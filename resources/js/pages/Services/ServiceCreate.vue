@@ -44,7 +44,7 @@ const createService = () => {
     form.post(route('my-services.store'), {
         onSuccess: (res) => {
             if (res.props.success) {
-                toastSuccess(res.props.message);
+                toastSuccess('Service created');
 
             } else {
                 toastError(res.props.message);
@@ -96,7 +96,7 @@ const createService = () => {
                            <div>
                                <InputText :form="form" label="Video Link" model="video_link" />
                                <span class="text-sm text-gray-500 font-small">
-                                   Your video will onlypa serve be shown to visitors if you have a running promotion</span>
+                                   Your video will  be shown to visitors if you have a running promotion</span>
                            </div>
 
                             <InputSelect label="Field Of Service" :form="form" model="category_id" :options="props.categories" required searchable />

@@ -47,7 +47,7 @@ const createService = () => {
     form.post(route('my-products.store'), {
         onSuccess: (res) => {
             if (res.props.success) {
-                toastSuccess(res.props.message);
+                toastSuccess('Product created');
 
             } else {
                 toastError(res.props.message);
@@ -95,7 +95,11 @@ const createService = () => {
                             <InputText :form="form" label="Website" model="website"  />
 
                             <InputText :form="form" label="Town" model="town" required />
-                            <InputText :form="form" label="Video Link" model="video_link" />
+                            <div>
+                                <InputText :form="form" label="Video Link" model="video_link" />
+                                <span class="text-sm text-gray-500 font-small">
+                                   Your video will  be shown to visitors if you have a running promotion</span>
+                            </div>
                             <InputText :form="form" label="Short Description" model="short_description"  textarea />
                         </div>
                     </div>

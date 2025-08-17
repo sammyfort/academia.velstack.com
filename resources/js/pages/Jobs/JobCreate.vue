@@ -48,7 +48,7 @@ const createJob = () => {
     form.post(route('my-jobs.store'), {
         onSuccess: (res) => {
             if (res.props.success) {
-                toastSuccess(res.props.message);
+                toastSuccess('Job created');
 
             } else {
                 toastError(res.props.message);
