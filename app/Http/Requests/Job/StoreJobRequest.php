@@ -26,18 +26,18 @@ class StoreJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_name' => ['required'],
+            'company_name' => ['required', 'string', 'max:100'],
             'title' => ['required', 'string', 'max:255'],
             'job_type' => ['required', Rule::in(JobType::toArray())],
             'work_mode' => ['required', Rule::in(JobMode::toArray())],
             'status' => ['required', Rule::in(JobStatus::toArray())],
             'categories' => ['required', 'array'],
             'summary' => ['required', 'string', 'max:255'],
-            'description' => ['required'],
+            'description' => ['required', 'string', 'max:255'],
 
-            'region_id' => ['required'],
-            'town' => ['required'],
-            'salary' => ['nullable'],
+            'region_id' => ['required', 'exists:regions,id'],
+            'town' => ['required', 'string', 'max:100'],
+            'salary' => ['nullable', 'string', 'max:100'],
 
             'apply_mode' => ['required',Rule::in(JobModeOfApply::toArray())],
 

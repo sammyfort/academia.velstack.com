@@ -66,7 +66,18 @@ const deleteSignboard = () => {
                                 <span>{{ props.signboard.region.name }}</span>
                                 <span>/</span>
                                 <span class="font-medium text-white">{{ props.signboard.landmark }}</span>
+
+                                <Link
+
+                                    :href="route('signboards.show', props.signboard.slug)"
+                                    class="flex items-center px-4 py-2 gap-x-2 bg-gray-100 text-black rounded-xl border border-white/30"
+                                >
+                                    <Eye class="h-5 w-5" />
+                                    <span>View as guest</span>
+                                </Link>
                             </div>
+
+
                         </nav>
 
                         <div class="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
@@ -95,6 +106,8 @@ const deleteSignboard = () => {
                                                 {{ props.signboard.views_count}}
                                             </span>
                                         </div>
+
+
                                     </div>
                                 </div>
 
@@ -192,7 +205,5 @@ const deleteSignboard = () => {
 </template>
 
 <style scoped>
-.hero-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='7' cy='7' r='7'/%3E%3Ccircle cx='53' cy='7' r='7'/%3E%3Ccircle cx='7' cy='53' r='7'/%3E%3Ccircle cx='53' cy='53' r='7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
+
 </style>

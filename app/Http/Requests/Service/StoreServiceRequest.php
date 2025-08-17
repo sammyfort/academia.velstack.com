@@ -25,15 +25,15 @@ class StoreServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required'],
-            'description' => ['required'],
+            'title' => ['required', 'string', 'max:100'],
+            'description' => ['required', 'string', 'max:255'],
             'first_mobile' => ['required', new MobileNumber()],
             'second_mobile' => ['nullable', new MobileNumber()],
-            'business_name' => ['nullable'],
+            'business_name' => ['nullable', 'string', 'max:100'],
             'email' => ['nullable', 'email'],
-            'address' => ['nullable'],
+            'address' => ['nullable', 'string', 'max:50'],
             'region_id' => ['required', 'exists:regions,id'],
-            'town' => ['required'],
+            'town' => ['required', 'string', 'max:50'],
             'gps' => ['nullable', new GPSRule()],
             'category_id' => ['required'],
             'featured' => ['required', 'image', 'max:2048'],

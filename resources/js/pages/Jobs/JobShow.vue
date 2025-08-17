@@ -163,9 +163,18 @@ const formatDeadline = (deadline: string) => {
                 <div class="relative px-6 py-8">
                     <div class="max-w-6xl mx-auto">
                         <Link :href="route('my-jobs.index')"
-                              class="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors">
+                              class="inline-flex items-center me-6 gap-2 text-white/80 hover:text-white mb-6 transition-colors">
                             <ArrowLeft class="w-5 h-5" />
                             <span>Back to My Jobs</span>
+                        </Link>
+
+                        <Link
+
+                            :href="route('jobs.show', props.job.slug)"
+                            class="inline-flex items-center bg-gray-100 px-3 py-2   border rounded-md gap-2 text-black   mb-6 transition-colors"
+                        >
+                            <Eye class="h-5 w-5" />
+                            <span>View as guest</span>
                         </Link>
 
                         <div class="flex flex-col lg:flex-row gap-8 items-start">
@@ -335,14 +344,14 @@ const formatDeadline = (deadline: string) => {
                                 </div>
                             </div>
 
-                            <PaymentHistory :promotions="job.promotions" />
+
                         </div>
 
 
                         <div class="space-y-6">
                             <div class="lg:col-span-1">
 
-                                <PromoteNow :promotable="job" :plans="plans" :promotable-type="PromotableE.JOB"/>
+
 
                             </div>
                             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sticky top-6">

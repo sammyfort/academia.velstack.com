@@ -84,10 +84,19 @@ const handleShare = () => {
                     <div class="mx-auto max-w-6xl">
                         <Link
                             :href="route('my-services.index')"
-                            class="mb-6 inline-flex items-center gap-2 text-white/80 transition-colors hover:text-white"
+                            class="mb-6 inline-flex items-center me-6 gap-2 text-white/80 transition-colors hover:text-white"
                         >
                             <ArrowLeft class="h-5 w-5" />
                             <span>Back to My Works</span>
+                        </Link>
+
+                        <Link
+
+                            :href="route('jobs.services', props.service.slug)"
+                            class="inline-flex items-center bg-gray-100 px-3 py-2   border rounded-md gap-2 text-black   mb-6 transition-colors"
+                        >
+                            <Eye class="h-5 w-5" />
+                            <span>View as guest</span>
                         </Link>
 
                         <div class="flex flex-col items-start gap-8 lg:flex-row">

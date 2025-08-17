@@ -65,7 +65,8 @@ class ServiceController extends Controller
     public function store(StoreServiceRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        DB::transaction(function () use ($data, $request) {
+        $service = null;
+        DB::transaction(function () use ($data, $request, &$service) {
             $service = auth()->user()->services()->create(
                 Arr::except($data, ['featured', 'gallery'])
             );
@@ -74,7 +75,11 @@ class ServiceController extends Controller
                 'gallery' => 'gallery',
             ]);
         });
-        return back()->with(successRes("Service created successfully."));
+        if ($service) {
+            return to_route('my-services.show', $service->slug);
+        }
+
+        return back()->with(errorRes("Please try again."));
     }
 
     public function edit(string $service): Response

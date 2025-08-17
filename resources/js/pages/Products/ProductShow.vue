@@ -98,9 +98,18 @@ const handleShare = () => {
                 <div class="relative px-6 py-8">
                     <div class="max-w-6xl mx-auto">
                         <Link :href="route('my-products.index')"
-                              class="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors">
+                              class="inline-flex items-center gap-2 me-6 text-white/80 hover:text-white mb-6 transition-colors">
                             <ArrowLeft class="w-5 h-5" />
                             <span>Back to My Products</span>
+                        </Link>
+
+                        <Link
+
+                            :href="route('products.show', props.product.slug)"
+                            class="inline-flex items-center bg-gray-100 px-3 py-2   border rounded-md gap-2 text-black   mb-6 transition-colors"
+                        >
+                            <Eye class="h-5 w-5" />
+                            <span>View as guest</span>
                         </Link>
 
                         <div class="flex flex-col lg:flex-row gap-8 items-start">

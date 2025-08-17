@@ -66,7 +66,8 @@ class ProductController extends Controller
         $data = $request->validated();
         $data['is_negotiable'] = YesNo::from($data['is_negotiable'])->toBool();
 
-        DB::transaction(function () use ($data, $request) {
+        $product = null;
+        DB::transaction(function () use ($data, $request, &$product) {
             $product = auth()->user()->products()->create(
                 Arr::except($data, ['featured', 'gallery', 'categories'])
             );
@@ -78,7 +79,10 @@ class ProductController extends Controller
             ]);
         });
 
-        return back()->with(successRes("Product created successfully."));
+        if ($product) {
+            return to_route('my-products.show', $product->slug);
+        }
+        return back()->with(successRes("Please try again."));
     }
 
     /**

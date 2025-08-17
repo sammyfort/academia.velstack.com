@@ -39,4 +39,9 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
+
+    'velstack' => [
+        'API_KEY' => env('VELSTACK_API_KEY'),
+        'SENDER_ID' => env('VELSTACK_SENDER_ID'),
+    ]
 ];

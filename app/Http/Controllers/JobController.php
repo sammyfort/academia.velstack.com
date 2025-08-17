@@ -80,16 +80,30 @@ class JobController extends Controller
     {
         $data = $request->validated();
 
-        DB::transaction(function () use ($data, $request) {
-            $job = $request->user()->jobs()->create(Arr::except($data, ['company_logo', 'categories', 'apply_mode']));
+        $job = null;
+
+        DB::transaction(function () use ($data, $request, &$job) {
+            $job = $request->user()->jobs()->create(
+                Arr::except($data, ['company_logo', 'categories', 'apply_mode'])
+            );
             $job->handleUploads($request, [
                 'company_logo' => 'company_logo',
             ]);
-
-            $job->categories()->sync($data['categories']);
+            $categoryIds = collect($data['categories'])->map(function ($new) {
+                if (is_numeric($new)) {
+                    return (int) $new;
+                }
+                $category = JobCategory::firstOrCreate(['name' => $new]);
+                return $category->id;
+            });
+            $job->categories()->sync($categoryIds);
         });
 
-        return back()->with(successRes("Job created successfully."));
+        if ($job) {
+            return to_route('my-jobs.show', $job->slug);
+        }
+
+        return back()->with(successRes("Please try again."));
     }
 
 
