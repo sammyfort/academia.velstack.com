@@ -67,7 +67,7 @@ onMounted(()=>{
             <form @submit.prevent="submit" class="flex flex-col gap-6 w-full md:w-1/3 justify-center">
                 <div>
                     <div class="text-3xl font-bold text-fade">Login To Your Account</div>
-                    <div class="text-fade" ref="descriptionRef"></div>
+                    <div class="text-fade min-h-[75px]" ref="descriptionRef"></div>
                 </div>
                 <div class="grid gap-6">
                     <InputText
