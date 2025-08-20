@@ -78,4 +78,12 @@ class Product extends Model implements HasMedia, Viewable
     {
         return $this->belongsTo(User::class);
     }
+
+    public function videoLink(): Attribute
+    {
+        return Attribute::get(function ($videoLink){
+            if ($this->active_promotion) return $videoLink;
+            return null;
+        });
+    }
 }

@@ -17,6 +17,7 @@ export interface Auth {
 
 export type AppPageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     name: string;
+    announcement: AnnouncementI|null;
     quote: { message: string; author: string };
     auth: Auth;
     ziggy: Config & { location: string };
@@ -27,6 +28,11 @@ export type AppPageProps<T extends Record<string, unknown> = Record<string, unkn
         [key]: string
     }
 };
+
+export interface AnnouncementI extends ModelI {
+    content: string
+    is_active: boolean
+}
 
 export interface User extends ModelI {
     firstname: string;
