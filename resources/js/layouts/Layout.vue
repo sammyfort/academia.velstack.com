@@ -20,8 +20,6 @@ const props = withDefaults(defineProps<Props>(), {
     isFullWidth: false,
 })
 
-const showNotice = false;
-
 onMounted(() => {
     GLightbox({
         selector: '.glightbox',
@@ -32,11 +30,11 @@ onMounted(() => {
 <template>
     <Toaster position="top-right" richColors/>
     <div :class="cn(props.class, 'flex min-h-screen flex-col items-center p-3  lg:justify-center lg:p-8 page')" :style="props.style">
-        <a class="hidden bg-gradient-to-b from-blue-500 to-blue-600 px-2 py-3 text-center text-sm text-white md:block lg:font-[500] w-full"
+        <a class="hidden bg-gradient-to-b from-blue-500 to-blue-700 px-2 py-3 text-center text-sm text-white md:block lg:font-[500] w-full"
            href="/pricing"
-           v-if="showNotice"
+           v-if="$page.props.announcement"
+           v-html="$page.props.announcement.content"
         >
-            Notice Board
         </a>
         <TopNavbar :class="{'max-w-[1700px]': props.isFullWidth, 'max-w-[1900px]': !props.isFullWidth}"/>
         <div class="flex w-full opacity-100 mt-5 transition-opacity duration-750 lg:grow starting:opacity-0"
