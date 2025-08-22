@@ -11,6 +11,7 @@ import InputSelect from '@/components/InputSelect.vue';
 import InputText from '@/components/InputText.vue';
 import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
 import GalleryFilesUpload from '@/components/GalleryFilesUpload.vue';
+import { InputSelectOption } from '@/types';
 
 const props = defineProps<{
     signboard: {
@@ -31,9 +32,11 @@ const props = defineProps<{
     categories: Array<{ label: string; value: string }>;
     regions: Array<{ label: string; value: string }>;
     businesses: Array<{ label: string; value: string }>;
+    countries: InputSelectOption[]
 }>();
 
 const form = useForm({
+    country_id: '',
     business_id: '',
     name: '',
     region_id: '',
@@ -50,6 +53,7 @@ const form = useForm({
 
 onMounted(() => {
     const s = props.signboard;
+     form.country_id = s.country_id;
     form.business_id = String(s.business_id);
     form.name = s.name;
     form.region_id = String(s.region_id);
@@ -123,6 +127,8 @@ const updateSignboard = () => {
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <h2 class="text-lg font-semibold text-gray-900 mb-6">Business Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries"   required searchable />
+
                             <InputSelect label="Select Business" :form="form" model="business_id" :disabled="true" :options="businesses" required searchable />
                             <InputText :form="form" label="Name/Title" model="name" required />
                             <div class="md:col-span-2">

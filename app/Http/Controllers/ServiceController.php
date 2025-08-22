@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Country;
 use App\Models\Promotion;
 use App\Models\PromotionPlan;
 use App\Models\Region;
@@ -21,6 +22,7 @@ class ServiceController extends Controller
         $this->props = [
             'categories' => toLabelValue(ServiceCategory::query()->select('id', 'name')->get(), 'name', 'id'),
             'regions' => toLabelValue(Region::query()->select('id', 'name')->get(), 'name', 'id'),
+            'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
         ];
     }
     public function index(): Response

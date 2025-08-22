@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Signboard\RateRequest;
 use App\Http\Requests\Signboard\StoreSignboardRequest;
 use App\Http\Requests\Signboard\UpdateSignboardRequest;
+use App\Models\Country;
 use App\Models\Promotion;
 use App\Models\PromotionPlan;
 use App\Models\Signboard;
@@ -84,7 +85,9 @@ class SignboardController extends Controller
             'business' => $request->business,
             'categories' => $this->helperService->getCategories(),
             'regions' => $this->helperService->getRegions(),
-            'businesses' => $this->helperService->getAuthBusinesses()
+            'businesses' => $this->helperService->getAuthBusinesses(),
+            'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
+
         ]);
     }
 
@@ -140,7 +143,9 @@ class SignboardController extends Controller
             'signboard' => $signboard->load(['business', 'region', 'categories'])->toArrayWithMedia(),
             'categories' => $this->helperService->getCategories(),
             'regions' => $this->helperService->getRegions(),
-            'businesses' => $this->helperService->getAuthBusinesses()
+            'businesses' => $this->helperService->getAuthBusinesses(),
+            'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
+
         ]);
     }
 

@@ -15,14 +15,17 @@ import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
 import GalleryFilesUpload from '@/components/GalleryFilesUpload.vue';
 import TextEditor from '@/components/forms/TextEditor.vue';
 import InputError from '@/components/InputError.vue';
+import { InputSelectOption } from '@/types';
 
 const props = defineProps<{
     categories: Array<{ label: string, value: string }>,
     regions: Array<{ label: string, value: string }>
+    countries: InputSelectOption[]
 }>();
 const galleryUploadRef = ref();
 const featureUploadRef = ref();
 const form = useForm({
+    country_id: '',
     title: '',
     description: '',
     first_mobile: '',
@@ -81,9 +84,8 @@ const createService = () => {
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <h2 class="text-lg font-semibold text-gray-900 mb-6">Business Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <InputSelect
-                                label="Select Region" :form="form" model="region_id" :options="props.regions"   required searchable
-                            />
+                            <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries"   required searchable />
+                            <InputSelect label="Select Region" :form="form" model="region_id" :options="props.regions"  required searchable />
                             <InputText :form="form" label="Service Name/Title" model="title" required />
                             <InputText :form="form" label="Years of Experience" model="years_experience" type="number" required />
                             <InputText :form="form" label="Town" model="town" required />

@@ -74,6 +74,7 @@ export interface CountryI extends ModelI{
 }
 
 export interface ProductI extends ModelI {
+    country_id: number|string
     user_id: number
     user: User
     name: string
@@ -103,6 +104,7 @@ export interface ProductI extends ModelI {
 }
 
 export interface ServiceI extends ModelI{
+    country_id: number|string
     title: string;
     slug: string;
     description: string;
@@ -133,6 +135,7 @@ export interface ServiceI extends ModelI{
 }
 
 export interface JobI extends ModelI{
+    country_id: number|string
     user_id: number
     company_name: string
     user: User
@@ -252,7 +255,7 @@ export interface PromotionI extends ModelI {
 }
 
 export interface SignboardI extends ModelI {
-    id: number;
+    country_id: number|string
     name: string;
     business_id: number;
     business: BusinessI;

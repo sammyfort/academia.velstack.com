@@ -11,21 +11,23 @@ import InputText from '@/components/InputText.vue';
 import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
 import InputSelect from '@/components/InputSelect.vue';
 import InputError from '@/components/InputError.vue';
-import { JobI } from '@/types';
+import { InputSelectOption, JobI } from '@/types';
 
 const props = defineProps<{
-    job: JobI
-    types: Array<{ label: string; value: string }>
-    statuses: Array<{ label: string; value: string }>
-    modes: Array<{ label: string; value: string }>
-    regions: Array<{ label: string; value: string }>
-    categories: Array<{ label: string; value: string }>
-    apply_modes: Array<{ label: string; value: string}>
+    job: JobI;
+    types: Array<{ label: string; value: string }>;
+    statuses: Array<{ label: string; value: string }>;
+    modes: Array<{ label: string; value: string }>;
+    regions: Array<{ label: string; value: string }>;
+    categories: Array<{ label: string; value: string }>;
+    apply_modes: Array<{ label: string; value: string }>;
+    countries: InputSelectOption[];
 }>();
 
 const featureUploadRef = ref();
 
 const form = useForm({
+    country_id: '',
     company_name: '',
     title: '',
     categories: [],
@@ -41,12 +43,12 @@ const form = useForm({
     apply_mode: 'instruction',
     how_to_apply: '',
     application_link: '',
-    company_logo: null
+    company_logo: null,
 });
 
 onMounted(() => {
     const job = props.job;
-
+    form.country_id = job.country_id;
     form.company_name = job.company_name || '';
     form.title = job.title || '';
     form.categories = (job.categories || []).map((cat: any) => cat.id);
@@ -62,11 +64,7 @@ onMounted(() => {
     form.how_to_apply = job.how_to_apply || '';
     form.application_link = job.application_link || '';
     form.description = job.description || '';
-
-
 });
-
-
 
 const updateJob = () => {
     form.put(route('my-jobs.update', props.job.id), {
@@ -77,54 +75,56 @@ const updateJob = () => {
             } else {
                 toastError(res.props.message);
             }
-        }
+        },
     });
 };
 </script>
-
 
 <template>
     <Head title="Update Job" />
     <Layout>
         <div class="w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-            <PageHeader
-                title="Edit Job"
-                subtitle="Update job details"
-                :icon="Building2"
-            />
+            <PageHeader title="Edit Job" subtitle="Update job details" :icon="Building2" />
 
-            <FormComponent :form="form" submit-text="Update Job"
-                           processing-text="Creating Job..."
-                           @submit="updateJob"
-                           container-width="max-w-6xl"
-                           containerWidth="w-full"
+            <FormComponent
+                :form="form"
+                submit-text="Update Job"
+                processing-text="Creating Job..."
+                @submit="updateJob"
+                container-width="max-w-6xl"
+                containerWidth="w-full"
             >
-
                 <template #form-sections>
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-6">Job Information</h2>
-                        <div class="grid grid-cols-2 md:grid-cols-2 gap-6">
+                    <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                        <h2 class="mb-6 text-lg font-semibold text-gray-900">Job Information</h2>
+                        <div class="grid grid-cols-2 gap-6 md:grid-cols-2">
+                            <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries" required searchable />
                             <InputText :form="form" label="Company Name" model="company_name" required />
-                            <InputSelect :form="form" label="Job Sector"  model="categories" :options="props.categories" taggable required searchable />
+                            <InputSelect
+                                :form="form"
+                                label="Job Sector"
+                                model="categories"
+                                :options="props.categories"
+                                taggable
+                                required
+                                searchable
+                            />
                             <InputText :form="form" label="Title" model="title" required />
-                            <InputSelect :form="form" label="Job Type"  model="job_type" :options="props.types" required />
-                            <InputSelect :form="form" label="Work Mode"  model="work_mode" :options="props.modes" required />
-                            <InputSelect :form="form" label="Region"  model="region_id" :options="props.regions" required searchable />
-                            <InputText  :form="form" label="Town" model="town" required />
+                            <InputSelect :form="form" label="Job Type" model="job_type" :options="props.types" required />
+                            <InputSelect :form="form" label="Work Mode" model="work_mode" :options="props.modes" required />
+                            <InputSelect :form="form" label="Region" model="region_id" :options="props.regions" required searchable />
+                            <InputText :form="form" label="Town" model="town" required />
                             <InputSelect label="Job Status" :form="form" model="status" :options="props.statuses" required />
-                            <InputText :form="form" label="Salary" model="salary"  />
+                            <InputText :form="form" label="Salary" model="salary" />
                             <InputText :form="form" label="Summary" model="summary" required textarea />
-                            <InputText :form="form" label="Deadline" model="deadline" type="date" required  />
-
-
+                            <InputText :form="form" label="Deadline" model="deadline" type="date" required />
                         </div>
                     </div>
 
-
-                    <div class="col-span-1 md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Job Description</label>
+                    <div class="col-span-1 rounded-xl border border-gray-200 bg-white p-6 shadow-sm md:col-span-2">
+                        <label class="mb-1 block text-sm font-medium text-gray-700">Job Description</label>
                         <TextEditor v-model="form.description" />
-                        <InputError v-if="form.errors.description" :message="form.errors.description " />
+                        <InputError v-if="form.errors.description" :message="form.errors.description" />
                     </div>
                 </template>
 
@@ -138,16 +138,17 @@ const updateJob = () => {
                         title="Company Logo"
                     />
 
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-6">How to apply</h2>
-                        <InputSelect :form="form" label="Mode of application"  model="apply_mode" :options="props.apply_modes" required />
-                        <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-4">
-
-                            <div v-if="form.apply_mode === 'instruction' || form.apply_mode === 'both'"
-                                 class="col-span-1 md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Provide instructions</label>
+                    <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                        <h2 class="mb-6 text-lg font-semibold text-gray-900">How to apply</h2>
+                        <InputSelect :form="form" label="Mode of application" model="apply_mode" :options="props.apply_modes" required />
+                        <div class="mt-4 grid grid-cols-2 gap-6 md:grid-cols-2">
+                            <div
+                                v-if="form.apply_mode === 'instruction' || form.apply_mode === 'both'"
+                                class="col-span-1 rounded-xl border border-gray-200 bg-white p-6 shadow-sm md:col-span-2"
+                            >
+                                <label class="mb-1 block text-sm font-medium text-gray-700">Provide instructions</label>
                                 <TextEditor v-model="form.how_to_apply" />
-                                <InputError v-if="form.errors.how_to_apply" :message="form.errors.how_to_apply " />
+                                <InputError v-if="form.errors.how_to_apply" :message="form.errors.how_to_apply" />
                             </div>
                         </div>
                         <InputText

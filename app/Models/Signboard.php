@@ -81,6 +81,11 @@ class Signboard extends Model implements HasMedia, Viewable
         return $this->belongsTo(Business::class);
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);

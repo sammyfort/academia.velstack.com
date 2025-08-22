@@ -82,6 +82,10 @@ class Service extends Model implements HasMedia, Viewable
         return $this->belongsTo(User::class);
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);

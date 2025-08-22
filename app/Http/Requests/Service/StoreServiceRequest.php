@@ -25,6 +25,7 @@ class StoreServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'country_id' => ['required', 'exists:countries,id'],
             'title' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string', 'max:255'],
             'first_mobile' => ['required', new MobileNumber()],

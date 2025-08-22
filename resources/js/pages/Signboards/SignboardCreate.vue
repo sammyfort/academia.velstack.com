@@ -11,15 +11,18 @@ import InputSelect from '@/components/InputSelect.vue';
 import InputText from '@/components/InputText.vue';
 import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
 import GalleryFilesUpload from '@/components/GalleryFilesUpload.vue';
+import { InputSelectOption } from '@/types';
 
 const props = defineProps<{
     business?: number;
     categories: Array<{ label: string; value: string }>;
     regions: Array<{ label: string; value: string }>;
     businesses: Array<{ label: string; value: string }>;
+    countries: InputSelectOption[]
 }>();
 
 const form = useForm({
+    country_id: '',
     business_id: '',
     region_id: '',
     categories: [],
@@ -80,6 +83,8 @@ const createSignboard = () => {
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <h2 class="text-lg font-semibold text-gray-900 mb-6">Business Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries"   required searchable />
+
                             <InputSelect
                                 label="Select Business" :form="form" model="business_id" :disabled="businessFieldDisabled" :options="businesses" required searchable
                             />
