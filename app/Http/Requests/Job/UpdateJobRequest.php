@@ -28,6 +28,7 @@ class UpdateJobRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'country_id' => ['required', 'exists:countries,id'],
             'company_name' => ['required'],
             'title' => ['required', 'string', 'max:255'],
             'job_type' => ['required', Rule::in(JobType::toArray())],

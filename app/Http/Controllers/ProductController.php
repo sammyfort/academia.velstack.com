@@ -6,6 +6,7 @@ use App\Enums\ProductStatus;
 use App\Enums\YesNo;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
+use App\Models\Country;
 use App\Models\ProductCategory;
 use App\Models\Promotion;
 use App\Models\PromotionPlan;
@@ -27,6 +28,8 @@ class ProductController extends Controller
             'categories' => toLabelValue(ProductCategory::query()->select(['id', 'name'])->get(), 'name', 'id'),
             'choices'    => toLabelValue(YesNo::toArray()),
             'statuses'    => toLabelValue(ProductStatus::toArray()),
+            'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
+
         ];
     }
 

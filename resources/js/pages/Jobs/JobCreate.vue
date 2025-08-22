@@ -12,6 +12,7 @@ import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
 import InputSelect from '@/components/InputSelect.vue';
 import InputError from '@/components/InputError.vue';
 import JobTemplate from '@/components/jobs/JobTemplate.vue';
+import { InputSelectOption } from '@/types';
 
 const props = defineProps<{
     types: Array<{ label: string; value: string }>
@@ -20,12 +21,14 @@ const props = defineProps<{
     regions: Array<{ label: string; value: string}>
     categories: Array<{ label: string; value: string}>
     apply_modes: Array<{ label: string; value: string}>
+    countries: InputSelectOption[]
 }>();
 
 
 
 const featureUploadRef = ref();
 const form = useForm({
+    country_id: '',
     company_name: '',
     title: '',
     categories: [],
@@ -89,6 +92,8 @@ const focusJobEditor = () => {
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <h2 class="text-lg font-semibold text-gray-900 mb-6">Job Information</h2>
                         <div class="grid grid-cols-2 md:grid-cols-2 gap-6">
+                            <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries"   required searchable />
+
                             <InputText :form="form" label="Company Name" model="company_name" required />
                             <InputSelect :form="form" label="Job Sector"  model="categories" :options="props.categories" taggable required searchable />
                             <InputText :form="form" label="Title" model="title" required />

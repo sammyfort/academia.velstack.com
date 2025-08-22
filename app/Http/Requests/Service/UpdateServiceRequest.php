@@ -23,6 +23,7 @@ class UpdateServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'country_id' => ['required', 'exists:countries,id'],
             'title' => ['required'],
             'description' => ['required'],
             'first_mobile' => ['required'],

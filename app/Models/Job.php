@@ -76,6 +76,11 @@ class Job extends Model implements  HasMedia, Viewable
         );
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);

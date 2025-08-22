@@ -27,6 +27,7 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'country_id' => ['required', 'exists:countries,id'],
             'region_id' => ['required', 'exists:regions,id'],
             'name' => ['required', 'string'],
             'status' => ['required', Rule::in(ProductStatus::toArray())],

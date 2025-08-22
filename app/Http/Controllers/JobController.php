@@ -8,6 +8,7 @@ use App\Enums\JobStatus;
 use App\Enums\JobType;
 use App\Http\Requests\Job\StoreJobRequest;
 use App\Http\Requests\Job\UpdateJobRequest;
+use App\Models\Country;
 use App\Models\JobCategory;
 use App\Models\PromotionPlan;
 use App\Models\Region;
@@ -28,7 +29,9 @@ class JobController extends Controller
             'types' => toLabelValue(JobType::toArray()),
             'modes' => toLabelValue(JobMode::toArray()),
             'regions' => toLabelValue(Region::query()->select('id', 'name')->get(), 'name', 'id'),
-            'apply_modes' => toLabelValue(JobModeOfApply::toArray())
+            'apply_modes' => toLabelValue(JobModeOfApply::toArray()),
+            'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
+
         ];
     }
 
