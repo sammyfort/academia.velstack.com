@@ -6,6 +6,7 @@ use App\Enums\JobMode;
 use App\Enums\JobModeOfApply;
 use App\Enums\JobStatus;
 use App\Enums\JobType;
+use App\Rules\RichEditorRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Mews\Purifier\Facades\Purifier;
@@ -36,7 +37,7 @@ class UpdateJobRequest extends FormRequest
             'status' => ['required', Rule::in(JobStatus::toArray())],
             'categories' => ['required', 'array'],
             'summary' => ['nullable', 'string'],
-            'description' => ['required'],
+            'description' => ['required', new RichEditorRule()],
 
             'region_id' => ['required'],
             'town' => ['required'],
@@ -49,6 +50,7 @@ class UpdateJobRequest extends FormRequest
                 'nullable',
                 'required_if:apply_mode,instruction',
                 'required_if:apply_mode,both',
+                new RichEditorRule()
             ],
 
             'application_link' => [
