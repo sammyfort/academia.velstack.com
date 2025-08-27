@@ -27,7 +27,7 @@ class StoreServiceRequest extends FormRequest
         return [
             'country_id' => ['required', 'exists:countries,id'],
             'title' => ['required', 'string', 'max:100'],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:2000'],
             'first_mobile' => ['required', new MobileNumber()],
             'second_mobile' => ['nullable', new MobileNumber()],
             'whatsapp_mobile' => ['nullable', new MobileNumber()],

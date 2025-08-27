@@ -34,7 +34,7 @@ class StoreJobRequest extends FormRequest
             'status' => ['required', Rule::in(JobStatus::toArray())],
             'categories' => ['required', 'array'],
             'summary' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:2000'],
 
             'region_id' => ['required', 'exists:regions,id'],
             'town' => ['required', 'string', 'max:100'],
@@ -46,6 +46,7 @@ class StoreJobRequest extends FormRequest
                 'nullable',
                 'required_if:apply_mode,instruction',
                 'required_if:apply_mode,both',
+                'max:2000'
             ],
 
             'application_link' => [
