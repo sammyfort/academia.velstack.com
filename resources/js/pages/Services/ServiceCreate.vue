@@ -91,9 +91,9 @@ const createService = () => {
                             <InputText :form="form" label="Years of Experience" model="years_experience" type="number" required />
                             <InputText :form="form" label="Town" model="town" required />
                             <InputText :form="form" label="Address" model="address" required />
-                            <InputText :form="form" label="First Number" type=tel model="first_mobile" required />
-                            <InputText :form="form" label="Second Number" type="tel" model="second_mobile"  />
-                            <InputText :form="form" label="Whatsapp Number" type="tel" model="whatsapp_mobile"  />
+                            <InputText :form="form" label="First Phone No." type=tel model="first_mobile" required />
+                            <InputText :form="form" label="Second Phone No." type="tel" model="second_mobile"  />
+                            <InputText :form="form" label="Whatsapp No." type="tel" model="whatsapp_mobile"  />
                             <InputText :form="form" label="Email address" type="email" model="email" required />
                             <InputText :form="form" label="Business Name" model="business_name"  />
                             <InputText :form="form" label="GPS Address" model="gps"  />
@@ -109,7 +109,6 @@ const createService = () => {
                                 <TextEditor v-model="form.description" />
                                 <InputError v-if="form.errors.description" :message="form.errors.description " />
                             </div>
-
                         </div>
                     </div>
                 </template>
