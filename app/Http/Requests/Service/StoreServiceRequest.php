@@ -30,6 +30,7 @@ class StoreServiceRequest extends FormRequest
             'description' => ['required', 'string', 'max:255'],
             'first_mobile' => ['required', new MobileNumber()],
             'second_mobile' => ['nullable', new MobileNumber()],
+            'whatsapp_mobile' => ['nullable', new MobileNumber()],
             'business_name' => ['nullable', 'string', 'max:100'],
             'email' => ['nullable', 'email'],
             'address' => ['nullable', 'string', 'max:50'],
