@@ -92,7 +92,7 @@ const handleShare = () => {
 
                         <Link
 
-                            :href="route('jobs.services', props.service.slug)"
+                            :href="route('my-services.index', props.service.slug)"
                             class="inline-flex items-center bg-gray-100 px-3 py-2   border rounded-md gap-2 text-black   mb-6 transition-colors"
                         >
                             <Eye class="h-5 w-5" />

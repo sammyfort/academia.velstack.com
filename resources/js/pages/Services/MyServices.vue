@@ -208,7 +208,7 @@ const goToPage = (page) => {
 
 
             <div v-else class="min-h-[60vh] flex flex-col items-center justify-center text-center px-6">
-                <div class="bg-gradient-to-br from-indigo-500 to-purple-600 w-24 h-24 rounded-full flex items-center justify-center mb-8 shadow-2xl">
+                <div class="bg-primary w-24 h-24 rounded-full flex items-center justify-center mb-8 shadow-2xl">
                     <Hammer class="w-12 h-12 text-white" />
                 </div>
                 <h3 class="text-3xl font-bold text-slate-800 mb-4">No Service Listed Yet</h3>
@@ -216,7 +216,7 @@ const goToPage = (page) => {
                     Start showcasing your craftsmanship and connect with clients looking for quality artisan work.
                 </p>
                 <Link :href="route('my-services.create')">
-                    <Button class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-3">
+                    <Button class="bg-primary text-white font-semibold px-8 py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-3">
                         <PlusIcon class="w-5 h-5" />
                         <span>List Your First Service</span>
                     </Button>

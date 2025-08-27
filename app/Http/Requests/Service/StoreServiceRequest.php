@@ -38,7 +38,7 @@ class StoreServiceRequest extends FormRequest
             'gps' => ['nullable', new GPSRule()],
             'category_id' => ['required'],
             'featured' => ['required', 'image', 'max:2048'],
-            'gallery' => ['required', 'array'],
+            'gallery' => ['array'],
             'gallery.*' => ['image', 'max:2048'],
             'years_experience' => ['required', 'integer'],
             'video_link'=> ['nullable', 'url']

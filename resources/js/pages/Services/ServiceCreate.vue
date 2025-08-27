@@ -38,7 +38,7 @@ const form = useForm({
     town: '',
     gps: '',
     region_id: '',
-    category_id: '',
+    category_id: [],
     featured: null,
     gallery: []
 });
@@ -101,7 +101,7 @@ const createService = () => {
                                    Your video will  be shown to visitors if you have a running promotion</span>
                            </div>
 
-                            <InputSelect label="Field Of Service" :form="form" model="category_id" :options="props.categories" required searchable />
+                            <InputSelect label="Field Of Service" :form="form" model="category_id" :options="props.categories" taggable required searchable />
 
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Service Description</label>

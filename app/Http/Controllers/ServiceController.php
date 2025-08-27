@@ -68,21 +68,33 @@ class ServiceController extends Controller
     {
         $data = $request->validated();
         $service = null;
+
         DB::transaction(function () use ($data, $request, &$service) {
+
+            $categoryName = array_key_first($data['category_id']);
+            $category = ServiceCategory::firstOrCreate(
+                ['name' => $categoryName],
+                ['name' => $categoryName]
+            );
+
+            $data['category_id'] = $category->id;
             $service = auth()->user()->services()->create(
                 Arr::except($data, ['featured', 'gallery'])
             );
+
             $service->handleUploads($request, [
                 'featured' => 'featured',
                 'gallery' => 'gallery',
             ]);
         });
+
         if ($service) {
             return to_route('my-services.show', $service->slug);
         }
 
         return back()->with(errorRes("Please try again."));
     }
+
 
     public function edit(string $service): Response
     {
