@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Service;
 
 use App\Rules\GPSRule;
+use App\Rules\MobileNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateServiceRequest extends FormRequest
@@ -29,6 +30,7 @@ class UpdateServiceRequest extends FormRequest
             'first_mobile' => ['required'],
             'business_name' => ['nullable'],
             'second_mobile' => ['nullable'],
+            'whatsapp_mobile' => ['nullable', new MobileNumber()],
             'email' => ['nullable'],
             'address' => ['nullable'],
             'region_id' => ['required', 'exists:regions,id'],

@@ -87,14 +87,11 @@ class ServiceController extends Controller
                 'gallery' => 'gallery',
             ]);
         });
-
         if ($service) {
             return to_route('my-services.show', $service->slug);
         }
-
         return back()->with(errorRes("Please try again."));
     }
-
 
     public function edit(string $service): Response
     {

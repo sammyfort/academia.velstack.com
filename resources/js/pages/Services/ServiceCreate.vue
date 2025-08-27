@@ -31,6 +31,7 @@ const form = useForm({
     first_mobile: '',
     business_name: '',
     second_mobile: '',
+    whatsapp_mobile: '',
     years_experience: '',
     video_link: '',
     email: '',
@@ -82,7 +83,7 @@ const createService = () => {
                 <template #form-sections>
 
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-6">Business Information</h2>
+                        <h2 class="text-lg font-semibold text-gray-900 mb-6">Service Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries"   required searchable />
                             <InputSelect label="Select Region" :form="form" model="region_id" :options="props.regions"  required searchable />
@@ -92,6 +93,7 @@ const createService = () => {
                             <InputText :form="form" label="Address" model="address" required />
                             <InputText :form="form" label="First Mobile No" type=tel model="first_mobile" required />
                             <InputText :form="form" label="Second Mobile No" type="tel" model="second_mobile"  />
+                            <InputText :form="form" label="Whatsapp Mobile No" type="tel" model="whatsapp_mobile"  />
                             <InputText :form="form" label="Email address" type="email" model="email" required />
                             <InputText :form="form" label="Business Name" model="business_name"  />
                             <InputText :form="form" label="GPS Address" model="gps"  />
