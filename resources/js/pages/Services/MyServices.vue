@@ -30,7 +30,7 @@ const props = defineProps<{
 }>()
 
 onMounted(()=>{
-    console.log(props.services)
+    //console.log(props.services)
 })
 const sortOrder = ref(props.sort || 'desc')
 const onSortChange = () => {
@@ -107,16 +107,13 @@ const goToPage = (page) => {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-
                                         <SelectItem value="desc">Latest</SelectItem>
                                         <SelectItem value="asc">Oldest</SelectItem>
                                     </SelectGroup>
-
                                 </SelectContent>
                             </Select>
                         </div>
                     </div>
-
 
                     <div class="grid gap-8 w-full md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         <Link v-for="service in services.data"

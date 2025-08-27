@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { toastSuccess, toastError } from '@/lib/helpers';
-import { Building2 } from 'lucide-vue-next';
+import {Building2, Check, LoaderCircle, PlusIcon} from 'lucide-vue-next';
 import Layout from '@/layouts/Layout.vue';
 import PageHeader from '@/pages/Signboards/blocks/PageHeader.vue';
 
@@ -12,6 +12,8 @@ import InputText from '@/components/InputText.vue';
 import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
 import GalleryFilesUpload from '@/components/GalleryFilesUpload.vue';
 import { InputSelectOption } from '@/types';
+import {Button} from "@/components/ui/button";
+import CreateBusiness from "@/pages/Businesses/CreateBusiness.vue";
 
 const props = defineProps<{
     business?: number;
@@ -85,9 +87,19 @@ const createSignboard = () => {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries"   required searchable />
 
-                            <InputSelect
-                                label="Select Business" :form="form" model="business_id" :disabled="businessFieldDisabled" :options="businesses" required searchable
-                            />
+                            <div>
+                                <InputSelect
+                                    label="Select Business" :form="form" model="business_id" :disabled="businessFieldDisabled" :options="businesses" required searchable
+                                />
+                                <CreateBusiness v-if="!businesses.length" @created="$inertia.reload({ only: ['businesses'] })">
+                                    <a
+                                        class="mt-2 text-primary font-semibold px-4 py-2 flex items-center gap-2"
+                                    >
+                                        <PlusIcon class="w-4 h-4" />
+                                        <span>Add Business</span>
+                                    </a>
+                                </CreateBusiness>
+                            </div>
                             <InputText :form="form" label="Name/Title" model="name" required />
                             <div class="md:col-span-2">
                                 <InputSelect label="Fields Of Operation" :form="form" model="categories" :options="categories" taggable required searchable />
