@@ -91,9 +91,9 @@ const createService = () => {
                             <InputText :form="form" label="Years of Experience" model="years_experience" type="number" required />
                             <InputText :form="form" label="Town" model="town" required />
                             <InputText :form="form" label="Address" model="address" required />
-                            <InputText :form="form" label="First Mobile No" type=tel model="first_mobile" required />
-                            <InputText :form="form" label="Second Mobile No" type="tel" model="second_mobile"  />
-                            <InputText :form="form" label="Whatsapp Mobile No" type="tel" model="whatsapp_mobile"  />
+                            <InputText :form="form" label="First Number" type=tel model="first_mobile" required />
+                            <InputText :form="form" label="Second Number" type="tel" model="second_mobile"  />
+                            <InputText :form="form" label="Whatsapp Number" type="tel" model="whatsapp_mobile"  />
                             <InputText :form="form" label="Email address" type="email" model="email" required />
                             <InputText :form="form" label="Business Name" model="business_name"  />
                             <InputText :form="form" label="GPS Address" model="gps"  />
@@ -104,7 +104,6 @@ const createService = () => {
                            </div>
 
                             <InputSelect label="Field Of Service" :form="form" model="category_id" :options="props.categories" taggable required searchable />
-
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Service Description</label>
                                 <TextEditor v-model="form.description" />
