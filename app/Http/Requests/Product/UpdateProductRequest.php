@@ -5,6 +5,7 @@ namespace App\Http\Requests\Product;
 use App\Enums\ProductStatus;
 use App\Enums\YesNo;
 use App\Rules\MobileNumber;
+use App\Rules\RichEditorRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Mews\Purifier\Facades\Purifier;
@@ -39,7 +40,7 @@ class UpdateProductRequest extends FormRequest
             'whatsapp_mobile' => ['nullable', new MobileNumber()],
             'website' => ['nullable', 'string'],
             'town' => ['required', 'string'],
-            'description' => ['required'],
+            'description' => ['required', new RichEditorRule()],
             'categories' => ['required', 'array'],
 
             'featured' => ['nullable', 'image', 'max:2048'],

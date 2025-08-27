@@ -4,6 +4,7 @@ namespace App\Http\Requests\Service;
 
 use App\Rules\GPSRule;
 use App\Rules\MobileNumber;
+use App\Rules\RichEditorRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Mews\Purifier\Facades\Purifier;
 
@@ -27,7 +28,7 @@ class StoreServiceRequest extends FormRequest
         return [
             'country_id' => ['required', 'exists:countries,id'],
             'title' => ['required', 'string', 'max:100'],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', new RichEditorRule()],
             'first_mobile' => ['required', new MobileNumber()],
             'second_mobile' => ['nullable', new MobileNumber()],
             'whatsapp_mobile' => ['nullable', new MobileNumber()],

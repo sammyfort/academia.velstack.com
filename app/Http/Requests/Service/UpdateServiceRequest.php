@@ -4,6 +4,7 @@ namespace App\Http\Requests\Service;
 
 use App\Rules\GPSRule;
 use App\Rules\MobileNumber;
+use App\Rules\RichEditorRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateServiceRequest extends FormRequest
@@ -26,7 +27,7 @@ class UpdateServiceRequest extends FormRequest
         return [
             'country_id' => ['required', 'exists:countries,id'],
             'title' => ['required'],
-            'description' => ['required'],
+            'description' => ['required', new RichEditorRule()],
             'first_mobile' => ['required'],
             'business_name' => ['nullable'],
             'second_mobile' => ['nullable'],

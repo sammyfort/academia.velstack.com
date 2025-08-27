@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Job;
 
+use App\Rules\RichEditorRule;
 use App\Enums\{JobMode, JobModeOfApply, JobStatus, JobType};
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -34,7 +35,7 @@ class StoreJobRequest extends FormRequest
             'status' => ['required', Rule::in(JobStatus::toArray())],
             'categories' => ['required', 'array'],
             'summary' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', new RichEditorRule()],
 
             'region_id' => ['required', 'exists:regions,id'],
             'town' => ['required', 'string', 'max:100'],
@@ -46,6 +47,7 @@ class StoreJobRequest extends FormRequest
                 'nullable',
                 'required_if:apply_mode,instruction',
                 'required_if:apply_mode,both',
+                new RichEditorRule()
             ],
 
             'application_link' => [
