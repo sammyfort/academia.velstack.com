@@ -111,7 +111,7 @@ const updateService = () => {
             >
                 <template #form-sections>
                     <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                        <h2 class="mb-6 text-lg font-semibold text-gray-900">Business Information</h2>
+                        <h2 class="mb-6 text-lg font-semibold text-gray-900">Service Information</h2>
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries"   required searchable />
                             <InputSelect label="Select Region" :form="form" model="region_id" :options="props.regions" required searchable />
