@@ -3,7 +3,7 @@ import Layout from '@/layouts/Layout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { Briefcase, Building, Edit, Loader2, MapPin, PlusIcon, Trash2, Eye } from 'lucide-vue-next';
 import { toastError, toastSuccess } from '@/lib/helpers';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import ConfirmDialogue from '@/components/helpers/ConfirmDialogue.vue';
 import { AverageRatingsI, PaymentStatusI, PromotionPlanI, RatingsDistributionI, SignboardI } from '@/types';
 import PaymentHistory from '@/components/promotions/PaymentHistory.vue';
@@ -44,6 +44,10 @@ const deleteSignboard = () => {
         },
     });
 };
+
+onMounted(()=> {
+    console.log(props.signboard)
+})
 </script>
 
 <template>

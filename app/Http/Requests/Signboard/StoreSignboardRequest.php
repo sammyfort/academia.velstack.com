@@ -34,7 +34,7 @@ class StoreSignboardRequest extends FormRequest
             'street' => ['nullable', 'string'],
             'landmark' => ['required', 'string'],
             'blk_number' => ['nullable', 'string'],
-            'gps' => ['nullable', 'string', new GPSRule()],
+            'gps' => ['required', 'string', new GPSRule()],
             'featured_image' => ['nullable', 'image', 'max:2048'],
             'gallery_images' => ['nullable', 'array'],
             'gallery_images.*' => ['image', 'max:2048'],

@@ -97,7 +97,7 @@ class SignboardController extends Controller
         $data = $request->validated();
         $business = $request->user()->businesses()->findOrFail($data['business_id']);
         $signboard = null;
-
+       // dd($data);
         DB::transaction(function () use ($business, $data, $request, &$signboard) {
             $signboard = $business->signboards()->create(
                 Arr::except($data, ['featured_image', 'gallery_images', 'categories'])
@@ -113,9 +113,10 @@ class SignboardController extends Controller
 
             $signboard->categories()->sync($categoryIds);
             $signboard->handleUploads($request, [
-                'featured' => 'featured_image',
-                'gallery'  => 'gallery_images',
+                'featured_image' => 'featured',
+                'gallery_images' => 'gallery',
             ]);
+
         });
 
         if ($signboard) {
