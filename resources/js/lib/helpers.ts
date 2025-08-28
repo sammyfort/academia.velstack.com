@@ -140,3 +140,18 @@ export function randomString(length: number = 8) {
     }
     return result;
 }
+
+export function whatsappChatLink(mobileNumber: string, message: string) {
+    // Remove spaces, dashes, parentheses, and plus sign
+    const cleanedNumber = mobileNumber.replace(/[\s\-()+]/g, "");
+
+    if (!/^\d+$/.test(cleanedNumber)) {
+        return
+    }
+
+    if (cleanedNumber.length < 8) {
+        return
+    }
+    const encodedMessage = encodeURIComponent(message);
+    return `https://wa.me/${cleanedNumber}?text=${encodedMessage}`;
+}

@@ -24,8 +24,8 @@ class GPSRule implements ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!preg_match('/^([A-Z]{2,3})-\d{3,4}-\d{4}$/', $value, $matches)) {
-            $fail('The :attribute must be in the format AREA-123-4567 or AREA-1234-5678.');
+        if (!preg_match('/^([A-Z]{2,3})-[A-Za-z0-9]{3,4}-\d{4}$/', $value, $matches)) {
+            $fail('The :attribute must be in the format AREA-123-4567 or AREA-AB12-5678.');
             return;
         }
 
