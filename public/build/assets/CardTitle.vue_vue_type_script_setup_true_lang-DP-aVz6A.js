@@ -1,1 +1,0 @@
-import{c as o}from"./Input.vue_vue_type_script_setup_true_lang-BidOO7xD.js";import{d as n,c as t,o as r,k as l,n as c,u as m}from"./app-BRIL4yzl.js";const f=n({__name:"CardTitle",props:{class:{}},setup(s){const e=s;return(a,p)=>(r(),t("h3",{"data-slot":"card-title",class:c(m(o)("leading-none font-semibold",e.class))},[l(a.$slots,"default")],2))}});export{f as _};

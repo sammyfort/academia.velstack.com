@@ -29,7 +29,7 @@ class StoreSignboardRequest extends FormRequest
             'business_id' => ['required', Rule::exists('businesses', 'id')->where('user_id', request()->user()->id)],
             'region_id' => ['required', Rule::exists('regions', 'id')],
             'categories' => ['required', 'array'],
-            'categories.*' => ['int'],
+            //'categories.*' => ['int'],
             'town' => ['required', 'string'],
             'street' => ['nullable', 'string'],
             'landmark' => ['required', 'string'],
