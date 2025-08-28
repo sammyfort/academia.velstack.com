@@ -122,6 +122,7 @@ export interface ServiceI extends ModelI{
     gps: string;
     gps_lat: string;
     gps_lon: string;
+    whatsapp_mobile: string;
     user: User;
     user_id: number;
     promotions: PromotionI[]

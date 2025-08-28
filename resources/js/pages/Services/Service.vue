@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3'
 import Layout from '@/layouts/Layout.vue'
-import { ArrowLeft, Eye, MapPin, Star, Award, Map } from 'lucide-vue-next';
+import { ArrowLeft, Eye, MapPin, Star, Award, Map, Phone, MessageCircle } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button'
 import { AverageRatingsI, RatingsDistributionI, ServiceI } from '@/types';
 import ImagePreview from '@/components/ImagePreview.vue';
@@ -11,6 +11,7 @@ import ReviewsDetails from '@/components/ReviewsDetails.vue';
 import { computed } from 'vue';
 import ShareToSocials from '@/components/ShareToSocials.vue';
 import VideoEmbed from '@/components/VideoEmbed.vue';
+import { whatsappChatLink } from '@/lib/helpers';
 
 const props = defineProps<{
     service: ServiceI,
@@ -19,6 +20,11 @@ const props = defineProps<{
 }>()
 
 const reviews = computed(()=> props.service.reviews);
+
+const wpChatLink = whatsappChatLink(
+    props.service.whatsapp_mobile,
+    `Hello, please I am inquiring about your service: ${props.service.title}\n\nService link:\n${route('services.show', props.service.id)}`
+)
 
 </script>
 
@@ -211,6 +217,26 @@ const reviews = computed(()=> props.service.reviews);
                                     </div>
                                     <div class="flex items-center text-sm py-2 justify-between border-b border-slate-100">
                                         <ShareToSocials />
+                                    </div>
+                                    <div class="flex items-center text-sm py-2 justify-between border-b border-slate-100">
+                                        <Button size="sm" variant="secondary" as-child>
+                                            <a
+                                                :href="`tel:${service.first_mobile}`"
+                                                target="_blank"
+                                                class="flex items-center gap-2"
+                                            >
+                                                <Phone :size="17"/> Call
+                                            </a>
+                                        </Button>
+                                        <Button v-if="wpChatLink" size="sm" variant="secondary">
+                                            <a
+                                                :href="wpChatLink"
+                                                target="_blank"
+                                                class="flex items-center gap-2"
+                                            >
+                                                <MessageCircle :size="17"/> Chat on WhatsApp
+                                            </a>
+                                        </Button>
                                     </div>
                                 </div>
 
