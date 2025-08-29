@@ -83,7 +83,7 @@ const createSignboard = () => {
                 <template #form-sections>
 
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-6">Business Information</h2>
+                        <h2 class="text-lg font-semibold text-gray-900 mb-6">Signboard Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries"   required searchable />
 

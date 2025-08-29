@@ -64,7 +64,7 @@ class BusinessController extends Controller
             'name' => ['required', 'string'],
             'email' => ['required', 'email'],
             'mobile' => ['required', 'digits:10'],
-            'description' => ['required'],
+            'description' => ['required', 'max:255'],
             'facebook' => ['nullable', 'url'],
             'instagram' => ['nullable', 'url'],
             'x' => ['nullable', 'url'],

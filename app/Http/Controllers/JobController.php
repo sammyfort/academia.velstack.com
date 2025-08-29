@@ -123,6 +123,7 @@ class JobController extends Controller
         $job = auth()->user()->jobs()->findOrFail($job);
         $data = $request->validated();
 
+
         //dd($data);
         DB::transaction(function () use ($request, $data, $job) {
             //$job->refresh();

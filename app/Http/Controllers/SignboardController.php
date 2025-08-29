@@ -9,6 +9,7 @@ use App\Models\Country;
 use App\Models\Promotion;
 use App\Models\PromotionPlan;
 use App\Models\Signboard;
+use App\Models\SignboardCategory;
 use App\Services\HelperService;
 use App\Services\RatingService;
 use Illuminate\Support\Arr;
@@ -53,18 +54,29 @@ class SignboardController extends Controller
         $data = $request->validated();
         $business = $request->user()->businesses()->findOrFail($data['business_id']);
         $signboard = null;
-
+       // dd($data);
         DB::transaction(function () use ($business, $data, $request, &$signboard) {
-            $signboard = $business->signboards()->create(Arr::except($data, ['featured_image', 'gallery_images', 'categories']));
-            $signboard->categories()->sync($data['categories']);
+            $signboard = $business->signboards()->create(
+                Arr::except($data, ['featured_image', 'gallery_images', 'categories'])
+            );
+            $categoryIds = collect($data['categories'] ?? [])
+                ->map(function ($category) {
+                    if (is_numeric($category)) {
+                        return (int) $category;
+                    }
+                    return SignboardCategory::firstOrCreate(['name' => trim($category)])->id;
+                })
+                ->all();
 
+            $signboard->categories()->sync($categoryIds);
             $signboard->handleUploads($request, [
-                'featured' => 'featured_image',
-                'gallery' => 'gallery_images',
+                'featured_image' => 'featured',
+                'gallery_images' => 'gallery',
             ]);
+
         });
 
-        if ($signboard){
+        if ($signboard) {
             return to_route('my-signboards.show', $signboard->slug);
         }
 

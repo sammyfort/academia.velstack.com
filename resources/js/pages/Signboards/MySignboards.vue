@@ -105,7 +105,7 @@ const goToPage = (page: number) => {
                     You haven't added any businesses yet. Click below to get started.
                 </p>
                 <Link
-                   :href="route('my-businesses.create')"
+                   :href="route('my-signboards.create')"
                     @created="$inertia.reload({ only: ['signboards'] })">
                     <Button
                         class="bg-primary hover:bg-primary text-white font-semibold px-6 py-2 rounded shadow flex items-center gap-2"
