@@ -8,12 +8,14 @@
 </head>
 <body class="bg-gray-100 text-gray-800 flex items-center justify-center h-screen">
 <div class="max-w-md w-full   rounded-2xl p-8 text-center">
-    <div class="text-6xl font-bold text-blue-500">@yield('code')</div>
+    <div class="text-6xl font-bold" style="color: #fb8509">@yield('code')</div>
     <h1 class="mt-4 text-2xl font-semibold">@yield('title')</h1>
     <p class="mt-2 text-gray-600">@yield('message')</p>
 
     <a href="{{ url('/') }}"
-       class="mt-6 inline-block px-6 py-2 bg-blue-500 text-white rounded-xl hover:bg-orange-600 transition">
+       class="mt-6 inline-block px-6 py-2 text-white rounded-xl hover:bg-orange-600 transition"
+        style="background-color: #fb8509"
+    >
         Go Home
     </a>
 </div>

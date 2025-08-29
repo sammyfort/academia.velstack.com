@@ -8,6 +8,8 @@ use App\Models\JobCategory;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Region;
+use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\Signboard;
 use App\Models\SignboardCategory;
 use App\Models\User;
@@ -68,17 +70,14 @@ class UserSeeder extends Seeder
 
         foreach ($users as $userData) {
             $user = User::query()->create($userData);
-
             if (app()->environment('production')) continue;
 
-            Business::factory(3)
+            Service::factory(3)
                 ->for($user)
-                ->create([
-                    'created_by_id' => $user->id
-                ])
-                ->each(function ($business) use ($user, $signboardCategories, $regions) {
+                ->create()
+                ->each(function ($service) use ($user, $signboardCategories, $regions) {
                     Signboard::factory(2)
-                        ->for($business)
+                        ->for($service)
                         ->create([
                             'region_id' => $regions->random(),
                             'created_by_id' => $user->id

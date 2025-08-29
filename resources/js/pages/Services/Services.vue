@@ -25,7 +25,7 @@ const {
     loading: loadingServices,
     nextPage,
 } = useScrollPagination<ServiceI>({
-    initialData: props.servicesData.data,
+    initialData: props.servicesData.data as ServiceI[],
     nextPageUrl: props.servicesData.next_page_url,
     extractResponseData: (page) => page.props.servicesData,
     preserveKeys: ['servicesData'],

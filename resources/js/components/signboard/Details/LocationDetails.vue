@@ -13,9 +13,7 @@ defineProps<Props>()
 
 <template>
     <div class="flex flex-col gap-3">
-        <div class="text-fade">
-            Location
-        </div>
+        <div class="text-fade font-semibold">Location</div>
         <div class="flex flex-col gap-3">
             <div class="flex flex-wrap gap-2">
                 <div class="flex gap-1 items-center">

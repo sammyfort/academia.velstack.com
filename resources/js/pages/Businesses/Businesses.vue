@@ -2,7 +2,7 @@
 import Layout from '@/layouts/Layout.vue';
 import { Head } from '@inertiajs/vue3';
 import { Briefcase } from 'lucide-vue-next';
-import SignboardCardV1 from '@/components/businesses/SignboardCardV1.vue';
+import SignboardCardV1 from '@/components/signboard/SignboardCardV1.vue';
 
 const props = defineProps<{
     businesses: Array<{

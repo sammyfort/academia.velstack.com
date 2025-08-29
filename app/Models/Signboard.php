@@ -36,6 +36,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $gps
  * @property string $gps_lat
  * @property string $gps_lon
+ * @property int $service_id
+ * @property Service $service
  */
 
 #[ObservedBy(SignboardObserver::class)]
@@ -76,9 +78,14 @@ class Signboard extends Model implements HasMedia, Viewable
         "active_promotion"
     ];
 
-    public function business(): BelongsTo
+    public function service(): BelongsTo
     {
-        return $this->belongsTo(Business::class);
+        return $this->belongsTo(Service::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function country(): BelongsTo

@@ -73,7 +73,7 @@ function performSearch(){
                                 @click="router.visit(route('signboards.index'))"
                                 class="flex items-center transition-all ease-in-out duration-500 hover:bg-primary hover:text-secondary cursor-pointer justify-center font-bold rounded-[100%] h-[120px] w-[120px] p-10 bg-gray-300"
                             >
-                                <span>Signboard</span>
+                                <span>Signboards</span>
                             </div>
                             <div
                                 @click="router.visit(route('jobs.index'))"

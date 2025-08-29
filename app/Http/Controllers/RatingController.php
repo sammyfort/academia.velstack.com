@@ -62,7 +62,6 @@ class RatingController extends Controller
 
         } catch (\Exception $exception) {
             DB::rollBack();
-            dd($exception);
             return back()->with(errorRes());
         }
     }

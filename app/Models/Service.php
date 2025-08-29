@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
@@ -45,6 +46,7 @@ use Spatie\Tags\HasTags;
  * @property string $gps
  * @property string $gps_lat
  * @property string $gps_lon
+ * @property string $initials
  * @property Collection<Review> $reviews
  */
 #[ObservedBy(ServiceObserver::class)]
@@ -59,6 +61,7 @@ class Service extends Model implements HasMedia, Viewable
         'active_promotion',
         "total_average_rating",
         "reviews_count",
+        'initials',
     ];
 
 
@@ -82,6 +85,11 @@ class Service extends Model implements HasMedia, Viewable
         return $this->belongsTo(User::class);
     }
 
+    public function signboards(): HasMany
+    {
+        return $this->hasMany(Signboard::class);
+    }
+
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
@@ -102,5 +110,12 @@ class Service extends Model implements HasMedia, Viewable
             if ($this->active_promotion) return $videoLink;
             return null;
         });
+    }
+
+    public function initials(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => strtoupper($this->title[0]). strtoupper($this->title[1])
+        );
     }
 }

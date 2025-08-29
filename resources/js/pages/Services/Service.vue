@@ -128,7 +128,7 @@ const wpChatLink = whatsappChatLink(
                             </div>
                             <div>
                                 <h2 class="text-xl font-bold text-slate-900 mb-6">Gallery</h2>
-                                <ImagePreview :featured-url="service.featured" :gallery-urls="service.gallery"/>
+                                <ImagePreview :featured-url="service.featured as string" :gallery-urls="service.gallery as unknown as string[]"/>
                             </div>
                             <div v-if="service.video_link">
                                 <div class="mb-3 text-lg font-semibold">Video Portfolio</div>
@@ -223,7 +223,7 @@ const wpChatLink = whatsappChatLink(
                                             <a
                                                 :href="`tel:${service.first_mobile}`"
                                                 target="_blank"
-                                                class="flex items-center gap-2"
+                                                class="flex items-center gap-1"
                                             >
                                                 <Phone :size="17"/> Call
                                             </a>
@@ -232,7 +232,7 @@ const wpChatLink = whatsappChatLink(
                                             <a
                                                 :href="wpChatLink"
                                                 target="_blank"
-                                                class="flex items-center gap-2"
+                                                class="flex items-center gap-1"
                                             >
                                                 <MessageCircle :size="17"/> Chat on WhatsApp
                                             </a>

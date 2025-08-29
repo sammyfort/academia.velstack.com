@@ -25,7 +25,7 @@ class SignboardService
                         ->orWhere("landmark", "LIKE", "%$input%")
                         ->orWhere("blk_number", "LIKE", "%$input%")
                         ->orWhere("gps", "LIKE", "%$input%")
-                        ->orWhereRelation('business', 'name', "LIKE", "%$input%");
+                        ->orWhereRelation('service', 'title', "LIKE", "%$input%");
                 }),
                 AllowedFilter::callback('categories', function ($query, $value) {
                     $ids = is_array($value) ? $value : explode(',', $value);
@@ -43,7 +43,7 @@ class SignboardService
                 $reviewsQuery->where('user_id', auth()->id())
                     ->with(['ratings']);
             })
-            ->with(['business', 'region.country'])
+            ->with(['service', 'region.country'])
             ->when(auth()->user(), function ($q){
                 $q->where('created_by_id', '!=', auth()->id());
             });
@@ -60,7 +60,7 @@ class SignboardService
     public static function getPromoted(): Collection
     {
         $signboardsQuery = Signboard::getRandomPromotedQuery()
-            ->with(['business', 'region.country'])
+            ->with(['service', 'region.country'])
             ->with('categories', function ($categoriesQuery) {
                 $categoriesQuery->take(3);
             })
@@ -72,7 +72,7 @@ class SignboardService
 
         if ($signboards->count() < 1) {
             $signboardsQuery = Signboard::query()
-                ->with(['business', 'region.country'])
+                ->with(['service', 'region.country'])
                 ->with('categories', function ($categoriesQuery) {
                     $categoriesQuery->take(3);
                 })

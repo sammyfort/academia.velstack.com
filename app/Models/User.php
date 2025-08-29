@@ -145,9 +145,9 @@ use Illuminate\Notifications\Notifiable;
      {
          return $this->hasManyThrough(
              Signboard::class,
-             Business::class,
+             Service::class,
              'user_id',
-             'business_id',
+             'service_id',
              'id',
              'id'
          );

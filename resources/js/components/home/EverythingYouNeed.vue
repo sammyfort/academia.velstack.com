@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import AdvertisedSignboardV from '@/components/businesses/AdvertisedSignboardV.vue';
+import AdvertisedSignboardV from '@/components/signboard/AdvertisedSignboardV.vue';
 import { router, usePage } from '@inertiajs/vue3';
 
 const page = usePage()

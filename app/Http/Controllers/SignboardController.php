@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests\Signboard\RateRequest;
 use App\Http\Requests\Signboard\StoreSignboardRequest;
 use App\Http\Requests\Signboard\UpdateSignboardRequest;
 use App\Models\Country;
@@ -27,48 +26,6 @@ class SignboardController extends Controller
     public function __construct(protected HelperService $helperService)
     {
 
-    }
-
-    public function rate(Signboard $signboard, RateRequest $request): \Illuminate\Http\RedirectResponse
-    {
-        $validatedData = $request->validated();
-        DB::beginTransaction();
-        try {
-            $reviewData = [
-                'review' => $validatedData['review'],
-                // 'recommend'  => true,
-                'ratings' => [
-                    'overall' => $validatedData['overall'],
-                    'customer_service' => $validatedData['customer_service'],
-                    'quality' => $validatedData['quality'],
-                    'price' => $validatedData['price'],
-                    'communication' => $validatedData['communication'],
-                    'speed' => $validatedData['speed'],
-                ],
-            ];
-            // check if user has already rated
-            $review = $signboard->reviews()->where('user_id', auth()->id())->first();
-            if ($review) {
-                $signboard->updateReview($review->id, $reviewData);
-            } else {
-                $review = $signboard->addReview($reviewData, auth()->id());
-            }
-            DB::commit();
-            $signboard->refresh();
-            $signboard->loadMissing([
-                'business',
-                'region',
-                'reviews' => function ($reviewsQuery) {
-                    $reviewsQuery->where('user_id', auth()->id())
-                        ->with(['ratings']);
-                },
-            ]);
-            $data['signboard'] = $signboard;
-            return back()->with(successRes('Signboard Rated Successfully', $data));
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            return back()->with(errorRes());
-        }
     }
 
     public function mySignboards(): Response
