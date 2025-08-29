@@ -58,6 +58,9 @@ import ContactUsSheet from '@/components/ContactUsSheet.vue';
                         <li>
                             <Link :href="route('dashboard')" class="text-gray-400 hover:text-primary text-sm transition-all">Dashboard</Link>
                         </li>
+                        <li>
+                            <a :href="route('download.apk')" target="_blank" class="text-gray-400 hover:text-primary text-sm transition-all">Download App</a>
+                        </li>
                     </ul>
                 </div>
 

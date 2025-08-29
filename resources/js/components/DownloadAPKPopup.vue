@@ -14,9 +14,9 @@ import { Button } from '@/components/ui/button';
 
 const showPopup = ref(false)
 
-function isInAppBrowser() {
-    const ua = navigator.userAgent || navigator.vendor || window.opera
-    return /wv|FBAN|FBAV|Instagram|Line|Twitter|OKHttp|WebView/i.test(ua)
+function isMyAppWrapper() {
+    const ua = navigator.userAgent || ""
+    return ua.includes("AppWebView")
 }
 
 function isAndroid() {
@@ -25,7 +25,7 @@ function isAndroid() {
 
 onMounted(() => {
     const dismissed = sessionStorage.getItem("appDownloadDismissed")
-    if (!dismissed && isAndroid() && !isInAppBrowser()) {
+    if (!dismissed && isAndroid() && !isMyAppWrapper()) {
         showPopup.value = true
     }
 })
