@@ -124,6 +124,7 @@ const createSignboard = () => {
                         :preview="form.featured"
                         modelName="featured"
                         :error="form.errors.featured"
+                        title="Title or Featured image"
                     />
 
 
