@@ -24,7 +24,7 @@ const props = defineProps<{
 }>();
 
 onMounted(()=>{
-    console.log(props.service)
+   // console.log(props.service)
 })
 const reviews = computed(() => props.service.reviews);
 

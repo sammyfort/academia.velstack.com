@@ -35,7 +35,7 @@ const props = defineProps<{
 }>()
 
 onMounted(()=> {
-    console.log(props.job)
+   // console.log(props.job)
 
 })
 

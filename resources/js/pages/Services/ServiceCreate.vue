@@ -26,7 +26,7 @@ const props = defineProps<{
 
 onMounted(() => {
 
-    console.log(props.categories)
+  //  console.log(props.categories)
 });
 
 const galleryUploadRef = ref();
