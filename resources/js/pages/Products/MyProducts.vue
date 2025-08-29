@@ -39,7 +39,7 @@ const goToPage = (page) => {
     <Head title="Artisan Works" />
 
     <Layout>
-        <div class=" md:block fixed bottom-8 right-8 z-50">
+        <div class=" md:block fixed bottom-8 left-8 z-50">
             <Link :href="route('my-products.create')">
                 <Button class="bg-primary hover:from-primary-700 hover:to-primary-700
                 text-white font-semibold px-6 py-4 rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300 ease-out flex items-center gap-3 group">

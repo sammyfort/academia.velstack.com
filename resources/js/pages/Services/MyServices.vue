@@ -53,7 +53,7 @@ const goToPage = (page) => {
     <Head title="Artisan Works" />
 
     <Layout>
-        <div class=" md:block fixed bottom-8 right-8 z-50">
+        <div class=" md:block fixed bottom-8 left-8 z-50">
             <Link :href="route('my-services.create')">
                 <Button class="bg-primary hover:from-primary-700 hover:to-primary-700
                 text-white font-semibold px-6 py-4 rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300 ease-out flex items-center gap-3 group">
@@ -165,21 +165,11 @@ const goToPage = (page) => {
                                     </h3>
 
 
-                                    <p class="text-slate-600 text-sm leading-relaxed mb-4 truncate">
-                                        {{ service.description }}
-                                    </p>
+<!--                                    <p   class="text-slate-600 text-sm leading-relaxed mb-4 truncate">-->
+<!--                                        {{service.category.name }}-->
+<!--                                    </p>-->
 
-                                    <div class="flex flex-wrap gap-2 mb-4">
-                                        <span v-for="category in service.categories?.slice(0, 3)"
-                                              :key="category"
-                                              class="bg-slate-100 text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full">
-                                            {{ category.name }}
-                                        </span>
-                                        <span v-if="service.categories?.length > 3"
-                                              class="bg-slate-100 text-slate-500 text-xs font-medium px-2.5 py-1 rounded-full">
-                                            +{{ service.categories.length - 3 }} more
-                                        </span>
-                                    </div>
+
 
 
                                     <Button class="w-full bg-secondary

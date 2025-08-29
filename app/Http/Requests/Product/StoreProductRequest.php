@@ -34,7 +34,7 @@ class StoreProductRequest extends FormRequest
             'status' => ['required', Rule::in(ProductStatus::toArray())],
             'price' => ['required', 'numeric'],
             'is_negotiable' => ['required', Rule::in(YesNo::toArray())],
-            'short_description' => ['nullable', 'string'],
+            'short_description' => ['required', 'string'],
             'first_mobile' => ['required', new MobileNumber()],
             'second_mobile' => ['nullable', new MobileNumber()],
             'whatsapp_mobile' => ['nullable', new MobileNumber()],

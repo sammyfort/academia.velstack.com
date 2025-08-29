@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import {Head, Link, useForm} from '@inertiajs/vue3';
 import { toastSuccess, toastError } from '@/lib/helpers';
 import {Building2, Check, LoaderCircle, PlusIcon} from 'lucide-vue-next';
 import Layout from '@/layouts/Layout.vue';
@@ -9,23 +9,23 @@ import PageHeader from '@/pages/Signboards/blocks/PageHeader.vue';
 import FormComponent from '@/components/FormComponent.vue';
 import InputSelect from '@/components/InputSelect.vue';
 import InputText from '@/components/InputText.vue';
-import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
-import GalleryFilesUpload from '@/components/GalleryFilesUpload.vue';
+
 import { InputSelectOption } from '@/types';
 import {Button} from "@/components/ui/button";
-import CreateBusiness from "@/pages/Businesses/CreateBusiness.vue";
+import GalleryFilePond from "@/components/GalleryFilePond.vue";
+import FeaturedFilePond from "@/components/FeaturedFilePond.vue";
 
 const props = defineProps<{
-    business?: number;
+    service?: number;
     categories: Array<{ label: string; value: string }>;
     regions: Array<{ label: string; value: string }>;
-    businesses: Array<{ label: string; value: string }>;
+    services: Array<{ label: string; value: string }>;
     countries: InputSelectOption[]
 }>();
 
 const form = useForm({
     country_id: '',
-    business_id: '',
+    service_id: '',
     region_id: '',
     categories: [],
     name: '',
@@ -34,21 +34,17 @@ const form = useForm({
     landmark: '',
     blk_number: '',
     gps: '',
-    featured_image: null,
-    gallery_images: []
+    featured: null,
+    gallery: []
 });
 
 const businessFieldDisabled = ref(false);
 
-const galleryErrors = computed(() =>
-    Object.keys(form.errors)
-        .filter((key) => key.startsWith('gallery_images.'))
-        .map((key) => form.errors[key])
-);
+
 
 onMounted(() => {
-    if (props.business) {
-        form.business_id = String(props.business);
+    if (props.service) {
+        form.service_id = String(props.service);
         businessFieldDisabled.value = true;
     }
 });
@@ -89,16 +85,16 @@ const createSignboard = () => {
 
                             <div>
                                 <InputSelect
-                                    label="Select Business" :form="form" model="business_id" :disabled="businessFieldDisabled" :options="businesses" required searchable
+                                    label="Select Service" :form="form" model="service_id"
+                                    :disabled="businessFieldDisabled" :options="services" required searchable
                                 />
-                                <CreateBusiness v-if="!businesses.length" @created="$inertia.reload({ only: ['businesses'] })">
-                                    <a
-                                        class="mt-2 text-primary font-semibold px-4 py-2 flex items-center gap-2"
-                                    >
-                                        <PlusIcon class="w-4 h-4" />
-                                        <span>Add Business</span>
-                                    </a>
-                                </CreateBusiness>
+                                <Link v-if="!services.length" :href="route('my-services.create')">
+                                    <Button class="bg-primary hover:from-primary-700 hover:to-primary-700
+                text-white font-semibold px-6 py-4 rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300 ease-out flex items-center gap-3 group">
+                                        <PlusIcon class="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                                        <span class=" lg:block">Add Service</span>
+                                    </Button>
+                                </Link>
                             </div>
                             <InputText :form="form" label="Name/Title" model="name" required />
                             <div class="md:col-span-2">
@@ -121,15 +117,20 @@ const createSignboard = () => {
                 </template>
 
                 <template #media-section>
-                    <FeatureFileUpload
+                    <FeaturedFilePond
+                        ref="featureUploadRef"
                         :form="form"
-                        v-model:file="form.featured_image"
+                        v-model="form.featured"
+                        :preview="form.featured"
+                        modelName="featured"
+                        :error="form.errors.featured"
                     />
 
-                    <GalleryFilesUpload
+
+                    <GalleryFilePond
+                        v-model="form.gallery"
                         :form="form"
-                        v-model:files="form.gallery_images"
-                        :gallery-errors="galleryErrors"
+                        :error="form.errors.gallery"
                     />
                 </template>
             </FormComponent>

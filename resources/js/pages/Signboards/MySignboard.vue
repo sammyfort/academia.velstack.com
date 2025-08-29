@@ -117,14 +117,14 @@ onMounted(()=> {
 
                                 <div class="max-w-md rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-md">
                                     <h3 class="mb-2 font-semibold text-white">Business Information</h3>
-                                    <p class="text-lg text-white/90">{{ props.signboard.business.name }}</p>
+                                    <p class="text-lg text-white/90">{{ props.signboard.service.title }}</p>
                                 </div>
                             </div>
 
                             <div class="flex gap-3">
                                 <Link
                                     :href="route('my-signboards.create')"
-                                    :data="{ business: props.signboard.business.id }"
+                                    :data="{ business: props.signboard.service.id }"
                                     class="flex items-center gap-x-2 rounded-xl border border-white/30 bg-primary px-6 py-3 text-white backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-primary/30"
                                 >
                                     <PlusIcon class="h-5 w-5" />
@@ -167,8 +167,8 @@ onMounted(()=> {
 
                         <div class="lg:col-span-2">
                             <ImagePreview
-                                :featured-url="props.signboard.featured_url"
-                                :gallery-urls="props.signboard.gallery_urls"
+                                :featured-url="props.signboard.featured"
+                                :gallery-urls="props.signboard.gallery"
                                 title="Signboard Gallery"
                             />
                         </div>

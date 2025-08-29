@@ -70,28 +70,26 @@ class ServiceController extends Controller
         $service = null;
 
         DB::transaction(function () use ($data, $request, &$service) {
-
-            $categoryName = array_key_first($data['category_id']);
-            $category = ServiceCategory::firstOrCreate(
-                ['name' => $categoryName],
-                ['name' => $categoryName]
-            );
-
-            $data['category_id'] = $category->id;
+            if (isset($data['category_id']) && !is_numeric($data['category_id'])) {
+                $category = ServiceCategory::firstOrCreate(['name' => $data['category_id']]);
+                $data['category_id'] = $category->id;
+            }
             $service = auth()->user()->services()->create(
                 Arr::except($data, ['featured', 'gallery'])
             );
-
             $service->handleUploads($request, [
                 'featured' => 'featured',
                 'gallery' => 'gallery',
             ]);
         });
+
         if ($service) {
             return to_route('my-services.show', $service->slug);
         }
+
         return back()->with(errorRes("Please try again."));
     }
+
 
     public function edit(string $service): Response
     {
@@ -105,13 +103,19 @@ class ServiceController extends Controller
     {
         $service = auth()->user()->services()->findOrFail($service);
         $data = $request->validated();
+
         DB::transaction(function () use ($service, $data, $request) {
+            if (isset($data['category_id']) && !is_numeric($data['category_id'])) {
+                $category = ServiceCategory::firstOrCreate(['name' => $data['category_id']]);
+                $data['category_id'] = $category->id;
+            }
             $service->update(Arr::except($data, ['featured', 'gallery', 'removed_gallery_urls']));
             $service->handleMediaUpdate($request);
         });
 
         return back()->with(successRes("Service updated successfully."));
     }
+
 
     public function destroy(string $service): RedirectResponse
     {

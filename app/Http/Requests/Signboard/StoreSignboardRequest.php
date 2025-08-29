@@ -26,7 +26,7 @@ class StoreSignboardRequest extends FormRequest
         return [
             'country_id' => ['required', 'exists:countries,id'],
             'name' => ['required', 'string'],
-            'business_id' => ['required', Rule::exists('businesses', 'id')->where('user_id', request()->user()->id)],
+            'service_id' => ['required', Rule::exists('services', 'id')->where('user_id', request()->user()->id)],
             'region_id' => ['required', Rule::exists('regions', 'id')],
             'categories' => ['required', 'array'],
             //'categories.*' => ['int'],
@@ -35,9 +35,10 @@ class StoreSignboardRequest extends FormRequest
             'landmark' => ['required', 'string'],
             'blk_number' => ['nullable', 'string'],
             'gps' => ['required', 'string', new GPSRule()],
-            'featured_image' => ['nullable', 'image', 'max:2048'],
-            'gallery_images' => ['nullable', 'array'],
-            'gallery_images.*' => ['image', 'max:2048'],
+
+            'featured' => ['nullable', 'image', 'max:2048'],
+            'gallery' => ['nullable', 'array'],
+            'gallery.*' => ['image', 'max:2048'],
         ];
     }
 

@@ -105,13 +105,13 @@ const user = computed(() => page.props.auth.user)
                             :href="route('dashboard')"
                         >Dashboard</TextLink>
                     </div>
-                    <div class="flex items-center">
-                        <TextLink
-                            class="font-bold py-1.5 no-underline ps-2 w-full"
-                            :class="{ 'mobile-active-nav': $page.component === 'Businesses/MyBusinesses' }"
-                            :href="route('my-businesses.index')"
-                        >My Businesses</TextLink>
-                    </div>
+<!--                    <div class="flex items-center">-->
+<!--                        <TextLink-->
+<!--                            class="font-bold py-1.5 no-underline ps-2 w-full"-->
+<!--                            :class="{ 'mobile-active-nav': $page.component === 'Businesses/MyBusinesses' }"-->
+<!--                            :href="route('my-businesses.index')"-->
+<!--                        >My Businesses</TextLink>-->
+<!--                    </div>-->
                     <div class="flex items-center">
                         <TextLink
                             class="font-bold py-1.5 no-underline ps-2 w-full"

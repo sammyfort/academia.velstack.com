@@ -1,7 +1,7 @@
 
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import { Head, useForm } from '@inertiajs/vue3';
 import { toastSuccess, toastError } from '@/lib/helpers';
 import { Building2 } from 'lucide-vue-next';
@@ -11,17 +11,24 @@ import PageHeader from '@/pages/Signboards/blocks/PageHeader.vue';
 import FormComponent from '@/components/FormComponent.vue';
 import InputSelect from '@/components/InputSelect.vue';
 import InputText from '@/components/InputText.vue';
-import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
-import GalleryFilesUpload from '@/components/GalleryFilesUpload.vue';
 import TextEditor from '@/components/forms/TextEditor.vue';
 import InputError from '@/components/InputError.vue';
 import { InputSelectOption } from '@/types';
+import GalleryFilePond from "@/components/GalleryFilePond.vue";
+import FeaturedFilePond from "@/components/FeaturedFilePond.vue";
+import TagSelect from "@/components/forms/TagSelect.vue";
 
 const props = defineProps<{
     categories: Array<{ label: string, value: string }>,
     regions: Array<{ label: string, value: string }>
     countries: InputSelectOption[]
 }>();
+
+onMounted(() => {
+
+    console.log(props.categories)
+});
+
 const galleryUploadRef = ref();
 const featureUploadRef = ref();
 const form = useForm({
@@ -39,7 +46,7 @@ const form = useForm({
     town: '',
     gps: '',
     region_id: '',
-    category_id: [],
+    category_id: '',
     featured: null,
     gallery: []
 });
@@ -103,7 +110,17 @@ const createService = () => {
                                    Your video will  be shown to visitors if you have a running promotion</span>
                            </div>
 
-                            <InputSelect label="Field Of Service" :form="form" model="category_id" :options="props.categories" taggable required searchable />
+                            <TagSelect
+                                :form="form"
+                                model="category_id"
+                                label="Field"
+                                :options="categories"
+                                :size="1"
+                                :addable="true"
+                                :searchable="true"
+                            />
+
+
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Service Description</label>
                                 <TextEditor v-model="form.description" />
@@ -114,17 +131,20 @@ const createService = () => {
                 </template>
 
                 <template #media-section>
-                    <FeatureFileUpload
+                    <FeaturedFilePond
                         ref="featureUploadRef"
                         :form="form"
-                        v-model:file="form.featured"
-                        model-name="featured"
+                        v-model="form.featured"
+                        :preview="form.featured"
+                        modelName="featured"
+                        :error="form.errors.featured"
                     />
 
-                    <GalleryFilesUpload
-                        ref="galleryUploadRef"
+
+                    <GalleryFilePond
+                        v-model="form.gallery"
                         :form="form"
-                        v-model:files="form.gallery"
+                        :error="form.errors.gallery"
                     />
                 </template>
             </FormComponent>

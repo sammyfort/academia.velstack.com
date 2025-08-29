@@ -21,7 +21,7 @@ class SignboardPolicy
      */
     public function view(User $user, Signboard $signboard): Response
     {
-        return $user->id == $signboard->business->user_id
+        return $user->id == $signboard->service->user_id
             ? Response::allow()
             : Response::denyWithStatus(404, "Signboard not Found");
     }
@@ -39,7 +39,7 @@ class SignboardPolicy
      */
     public function update(User $user, Signboard $signboard): Response
     {
-        return $user->id == $signboard->business->user_id
+        return $user->id == $signboard->service->user_id
             ? Response::allow()
             : Response::denyWithStatus(404, "Signboard not Found");
     }
@@ -49,7 +49,7 @@ class SignboardPolicy
      */
     public function delete(User $user, Signboard $signboard): Response
     {
-        return $user->id == $signboard->business->user_id
+        return $user->id == $signboard->service->user_id
             ? Response::allow()
             : Response::denyWithStatus(404, "Signboard not Found");
     }

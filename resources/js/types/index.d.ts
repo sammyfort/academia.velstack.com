@@ -104,6 +104,7 @@ export interface ProductI extends ModelI {
 
 export interface ServiceI extends ModelI{
     country_id: number|string
+    category_id: number|string
     title: string;
     slug: string;
     description: string;
@@ -256,7 +257,7 @@ export interface PromotionI extends ModelI {
 }
 
 export interface SignboardI extends ModelI {
-    country_id: number|string
+    country_id: number
     name: string;
     service_id: number;
     service: ServiceI;
@@ -280,6 +281,8 @@ export interface SignboardI extends ModelI {
     reviews: ReviewI[];
     promotions: PromotionI[]
     active_promotion: PromotionI | null,
+    featured: string|MediaI;
+    gallery: MediaI[];
 }
 
 export interface RatingI extends ModelI {

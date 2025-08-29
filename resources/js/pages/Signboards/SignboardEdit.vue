@@ -9,62 +9,38 @@ import PageHeader from '@/pages/Signboards/blocks/PageHeader.vue';
 import FormComponent from '@/components/FormComponent.vue';
 import InputSelect from '@/components/InputSelect.vue';
 import InputText from '@/components/InputText.vue';
-import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
-import GalleryFilesUpload from '@/components/GalleryFilesUpload.vue';
-import { InputSelectOption } from '@/types';
+
+import {InputSelectOption, SignboardI} from '@/types';
+import GalleryFilePond from "@/components/GalleryFilePond.vue";
+import FeaturedFilePond from "@/components/FeaturedFilePond.vue";
 
 const props = defineProps<{
-    signboard: {
-        id: number;
-        business_id: number;
-        name: string;
-        region_id: number;
-        categories?: Array<{ id: number; name: string }>;
-        slug: string;
-        town: string;
-        street: string;
-        landmark: string;
-        blk_number: string;
-        gps: string;
-        featured?: string;
-        gallery: string[];
-    };
-    categories: Array<{ label: string; value: string }>;
-    regions: Array<{ label: string; value: string }>;
-    businesses: Array<{ label: string; value: string }>;
+    signboard: SignboardI;
+    categories: InputSelectOption[];
+    regions: InputSelectOption[];
+    services: InputSelectOption[];
     countries: InputSelectOption[]
 }>();
 
 const form = useForm({
-    country_id: '',
-    business_id: '',
-    name: '',
-    region_id: '',
-    categories: [],
-    town: '',
-    street: '',
-    landmark: '',
-    blk_number: '',
-    gps: '',
+    country_id: props.signboard?.country_id ?? '',
+    service_id: props.signboard?.service_id ?? '',
+    name: props.signboard?.name ?? '',
+    region_id: props.signboard?.region_id ?? '',
+    categories: props.signboard?.categories?.map(cat => cat.id) ?? [],
+    town: props.signboard?.town ?? '',
+    street: props.signboard?.street ?? '',
+    landmark: props.signboard?.landmark ?? '',
+    blk_number: props.signboard?.blk_number ?? '',
+    gps: props.signboard?.gps ?? '',
     featured: null,
     gallery: [] as File[],
     removed_gallery_urls: [] as string[],
 });
 
+
 onMounted(() => {
-    const s = props.signboard;
-     form.country_id = s.country_id;
-    form.business_id = String(s.business_id);
-    form.name = s.name;
-    form.region_id = String(s.region_id);
-    form.categories = s.categories?.map(cat => cat.id) || [];
-    form.town = s.town;
-    form.street = s.street;
-    form.landmark = s.landmark;
-    form.blk_number = s.blk_number;
-    form.gps = s.gps;
-
-
+console.log(props.signboard)
 });
 
 const galleryItems = computed(() => {
@@ -82,11 +58,7 @@ const galleryItems = computed(() => {
 
 });
 
-const galleryErrors = computed(() =>
-    Object.keys(form.errors)
-        .filter(key => key.startsWith('gallery_images.'))
-        .map(key => form.errors[key])
-);
+
 
 const updateSignboard = () => {
     form.post(route('my-signboards.update', props.signboard.id), {
@@ -116,9 +88,6 @@ const updateSignboard = () => {
 
             <FormComponent
                 :form="form"
-                :featured-preview="props.signboard.featured"
-                :gallery-items="galleryItems"
-                :gallery-errors="galleryErrors"
                 submit-text="Update Signboard"
                 processing-text="Updating Signboard..."
                 @submit="updateSignboard"
@@ -128,13 +97,13 @@ const updateSignboard = () => {
                         <h2 class="text-lg font-semibold text-gray-900 mb-6">Signboard Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <InputSelect label="Select Country" :form="form" model="country_id" :options="props.countries"   required searchable />
-
-                            <InputSelect label="Select Business" :form="form" model="business_id" :disabled="true" :options="businesses" required searchable />
+                            <InputSelect label="Region" :form="form" model="region_id" :options="regions" required searchable />
+                            <InputSelect label="Select Service" :form="form" model="service_id" :disabled="true" :options="services" required searchable />
                             <InputText :form="form" label="Name/Title" model="name" required />
                             <div class="md:col-span-2">
                                 <InputSelect label="Fields Of Operation" :form="form" model="categories" :options="categories" taggable required searchable />
                             </div>
-                            <InputSelect label="Region" :form="form" model="region_id" :options="regions" required searchable />
+
                             <InputText :form="form" label="Town" model="town" required />
                         </div>
                     </div>
@@ -152,17 +121,21 @@ const updateSignboard = () => {
 
                 </template>
                 <template #media-section>
-                    <FeatureFileUpload
+                    <FeaturedFilePond
+                        ref="featureUploadRef"
                         :form="form"
-                        :featured-preview="props.signboard.featured"
-                        v-model:file="form.featured"
+                        v-model="form.featured"
+                        :preview="props.signboard.featured"
+                        modelName="featured"
+                        :error="form.errors.featured"
                     />
 
-                    <GalleryFilesUpload
+
+                    <GalleryFilePond
+                        v-model="form.gallery"
+                        :existing="galleryItems"
                         :form="form"
-                        v-model:files="form.gallery"
-                        :gallery-errors="galleryErrors"
-                        :gallery-items="galleryItems"
+                        :error="form.errors.gallery"
                     />
                 </template>
             </FormComponent>

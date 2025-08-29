@@ -82,17 +82,36 @@ function toggleTag(value: string) {
 
 function addNewTag() {
     if (!props.form || !props.model) return
+
     const newValue = searchQuery.value.trim()
-    if (newValue && !props.form[props.model].includes(newValue)) {
-        props.form[props.model].push(newValue)
-        searchQuery.value = ''
+    if (!newValue) return
+
+    const exists = props.options.some(opt => opt.label === newValue)
+    let newOption
+
+    if (!exists) {
+        newOption = { label: newValue, value: newValue }
+        props.options.push(newOption)
+    } else {
+        newOption = props.options.find(opt => opt.label === newValue)!
     }
+
+    if (!Array.isArray(props.form[props.model])) {
+        props.form[props.model] = []
+    }
+
+    if (!props.form[props.model].includes(newOption.value)) {
+        props.form[props.model].push(newOption.value)
+    }
+
+    searchQuery.value = ''
 }
 
 function removeTag(value: string) {
     if (!props.form || !props.model) return
-    const index = props.form[props.model].indexOf(value)
-    if (index !== -1) props.form[props.model].splice(index, 1)
+    if (!Array.isArray(props.form[props.model])) return
+
+    props.form[props.model] = props.form[props.model].filter((v: string) => v !== value)
 }
 
 function selectOption(value: string) {
