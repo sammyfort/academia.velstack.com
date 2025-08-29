@@ -68,7 +68,7 @@ const googleLogin = () => {
             </div>
             <form @submit.prevent="submit" class="flex flex-col gap-6 w-full justify-center md:w-1/3">
                 <div>
-                    <div class="text-3xl font-bold text-fade">Join Signboard</div>
+                    <div class="text-3xl font-bold text-fade">Join {{ $page.props.name }}</div>
                     <div class="text-fade min-h-[75px]" ref="descriptionRef"></div>
                 </div>
                 <div class="grid gap-6">

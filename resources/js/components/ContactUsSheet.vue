@@ -34,7 +34,7 @@ const submitForm = ()=>{
             <SheetTitle />
 
             <section>
-                <div class="mx-auto max-w-7xl px-4 lg:py-14 py-8 sm:px-6 lg:px-8 overflow-y-scroll lg:overflow-y-auto h-200 lg:h-auto">
+                <div class="mx-auto max-w-7xl px-4 lg:py-14 py-8 sm:px-6 lg:px-8 overflow-y-scroll lg:overflow-y-auto h-150 lg:h-auto">
                     <div class="mb-4">
                         <div class="mb-6 max-w-3xl text-center sm:text-center md:mx-auto md:mb-12">
                             <p class="text-2xl font-semibold tracking-wide uppercase">Contact</p>
