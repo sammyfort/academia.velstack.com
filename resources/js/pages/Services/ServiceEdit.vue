@@ -45,8 +45,8 @@ const form = useForm({
 });
 
 onMounted(() => {
-    console.log(props.service)
-    console.log(props.categories)
+ //   console.log(props.service)
+   // console.log(props.categories)
 });
 
 const galleryItems = computed(() => {
@@ -66,7 +66,7 @@ const galleryItems = computed(() => {
 
 
 const updateService = () => {
-    console.log('Submitting form data:', {...form.data()});
+   // console.log('Submitting form data:', {...form.data()});
     form.transform((data) => ({
         ...data,
         _method: 'PUT'

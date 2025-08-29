@@ -105,7 +105,10 @@ const user = computed(() => page.props.auth.user)
 
                             <Link
                                 :class="{ 'active-nav': $page.component ===
-                                'Signboards/SignboardCreate' || 'Signboards/SignboardEdit' || 'Signboards/SignboardShow' || 'Signboards/MySignboards' }"
+                                'Signboards/SignboardCreate'
+                                || 'Signboards/SignboardEdit'
+                                || 'Signboards/SignboardShow'
+                                || 'Signboards/MySignboards' }"
                                 :href="route('my-signboards.index')"
                                 class="hover:text-primary flex items-center gap-1 py-4 text-center"
                             >
