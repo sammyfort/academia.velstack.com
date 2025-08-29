@@ -5,6 +5,7 @@ import { HTMLAttributes, onMounted } from 'vue';
 import GLightbox from 'glightbox';
 import { cn } from '@/lib/utils';
 import Footer from '@/layouts/Footer.vue';
+import DownloadAPKPopup from '@/components/DownloadAPKPopup.vue';
 
 type Props = {
     centerX?: boolean,
@@ -29,6 +30,7 @@ onMounted(() => {
 
 <template>
     <Toaster position="top-right" richColors/>
+    <DownloadAPKPopup />
     <div :class="cn(props.class, 'flex min-h-screen flex-col items-center p-3  lg:justify-center lg:p-8 page')" :style="props.style">
         <a class="hidden bg-gradient-to-b from-blue-500 to-blue-700 px-2 py-3 text-center text-sm text-white md:block lg:font-[500] w-full"
            href="/pricing"

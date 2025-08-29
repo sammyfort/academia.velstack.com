@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FAQController;
 use App\Http\Controllers\{CountryController,
+    DownloadController,
     JobPublicController,
     ProductController,
     ServiceController,
@@ -116,6 +117,8 @@ Route::prefix('countries')->as('countries.')->group(callback: function () {
     Route::get('/', [CountryController::class, 'index'])->name('index');
     Route::get('/regions', [CountryController::class, 'regions'])->name('regions');
 });
+
+Route::get('download/apk', [DownloadController::class, 'downloadAPK'])->name('download.apk');
 
 
 require __DIR__.'/auth.php';
