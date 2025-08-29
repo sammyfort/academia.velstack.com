@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AdvertisedSignboardsH from '@/components/businesses/AdvertisedSignboardsH.vue';
+import AdvertisedSignboardsH from '@/components/signboard/AdvertisedSignboardsH.vue';
 
 withDefaults(defineProps<{
     titleText?: string

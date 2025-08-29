@@ -10,7 +10,7 @@ class ServiceObserver
     public function creating(Service $service): void
     {
         // get lat and lon from gps(Ghana post)
-        if ($service->gps){
+        if ($service->gps && app()->environment() == 'production') {
             $location = GhanaPostService::getLocationByGPS($service->gps);
             $service->gps_lat = $location->centerLongitude;
             $service->gps_lon = $location->centerLatitude;
@@ -24,7 +24,7 @@ class ServiceObserver
 
     public function updated(Service $service): void
     {
-        if ($service->isDirty('gps') && $service->gps){
+        if ($service->isDirty('gps') && $service->gps && app()->environment() == 'production') {
             $location = GhanaPostService::getLocationByGPS($service->gps);
             $service->gps_lat = $location->centerLongitude;
             $service->gps_lon = $location->centerLatitude;

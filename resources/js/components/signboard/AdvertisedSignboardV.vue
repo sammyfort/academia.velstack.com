@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Autoplay from 'embla-carousel-autoplay'
-import SignboardCardV1 from '@/components/businesses/SignboardCardV1.vue';
+import SignboardCardV1 from '@/components/signboard/SignboardCardV1.vue';
 import { Carousel, CarouselItem, CarouselContent } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
 import { HTMLAttributes, onMounted, ref } from 'vue';

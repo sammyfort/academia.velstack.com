@@ -11,9 +11,11 @@ class SignboardObserver
     public function creating(Signboard $signboard): void
     {
         // get lat and lon from gps(Ghana post)
-//        $location = GhanaPostService::getLocationByGPS($signboard->gps);
-//        $signboard->gps_lat = $location->centerLongitude;
-//        $signboard->gps_lon = $location->centerLatitude;
+        if ($signboard->gps && app()->environment() == 'production') {
+            $location = GhanaPostService::getLocationByGPS($signboard->gps);
+            $signboard->gps_lat = $location->centerLongitude;
+            $signboard->gps_lon = $location->centerLatitude;
+        }
     }
 
     public function created(Signboard $signboard): void
@@ -23,7 +25,7 @@ class SignboardObserver
 
     public function updated(Signboard $signboard): void
     {
-        if ($signboard->isDirty('gps')){
+        if ($signboard->isDirty('gps') && $signboard->gps && app()->environment() == 'production') {
             $location = GhanaPostService::getLocationByGPS($signboard->gps);
             $signboard->gps_lat = $location->centerLongitude;
             $signboard->gps_lon = $location->centerLatitude;

@@ -63,7 +63,7 @@ const ratedHandler = (sb: SignboardI)=>{
             <div class="flex flex-wrap gap-x-2 gap-y-0 text-xs">
                 <div class="flex items-center truncate" v-for="category in signboard.categories" :key="category.id">
                     <Dot class="text-primary h-5 w-5" :size="35"/>
-                    <div>{{ category.name }}</div>
+                    <div class="font-bold">{{ category.name }}</div>
                 </div>
             </div>
 

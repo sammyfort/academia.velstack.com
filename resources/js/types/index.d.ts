@@ -54,11 +54,10 @@ export interface User extends ModelI {
     referral_link: string
     points: number
     is_referrer_points_settled: boolean
-    services: ServiceI
-    jobs: JobI
-    businesses: BusinessI
-    signboards: SignboardI
-    products: ProductI
+    services: ServiceI[]
+    jobs: JobI[]
+    signboards: SignboardI[]
+    products: ProductI[]
     points_in_cedis: number
     country: CountryI
 }
@@ -113,7 +112,7 @@ export interface ServiceI extends ModelI{
     video_link: string;
     email: string;
     address: string;
-    business_name?: string;
+    business_name: string|null;
     region_id: number;
     years_experience: string;
     region: RegionI;
@@ -133,6 +132,7 @@ export interface ServiceI extends ModelI{
     total_average_rating: number
     reviews_count: number
     reviews: ReviewI[]
+    initials: string,
 }
 
 export interface JobI extends ModelI{
@@ -258,8 +258,8 @@ export interface PromotionI extends ModelI {
 export interface SignboardI extends ModelI {
     country_id: number|string
     name: string;
-    business_id: number;
-    business: BusinessI;
+    service_id: number;
+    service: ServiceI;
     categories: SignboardCategoryI[],
     region: RegionI;
     region_id: number;
@@ -273,6 +273,7 @@ export interface SignboardI extends ModelI {
     total_average_rating: number,
     reviews_count: number,
     slug: string,
+    active_subscription: PromotionPlanI
     featured_url: string,
     views_count: number | null,
     gallery_urls: [],

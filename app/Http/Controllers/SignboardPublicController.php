@@ -29,7 +29,7 @@ class SignboardPublicController extends Controller
 
     public function show(Signboard $signboard): Response
     {
-        $signboard->loadMissing(['reviews.ratings', 'business.user', 'region.country', 'categories', 'media']);
+        $signboard->loadMissing(['reviews.ratings', 'service.user', 'region.country', 'categories', 'media']);
         $averageRatings = $signboard->averageRatings();
         $distributions = RatingService::getDistributions($signboard);
 

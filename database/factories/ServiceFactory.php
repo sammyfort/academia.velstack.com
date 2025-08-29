@@ -26,6 +26,7 @@ class ServiceFactory extends Factory
             'second_mobile' => $this->faker->optional()->phoneNumber(),
             'email' => $this->faker->optional()->safeEmail(),
             'address' => $this->faker->optional()->streetAddress(),
+            'whatsapp_mobile' => '233542092800',
             'region_id' => Region::query()->inRandomOrder()->first()->id,
             'town' => $this->faker->city(),
             'category_id' => ServiceCategory::query()->inRandomOrder()->first()->id,

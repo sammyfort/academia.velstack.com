@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import Layout from '@/layouts/Layout.vue';
 import { Head } from '@inertiajs/vue3';
-import SignboardCardV1 from '@/components/businesses/SignboardCardV1.vue';
+import SignboardCardV1 from '@/components/signboard/SignboardCardV1.vue';
 import { PaginatedDataI, RegionI, SignboardCategoryI, SignboardI } from '@/types';
-import AdvertisedSignboardV from '@/components/businesses/AdvertisedSignboardV.vue';
+import AdvertisedSignboardV from '@/components/signboard/AdvertisedSignboardV.vue';
 import { onMounted } from 'vue';
 import BackToTop from '@/components/BackToTop.vue';
 import { Star, Factory } from 'lucide-vue-next';
-import AdvertisedSignboardsH from '@/components/businesses/AdvertisedSignboardsH.vue';
+import AdvertisedSignboardsH from '@/components/signboard/AdvertisedSignboardsH.vue';
 import { chunkArray } from '@/lib/helpers';
 import { useScrollPagination } from '@/lib/useScrollPagination';
 import ServiceCardV1Skeleton from '@/components/skeletons/ServiceCardV1Skeleton.vue';
@@ -26,7 +26,7 @@ const {
     loading: loadingSignboards,
     nextPage,
 } = useScrollPagination<SignboardI>({
-    initialData: props.signboardsData.data,
+    initialData: props.signboardsData.data as SignboardI[],
     nextPageUrl: props.signboardsData.next_page_url,
     extractResponseData: (page) => page.props.signboardsData,
     preserveKeys: ['signboardsData'],

@@ -17,7 +17,7 @@ const { facebook, whatsapp, x } = generateShareLinks(props.url ?? null);
 
 <template>
     <div :class="cn('flex items-center space-x-4 my-4', props.class)">
-        <span class="me-5 font-bold">Share: </span>
+        <span class="me-5 font-semibold">Share: </span>
         <a :href="whatsapp" target="_blank" class="w-4 h-4 flex items-center justify-center">
             <Whatsapp />
         </a>

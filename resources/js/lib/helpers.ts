@@ -142,13 +142,11 @@ export function randomString(length: number = 8) {
 }
 
 export function whatsappChatLink(mobileNumber: string, message: string) {
-    // Remove spaces, dashes, parentheses, and plus sign
+    if (!mobileNumber || !mobileNumber.length) return;
     const cleanedNumber = mobileNumber.replace(/[\s\-()+]/g, "");
-
     if (!/^\d+$/.test(cleanedNumber)) {
         return
     }
-
     if (cleanedNumber.length < 8) {
         return
     }
