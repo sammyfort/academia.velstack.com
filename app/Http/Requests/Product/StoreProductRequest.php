@@ -43,7 +43,7 @@ class StoreProductRequest extends FormRequest
             'description' => ['required', new RichEditorRule()],
             'categories' => ['required', 'array'],
             'featured' => ['required', 'image', 'max:2048'],
-            'gallery' => ['required', 'array'],
+            'gallery' => ['nullable', 'array'],
             'gallery.*' => ['image', 'max:2048'],
             'video_link'=> ['nullable', 'url']
         ];

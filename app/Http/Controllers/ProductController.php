@@ -29,7 +29,6 @@ class ProductController extends Controller
             'choices'    => toLabelValue(YesNo::toArray()),
             'statuses'    => toLabelValue(ProductStatus::toArray()),
             'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
-
         ];
     }
 
@@ -74,7 +73,15 @@ class ProductController extends Controller
             $product = auth()->user()->products()->create(
                 Arr::except($data, ['featured', 'gallery', 'categories'])
             );
-            $product->categories()->sync($data['categories']);
+            $categoryIds = collect($data['categories'] ?? [])
+                ->map(function ($category) {
+                    if (is_numeric($category)) {
+                        return (int) $category;
+                    }
+                    return ProductCategory::firstOrCreate(['name' => trim($category)])->id;
+                })
+                ->all();
+            $product->categories()->sync($categoryIds);
 
             $product->handleUploads($request, [
                 'featured' => 'featured',
@@ -136,7 +143,15 @@ class ProductController extends Controller
         DB::transaction(function () use ($product, $data, $request) {
             $product->update(Arr::except($data, ['featured', 'gallery', 'categories', 'removed_gallery_urls']));
 
-            $product->categories()->sync($data['categories']);
+            $categoryIds = collect($data['categories'] ?? [])
+                ->map(function ($category) {
+                    if (is_numeric($category)) {
+                        return (int) $category;
+                    }
+                    return ProductCategory::firstOrCreate(['name' => trim($category)])->id;
+                })
+                ->all();
+            $product->categories()->sync($categoryIds);
             $product->handleMediaUpdate($request);
         });
 
