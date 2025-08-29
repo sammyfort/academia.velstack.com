@@ -13,6 +13,7 @@ import InputSelect from '@/components/InputSelect.vue';
 import InputError from '@/components/InputError.vue';
 import JobTemplate from '@/components/jobs/JobTemplate.vue';
 import { InputSelectOption } from '@/types';
+import FeaturedFilePond from "@/components/FeaturedFilePond.vue";
 
 const props = defineProps<{
     types: Array<{ label: string; value: string }>
@@ -127,12 +128,13 @@ const focusJobEditor = () => {
                 </template>
 
                 <template #media-section>
-                    <FeatureFileUpload
+
+                    <FeaturedFilePond
                         ref="featureUploadRef"
                         :form="form"
-                        v-model:file="form.company_logo"
-                        model-name="company_logo"
-                        title="Company Logo"
+                        v-model="form.company_logo"
+                        modelName="company_logo"
+                        :error="form.errors.company_logo"
                     />
 
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">

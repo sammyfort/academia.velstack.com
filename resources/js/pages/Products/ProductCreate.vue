@@ -16,6 +16,8 @@ import GalleryFilesUpload from '@/components/GalleryFilesUpload.vue';
 import TextEditor from '@/components/forms/TextEditor.vue';
 import InputError from '@/components/InputError.vue';
 import { InputSelectOption } from '@/types';
+import GalleryFilePond from "@/components/GalleryFilePond.vue";
+import FeaturedFilePond from "@/components/FeaturedFilePond.vue";
 
 const props = defineProps<{
     regions: Array<{ label: string, value: string }>
@@ -116,17 +118,22 @@ const createService = () => {
                 </template>
 
                 <template #media-section>
-                    <FeatureFileUpload
+
+
+                    <FeaturedFilePond
                         ref="featureUploadRef"
                         :form="form"
-                        v-model:file="form.featured"
-                        model-name="featured"
+                        v-model="form.featured"
+                        :preview="form.featured"
+                        modelName="featured"
+                        :error="form.errors.featured"
                     />
 
-                    <GalleryFilesUpload
-                        ref="galleryUploadRef"
+
+                    <GalleryFilePond
+                        v-model="form.gallery"
                         :form="form"
-                        v-model:files="form.gallery"
+                        :error="form.errors.gallery"
                     />
                 </template>
             </FormComponent>

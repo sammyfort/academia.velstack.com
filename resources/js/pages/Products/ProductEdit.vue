@@ -14,6 +14,8 @@ import GalleryFilesUpload from '@/components/GalleryFilesUpload.vue';
 import { InputSelectOption, ProductI } from '@/types';
 import TextEditor from '@/components/forms/TextEditor.vue';
 import InputError from '@/components/InputError.vue';
+import GalleryFilePond from "@/components/GalleryFilePond.vue";
+import FeaturedFilePond from "@/components/FeaturedFilePond.vue";
 
 const props = defineProps<{
     categories: Array<{ label: string; value: string }>;
@@ -26,45 +28,30 @@ const props = defineProps<{
 const galleryUploadRef = ref();
 const featureUploadRef = ref();
 const form = useForm({
-    country_id: '',
-    name: '',
-    status: '',
-    description: '',
-    short_description: '',
-    price: '',
-    categories: [],
-    is_negotiable: '',
-    first_mobile: '',
-    second_mobile: '',
-    whatsapp_mobile: '',
-    video_link: '',
-    website: '',
-    town: '',
-    region_id: '',
+    country_id: props.product?.country_id || '',
+    region_id: props.product?.region_id || '',
+    name: props.product?.name || '',
+    status: props.product?.status || '',
+    description: props.product?.description || '',
+    short_description: props.product?.short_description || '',
+    price: props.product?.price ?? '',
+    categories: (props.product?.categories || []).map((cat: any) => cat.id),
+    is_negotiable: props.product?.is_negotiable ? 'yes' : 'no',
+    first_mobile: props.product?.first_mobile || '',
+    second_mobile: props.product?.second_mobile || '',
+    whatsapp_mobile: props.product?.whatsapp_mobile || '',
+    town: props.product?.town || '',
+    video_link: props.product?.video_link || '',
+    website: props.product?.website || '',
     featured: null,
     gallery: [] as File[],
     removed_gallery_urls: [] as string[],
 });
 
+
 onMounted(() => {
 
-    const p = props.product;
-    form.country_id = p.country_id;
-    form.region_id = p.region_id;
-    form.name = p.name;
-    form.status = p.status;
-    form.categories = (p.categories || []).map((cat: any) => cat.id);
-    form.description = p.description;
-    form.short_description = p.short_description;
-    form.price = p.price;
-    form.is_negotiable = p.is_negotiable ? 'yes' : 'no';
-    form.first_mobile = p.first_mobile;
-    form.second_mobile = p.second_mobile;
-    form.town = p.town;
-    form.video_link = p.video_link;
 
-
-    form.website = p.website;
 });
 
 const galleryItems = computed(() => {
@@ -108,9 +95,6 @@ const updateService = () => {
 
             <FormComponent
                 :form="form"
-                :featured-preview="props.product.featured"
-                :gallery-items="galleryItems"
-                :gallery-errors="galleryErrors"
                 submit-text="Update Product"
                 processing-text="Updating Product..."
                 @submit="updateService"
@@ -145,20 +129,22 @@ const updateService = () => {
                 </template>
 
                 <template #media-section>
-                    <FeatureFileUpload
+
+                    <FeaturedFilePond
                         ref="featureUploadRef"
                         :form="form"
-                        :featured-preview="props.product.featured"
-                        v-model:file="form.featured"
-                        model-name="featured"
+                        v-model="form.featured"
+                        :preview="props.product.featured"
+                        modelName="featured"
+                        :error="form.errors.featured"
                     />
 
-                    <GalleryFilesUpload
-                        ref="galleryUploadRef"
+
+                    <GalleryFilePond
+                        v-model="form.gallery"
                         :form="form"
-                        v-model:files="form.gallery"
-                        :gallery-errors="galleryErrors"
-                        :gallery-items="galleryItems"
+                        :error="form.errors.gallery"
+                        :existing="galleryItems"
                     />
                 </template>
             </FormComponent>

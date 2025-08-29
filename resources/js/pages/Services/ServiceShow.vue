@@ -22,9 +22,14 @@ const props = defineProps<{
     ratings: AverageRatingsI;
     distributions: RatingsDistributionI;
 }>();
+
+onMounted(()=>{
+    console.log(props.service)
+})
 const reviews = computed(() => props.service.reviews);
 
 const isDeleting = ref(false);
+
 
 const handleDelete = () => {
     isDeleting.value = true;

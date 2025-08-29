@@ -8,10 +8,10 @@ import PageHeader from '@/pages/Signboards/blocks/PageHeader.vue';
 import TextEditor from '@/components/forms/TextEditor.vue';
 import FormComponent from '@/components/FormComponent.vue';
 import InputText from '@/components/InputText.vue';
-import FeatureFileUpload from '@/components/FeatureFileUpload.vue';
 import InputSelect from '@/components/InputSelect.vue';
 import InputError from '@/components/InputError.vue';
 import { InputSelectOption, JobI } from '@/types';
+import FeaturedFilePond from "@/components/FeaturedFilePond.vue";
 
 const props = defineProps<{
     job: JobI;
@@ -129,13 +129,14 @@ const updateJob = () => {
                 </template>
 
                 <template #media-section>
-                    <FeatureFileUpload
+
+                    <FeaturedFilePond
                         ref="featureUploadRef"
                         :form="form"
-                        :featured-preview="props.job.company_logo"
-                        v-model:file="form.company_logo"
-                        model-name="company_logo"
-                        title="Company Logo"
+                        v-model="form.company_logo"
+                        :preview="props.job.company_logo"
+                        modelName="featured"
+                        :error="form.errors.company_logo"
                     />
 
                     <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">

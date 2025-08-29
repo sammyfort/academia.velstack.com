@@ -8,6 +8,8 @@ use App\Http\Requests\Signboard\UpdateSignboardRequest;
 use App\Models\Country;
 use App\Models\Promotion;
 use App\Models\PromotionPlan;
+use App\Models\Region;
+use App\Models\ServiceCategory;
 use App\Models\Signboard;
 use App\Models\SignboardCategory;
 use App\Services\HelperService;
@@ -24,40 +26,40 @@ use Inertia\Response;
 class SignboardController extends Controller
 {
 
-    public function __construct(protected HelperService $helperService)
+    public function __construct(protected $props = [])
     {
-
+        $this->props = [
+            'categories' => toLabelValue(SignboardCategory::query()->select('id', 'name')->get(), 'name', 'id'),
+            'regions' => toLabelValue(Region::query()->select('id', 'name')->get(), 'name', 'id'),
+            'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
+        ];
     }
 
     public function mySignboards(): Response
     {
         $user = auth()->user();
         return Inertia::render('Signboards/MySignboards', [
-            'signboards' => $user->signboards()->with(['region', 'business'])->latest()->paginate(10),
+            'signboards' => $user->signboards()->with(['region', 'service'])->latest()->paginate(10),
         ]);
     }
 
     public function create(Request $request): Response
     {
-        return Inertia::render('Signboards/SignboardCreate',[
-            'business' => $request->business,
-            'categories' => $this->helperService->getCategories(),
-            'regions' => $this->helperService->getRegions(),
-            'businesses' => $this->helperService->getAuthBusinesses(),
-            'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
-
-        ]);
+        return Inertia::render('Signboards/SignboardCreate', array_merge($this->props, [
+            'service' => $request->service,
+            'services' => toLabelValue($request->user()->services()->select('id', 'title')->get(), 'title', 'id'),
+        ]));
     }
 
     public function store(StoreSignboardRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $business = $request->user()->businesses()->findOrFail($data['business_id']);
+        $service = $request->user()->services()->findOrFail($data['service_id']);
         $signboard = null;
        // dd($data);
-        DB::transaction(function () use ($business, $data, $request, &$signboard) {
-            $signboard = $business->signboards()->create(
-                Arr::except($data, ['featured_image', 'gallery_images', 'categories'])
+        DB::transaction(function () use ($service, $data, $request, &$signboard) {
+            $signboard = $service->signboards()->create(
+                Arr::except($data, ['featured', 'gallery', 'categories'])
             );
             $categoryIds = collect($data['categories'] ?? [])
                 ->map(function ($category) {
@@ -70,8 +72,8 @@ class SignboardController extends Controller
 
             $signboard->categories()->sync($categoryIds);
             $signboard->handleUploads($request, [
-                'featured_image' => 'featured',
-                'gallery_images' => 'gallery',
+                'featured' => 'featured',
+                'gallery' => 'gallery',
             ]);
 
         });
@@ -88,7 +90,7 @@ class SignboardController extends Controller
     {
         Gate::authorize('view', $signboard);
         $promotionPlans = PromotionPlan::query()->get(['id', 'name', 'description', 'number_of_days', 'price']);
-        $signboard->loadMissing(['reviews.ratings','business.user', 'region', 'reviews', 'categories', 'promotions.plan']);
+        $signboard->loadMissing(['reviews.ratings','service.user', 'region', 'reviews', 'categories', 'promotions.plan']);
 
         // check if it has payment
         $paymentStatus = Promotion::routeCallback();
@@ -108,14 +110,11 @@ class SignboardController extends Controller
     {
         Gate::authorize('update', $signboard);
 
-        return Inertia::render('Signboards/SignboardEdit', [
-            'signboard' => $signboard->load(['business', 'region', 'categories'])->toArrayWithMedia(),
-            'categories' => $this->helperService->getCategories(),
-            'regions' => $this->helperService->getRegions(),
-            'businesses' => $this->helperService->getAuthBusinesses(),
-            'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
+        return Inertia::render('Signboards/SignboardEdit',array_merge($this->props, [
+            'signboard' => $signboard->load(['service', 'region', 'categories'])->toArrayWithMedia(),
+            'services' => toLabelValue(\request()->user()->services()->select('id', 'title')->get(), 'title', 'id'),
 
-        ]);
+        ]));
     }
 
 
@@ -127,28 +126,11 @@ class SignboardController extends Controller
 
         //dd($data);
         DB::transaction(function () use ($signboard, $data, $request) {
-            $signboard->update(Arr::except($data, ['featured_image', 'gallery_images', 'removed_gallery_urls', 'categories']));
+            $signboard->update(Arr::except($data, ['featured', 'gallery', 'removed_gallery_urls', 'categories']));
             $signboard->categories()->sync($data['categories']);
 
-            if ($request->hasFile('featured_image')) {
-                $signboard->addMediaFromRequest('featured_image')->toMediaCollection('featured');
-            }
+            $signboard->handleMediaUpdate($request);
 
-            $removedUrls = $request->input('removed_gallery_urls', []);
-            if (!empty($removedUrls)) {
-
-                $galleryMedia = $signboard->getMedia('gallery');
-                foreach ($galleryMedia as $media) {
-                    if (in_array($media->getUrl(), $removedUrls)) {
-                        $media->delete();
-                    }
-                }
-            }
-            if ($request->hasFile('gallery_images')) {
-                foreach ($request->file('gallery_images') as $file) {
-                    $signboard->addMedia($file)->toMediaCollection('gallery');
-                }
-            }
 
         });
 

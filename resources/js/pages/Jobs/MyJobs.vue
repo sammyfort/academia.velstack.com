@@ -122,9 +122,9 @@ const getExpiryStatus = (dateString: string) => {
     <Head title="My Job Listings" />
 
     <Layout>
-        <div class=" fixed bottom-8 right-8 z-50">
+        <div class=" fixed bottom-8 left-8 z-50">
             <Link :href="route('my-jobs.create')">
-                <Button class="bg-secondary hover:to-purple-700
+                <Button class="bg-secondary
                 text-white font-semibold px-6 py-4 rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300 ease-out flex items-center gap-3 group">
                     <PlusIcon class="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                     <span class="hidden lg:block">Post Job</span>

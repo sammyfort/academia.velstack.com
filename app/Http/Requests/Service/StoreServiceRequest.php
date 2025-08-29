@@ -42,7 +42,8 @@ class StoreServiceRequest extends FormRequest
             'featured' => ['required', 'image', 'max:2048'],
             'gallery' => ['array'],
             'gallery.*' => ['image', 'max:2048'],
-            'years_experience' => ['required', 'integer'],
+            'years_experience' => ['required', 'integer', 'min:0', 'max:70'],
+
             'video_link'=> ['nullable', 'url']
         ];
     }

@@ -24,6 +24,8 @@ class UpdateServiceRequest extends FormRequest
      */
     public function rules(): array
     {
+        logger()->info('Incoming keys', array_keys(request()->all()));
+
         return [
             'country_id' => ['required', 'exists:countries,id'],
             'title' => ['required'],
@@ -38,13 +40,15 @@ class UpdateServiceRequest extends FormRequest
             'town' => ['required'],
             'gps' => ['nullable', new GPSRule()],
             'category_id' => ['required'],
-            'years_experience' => ['required', 'integer'],
+            'years_experience' => ['required', 'integer', 'min:0', 'max:70'],
             'video_link'=> ['nullable', 'url'],
             'featured' => ['nullable', 'image', 'max:2048'],
+
             'gallery' => ['nullable', 'array'],
             'gallery.*' => ['image', 'max:2048'],
             'removed_gallery_urls' => ['nullable', 'array'],
             'removed_gallery_urls.*' => ['string'],
+
         ];
     }
 }
