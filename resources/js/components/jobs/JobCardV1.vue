@@ -31,9 +31,9 @@ const props = defineProps<Props>()
                             <MapPin :size="13"/> <span class="text-xs">{{ job.region.name }}</span>
                         </div>
                     </div>
-                    <div class="ms-auto">
-                        <VerifiedBadge :size="22"/>
-                    </div>
+<!--                    <div class="ms-auto">-->
+<!--                        <VerifiedBadge :size="22"/>-->
+<!--                    </div>-->
                 </div>
 
                 <div class="flex flex-col gap-2">

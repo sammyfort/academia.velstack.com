@@ -60,4 +60,11 @@ class UpdateProductRequest extends FormRequest
             ]);
         }
     }
+
+    public function messages(): array
+    {
+        return  [
+            'country_id.required' => 'Please select a country',
+        ];
+    }
 }

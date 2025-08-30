@@ -34,4 +34,11 @@ class UpdatePersonalDetailsRequest extends FormRequest
             'country_id' => 'Country',
         ];
     }
+
+    public function messages(): array
+    {
+        return  [
+            'country_id.required' => 'Please select a country',
+        ];
+    }
 }

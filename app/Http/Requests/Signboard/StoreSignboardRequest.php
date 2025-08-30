@@ -45,7 +45,8 @@ class StoreSignboardRequest extends FormRequest
     public function messages(): array
     {
         return  [
-          'categories.required' => 'Please select at least one category'
+          'categories.required' => 'Please select at least one category',
+            'country_id.required' => 'Please select a country',
         ];
     }
 }

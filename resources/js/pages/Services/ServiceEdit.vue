@@ -98,7 +98,7 @@ const updateService = () => {
                 <template #form-sections>
                     <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                         <h2 class="mb-6 text-lg font-semibold text-gray-900">Service Information</h2>
-                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
                             <InputSelect label="Select Country" :form="form" model="country_id"
                                          :options="props.countries" required searchable/>
                             <InputSelect label="Select Region" :form="form" model="region_id" :options="props.regions"
@@ -112,7 +112,7 @@ const updateService = () => {
                             <InputText :form="form" label="Second Mobile No" type="tel" model="second_mobile"/>
                             <InputText :form="form" label="Email address" type="email" model="email" required/>
                             <InputText :form="form" label="Business Name" model="business_name"/>
-                            <InputText :form="form" label="GPS Address" model="gps" required/>
+                            <InputText :form="form" label="GPS Address" model="gps"/>
                             <div>
                                 <InputText :form="form" label="Video Link" model="video_link"/>
                                 <span class="font-small text-sm text-gray-500">
@@ -128,8 +128,6 @@ const updateService = () => {
                                 :addable="true"
                                 :searchable="true"
                             />
-
-
                             <div class="md:col-span-2">
                                 <label class="mb-1 block text-sm font-medium text-gray-700">Service Description</label>
                                 <TextEditor v-model="form.description"/>
@@ -148,8 +146,6 @@ const updateService = () => {
                         modelName="featured"
                         :error="form.errors.featured"
                     />
-
-
                     <GalleryFilePond
                         v-model="form.gallery"
                         :existing="galleryItems"
