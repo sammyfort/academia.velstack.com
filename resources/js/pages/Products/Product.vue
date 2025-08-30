@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/vue3';
 import { MediaI, ProductI } from '@/types';
 import RateDialog from '@/components/RateDialog.vue';
 import { watchOnce } from '@vueuse/core';
-import { ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Button } from '@/components/ui/button';
 import { cediSign, whatsappChatLink } from '@/lib/helpers';
@@ -49,9 +49,18 @@ watchOnce(emblaMainApi, (emblaMainApi) => {
 
 const wpChatLink = whatsappChatLink(
     props.product.whatsapp_mobile as string,
-    `Hello, please I am inquiring about your product: ${props.product.name}\n\nProduct link:\n${route('products.show', props.product.id)}`
+    `Hello, please I am inquiring about your product: ${props.product.name}\n\nProduct link:\n${route('products.show', props.product.id)}`,
 );
 
+const longestTab = ref(null);
+const longestTabWidth = ref(0);
+
+onMounted(async () => {
+    await nextTick();
+    if (longestTab.value) {
+        longestTabWidth.value = longestTab.value.offsetWidth;
+    }
+});
 </script>
 
 <template>
@@ -173,7 +182,7 @@ const wpChatLink = whatsappChatLink(
                                     class="rounded-none hover:border-b-2 hover:border-b-primary data-[state=active]:border-b-2 data-[state=active]:border-b-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
                                     value="additional-information"
                                 >
-                                    Additional information
+                                    Information
                                 </TabsTrigger>
                                 <TabsTrigger
                                     class="rounded-none hover:border-b-2 hover:border-b-primary data-[state=active]:border-b-2 data-[state=active]:border-b-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
@@ -185,10 +194,11 @@ const wpChatLink = whatsappChatLink(
                         </div>
 
                         <TabsContent class="border-s border-secondary/20 ps-3" value="description">
-                            <div class="py-6" v-html="product.description"></div>
+                            <div ref="longestTab" class="py-6" v-html="product.description"></div>
                         </TabsContent>
+
                         <TabsContent class="border-s border-secondary/20 ps-3" value="additional-information">
-                            <div class="py-6">
+                            <div class="py-6" :style="{minWidth: longestTabWidth+'px'}">
                                 <p class="mb-2">
                                     Negotiation: <strong>{{ product.is_negotiable ? 'Negotiable' : 'Non-negotiable' }}</strong>
                                 </p>
@@ -221,7 +231,7 @@ const wpChatLink = whatsappChatLink(
                                 </p>
                             </div>
                         </TabsContent>
-                        <TabsContent class="ps-3" value="reviews">
+                        <TabsContent class="ps-3" value="reviews" :style="{minWidth: longestTabWidth+'px'}">
                             <div class="py-6">
                                 <div class="mb-4 flex items-end justify-between">
                                     <h3 class="text-lg font-semibold">Customer Reviews</h3>
