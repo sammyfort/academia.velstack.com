@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Signboard\RateRequest;
+use App\Http\Requests\RateRequest;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\Signboard;

@@ -95,20 +95,20 @@ const handleShare = () => {
                             <span>Back to My Works</span>
                         </Link>
 
-                        <Link
-
+                        <a
+                            target="_blank"
                             :href="route('my-services.index', props.service.slug)"
                             class="inline-flex items-center bg-gray-100 px-3 py-2   border rounded-md gap-2 text-black   mb-6 transition-colors"
                         >
                             <Eye class="h-5 w-5" />
                             <span>View as guest</span>
-                        </Link>
+                        </a>
 
                         <div class="flex flex-col items-start gap-8 lg:flex-row">
                             <div class="flex-shrink-0">
                                 <div class="relative h-64 w-80 overflow-hidden rounded-2xl bg-gradient-to-br from-slate-200 to-slate-300">
                                     <div class="relative h-full w-full">
-                                        <img :src="service.featured" alt="Service image" class="h-full w-full object-cover" />
+                                        <img :src="service.featured as string" alt="Service image" class="h-full w-full object-cover" />
                                         <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
                                     </div>
 
@@ -207,7 +207,7 @@ const handleShare = () => {
 
                             <div>
                                 <h2 class="mb-6 text-2xl font-bold text-slate-900">Gallery</h2>
-                                <ImagePreview :featured-url="service.featured" :gallery-urls="service.gallery" />
+                                <ImagePreview :featured-url="service.featured as string" :gallery-urls="service.gallery as []" />
                             </div>
                             <PaymentHistory :promotions="service.promotions" />
                             <div class="mx-auto w-full">

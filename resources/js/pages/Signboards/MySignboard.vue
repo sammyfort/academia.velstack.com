@@ -71,14 +71,14 @@ onMounted(()=> {
                                 <span>/</span>
                                 <span class="font-medium text-white">{{ props.signboard.landmark }}</span>
 
-                                <Link
-
+                                <a
+                                    target="_blank"
                                     :href="route('signboards.show', props.signboard.slug)"
                                     class="flex items-center px-4 py-2 gap-x-2 bg-gray-100 text-black rounded-xl border border-white/30"
                                 >
                                     <Eye class="h-5 w-5" />
                                     <span>View as guest</span>
-                                </Link>
+                                </a>
                             </div>
 
 
@@ -167,8 +167,8 @@ onMounted(()=> {
 
                         <div class="lg:col-span-2">
                             <ImagePreview
-                                :featured-url="props.signboard.featured"
-                                :gallery-urls="props.signboard.gallery"
+                                :featured-url="props.signboard.featured as string"
+                                :gallery-urls="props.signboard.gallery as []"
                                 title="Signboard Gallery"
                             />
                         </div>

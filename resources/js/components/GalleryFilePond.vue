@@ -4,6 +4,9 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import InputError from "@/components/InputError.vue";
 import {Plus} from 'lucide-vue-next'
+import { X } from "lucide-vue-next";
+
+
 const FilePond = vueFilePond(
     FilePondPluginImagePreview,
     FilePondPluginFileValidateType
@@ -94,3 +97,9 @@ const removeOriginalImage = (url: string) => {
         </div>
     </div>
 </template>
+
+<style>
+    .filepond--credits{
+        display: none !important;
+    }
+</style>

@@ -8,7 +8,6 @@ import ContactDetails from '@/components/signboard/Details/ContactDetails.vue';
 import SocialsDetails from '@/components/signboard/Details/SocialsDetails.vue';
 import LocationDetails from '@/components/signboard/Details/LocationDetails.vue';
 import { Badge } from '@/components/ui/badge';
-import SignboardGallery from '@/components/signboard/Details/SignboardGallery.vue';
 import AdvertisedSignboardV from '@/components/signboard/AdvertisedSignboardV.vue';
 import AdvertisedSignboardsH from '@/components/signboard/AdvertisedSignboardsH.vue';
 import { Eye, MessageCircle, Phone } from 'lucide-vue-next';
@@ -17,6 +16,7 @@ import { computed } from 'vue';
 import ReviewsDetails from '@/components/ReviewsDetails.vue';
 import { Button } from '@/components/ui/button';
 import { whatsappChatLink } from '@/lib/helpers';
+import ImagePreview from '@/components/ImagePreview.vue';
 
 type Props = {
     signboard: SignboardI;
@@ -47,7 +47,7 @@ const wpChatLink = whatsappChatLink(
                     <div class="rounded-lg border">
                         <div class="flex items-center gap-4 rounded-t-lg border-b bg-secondary p-4 text-white">
                             <Avatar class="h-[5.5rem] w-[5.5rem]">
-                                <AvatarImage src="" :size="50" />
+                                <AvatarImage :src="signboard.featured as string ?? '' " :size="50" />
                                 <AvatarFallback class="text-2xl font-bold text-black">{{ service?.initials }}</AvatarFallback>
                             </Avatar>
                             <div class="flex w-full flex-col">
@@ -102,7 +102,7 @@ const wpChatLink = whatsappChatLink(
                             <div class="mt-3 flex w-full flex-col gap-3">
                                 <div>
                                     <div class="mb-1 underline">Description</div>
-                                    <div>{{ service?.description }}</div>
+                                    <div v-html="service?.description"></div>
                                 </div>
                                 <div>
                                     <div class="text-fade mb-1 underline">Fields Of Operation</div>
@@ -124,7 +124,12 @@ const wpChatLink = whatsappChatLink(
                     </div>
                 </div>
                 <div class="order-2 p-3 lg:order-1 lg:col-span-2">
-                    <SignboardGallery :signboard="signboard" class="rounded-none border-2 bg-transparent shadow-none" />
+                    <ImagePreview
+                        :featured-url="props.signboard.featured as string"
+                        :gallery-urls="props.signboard.gallery as []"
+                        title="Signboard Gallery"
+                        :for-public="true"
+                    />
                 </div>
                 <div class="order-3 hidden p-3 lg:order-3 lg:col-span-2 lg:block">
                     <AdvertisedSignboardV items-class="h-screen" />

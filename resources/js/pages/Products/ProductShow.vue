@@ -103,14 +103,14 @@ const handleShare = () => {
                             <span>Back to My Products</span>
                         </Link>
 
-                        <Link
-
+                        <a
+                            target="_blank"
                             :href="route('products.show', props.product.slug)"
                             class="inline-flex items-center bg-gray-100 px-3 py-2   border rounded-md gap-2 text-black   mb-6 transition-colors"
                         >
                             <Eye class="h-5 w-5" />
                             <span>View as guest</span>
-                        </Link>
+                        </a>
 
                         <div class="flex flex-col lg:flex-row gap-8 items-start">
                             <div class="flex-shrink-0">
