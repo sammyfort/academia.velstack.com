@@ -131,7 +131,6 @@ class SignboardController extends Controller
 
             $signboard->handleMediaUpdate($request);
 
-
         });
 
         return back()->with(successRes("Signboard updated successfully."));

@@ -86,29 +86,11 @@ const user = computed(() => page.props.auth.user)
                             >
                                 <LayoutDashboard  :size="15" class="text-secondary"/> Dashboard
                             </Link>
-
-<!--                            <SignboardNavPopover>-->
-<!--                                 <span :class="{ 'active-nav':-->
-<!--                                 $page.component === 'Signboards/MySignboards'-->
-<!--                                || $page.component === 'Signboards/SignboardShow'-->
-<!--                                || $page.component === 'Signboards/SignboardCreate'-->
-<!--                                || $page.component === 'Signboards/SignboardEdit'-->
-
-<!--                                || $page.component === 'Businesses/BusinessesShow'-->
-<!--                                || $page.component === 'Businesses/BusinessesCreate'-->
-<!--                                || $page.component === 'Businesses/BusinessesEdit'-->
-<!--                                || $page.component === 'Businesses/MyBusinesses'-->
-<!--                                 }"-->
-<!--                                     class="hover:text-primary py-4 text-center flex gap-0.5 items-center"-->
-<!--                                 ><Milestone :size="15" class="text-secondary"/> My Signboards<ChevronDown :size="22"/></span>-->
-<!--                            </SignboardNavPopover>-->
+ 
 
                             <Link
                                 :class="{ 'active-nav': $page.component ===
-                                'Signboards/SignboardCreate'
-                                || 'Signboards/SignboardEdit'
-                                || 'Signboards/SignboardShow'
-                                || 'Signboards/MySignboards' }"
+                                                            'Signboards/MySignboards' }"
                                 :href="route('my-signboards.index')"
                                 class="hover:text-primary flex items-center gap-1 py-4 text-center"
                             >

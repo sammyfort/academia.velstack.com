@@ -30,7 +30,7 @@ const props = defineProps<{
     user: User
     promotions: PromotionI[];
     signboards: SignboardI[];
-    businesses: BusinessI[];
+   // businesses: BusinessI[];
     jobs: JobI[];
     services: ServiceI[];
     products: ProductI[];
@@ -47,7 +47,7 @@ const totalViews =
     props.jobs.reduce((sum, s) => sum + (s.views_count || 0), 0)
 ;
 
-const averageRating = props.businesses.reduce((sum, b) => sum + b.average_rating, 0) / props.businesses.length || 0;
+//const averageRating = props.businesses.reduce((sum, b) => sum + b.average_rating, 0) / props.businesses.length || 0;
 
 const totalReviews = props.products.reduce((sum, product) => sum + product.reviews_count, 0)
     + props.signboards.reduce((sum, signboard) => sum + signboard.reviews_count, 0)
@@ -55,8 +55,8 @@ const totalReviews = props.products.reduce((sum, product) => sum + product.revie
 
 const quickStats = [
     { label: 'Referral Points', value: props.user.points,  icon: DollarSign, color: 'purple' },
-    { label: 'Active Businesses', value: props.businesses.length, icon: Building2, color: 'green' },
-    { label: 'Avg Rating', value: averageRating.toFixed(1), icon: Star, color: 'yellow' },
+    { label: 'Active Services', value: props.services.length, icon: Building2, color: 'green' },
+   // { label: 'Avg Rating', value: averageRating.toFixed(1), icon: Star, color: 'yellow' },
     { label: 'Total Reviews', value: totalReviews.toFixed(1), icon: TextQuote, color: 'blue' }
 ];
 
@@ -198,46 +198,43 @@ const quickStats = [
                     <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-white/30">
                         <div class="p-6 border-b border-gray-200/50">
                             <div class="flex items-center justify-between">
-                                <h2 class="text-lg font-semibold text-gray-900">Top Businesses</h2>
-                                <Link :href="route('my-businesses.index')" class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1">
+                                <h2 class="text-lg font-semibold text-gray-900">Top Services</h2>
+                                <Link :href="route('my-services.index')" class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1">
                                     View All <ArrowUpRight class="w-4 h-4" />
                                 </Link>
                             </div>
                         </div>
                         <div class="divide-y divide-gray-200/50">
-                            <div v-if="props.businesses.length">
-                                <div v-for="business in props.businesses.slice(0, 5)" :key="business.id"
+                            <div v-if="props.services.length">
+                                <div v-for="service in props.services.slice(0, 5)" :key="service.id"
                                      class="p-6 hover:bg-gray-50/50 transition-colors">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-4">
                                             <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white font-bold">
-                                                {{ business.initials }}
+                                                {{ service.initials }}
                                             </div>
                                             <div>
-                                                <h3 class="text-base font-medium text-gray-900">{{ business.name }}</h3>
+                                                <h3 class="text-base font-medium text-gray-900">{{ service.title }}</h3>
                                                 <div class="flex items-center space-x-3 mt-1">
                                                     <div class="flex items-center space-x-1">
                                                         <Star class="w-4 h-4 text-yellow-400 fill-current" />
-                                                        <span class="text-sm text-gray-600">{{ business.average_rating }}</span>
+                                                        <span class="text-sm text-gray-600">{{ service.town }}</span>
                                                     </div>
                                                     <div class="flex items-center space-x-1">
                                                         <Phone class="w-4 h-4 text-gray-400" />
-                                                        <span class="text-sm text-gray-600">{{ business.mobile }}</span>
+                                                        <span class="text-sm text-gray-600">{{ service.category?.name }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <span v-if="business.verified"
-                                              class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Verified
-                                        </span>
+                                        
                                     </div>
                                 </div>
                             </div>
                             <div v-else class="p-6 text-center">
                                 <Building2 class="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                                <h3 class="text-lg font-medium text-gray-700 mb-2">No businesses yet</h3>
-                                <p class="text-sm text-gray-500">Businesses will appear here once registered</p>
+                                <h3 class="text-lg font-medium text-gray-700 mb-2">No Services yet</h3>
+                                <p class="text-sm text-gray-500">Servicesss will appear here once registered</p>
                             </div>
                         </div>
                     </div>
@@ -259,7 +256,7 @@ const quickStats = [
                                      class="p-6 hover:bg-gray-50/50 transition-colors">
                                     <div class="flex items-start justify-between">
                                         <div class="flex-1">
-                                            <h3 class="text-base font-medium text-gray-900">{{ signboard.business.name }}</h3>
+                                            <h3 class="text-base font-medium text-gray-900">{{ signboard.service.title }}</h3>
                                             <div class="flex items-center space-x-1 mt-1">
                                                 <MapPin class="w-4 h-4 text-gray-400" />
                                                 <p class="text-sm text-gray-600">{{ signboard.landmark }}</p>
