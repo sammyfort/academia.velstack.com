@@ -99,10 +99,12 @@ class ServiceController extends Controller
         ]));
     }
 
-    public function update(UpdateServiceRequest $request, int $service): RedirectResponse
+    public function update(UpdateServiceRequest $request, int $id): RedirectResponse
     {
-        $service = auth()->user()->services()->find($service);
+        $service = auth()->user()->services()->find($id);
         $data = $request->validated();
+
+        info("Service id: $id");
 
         DB::beginTransaction();
         try{   
