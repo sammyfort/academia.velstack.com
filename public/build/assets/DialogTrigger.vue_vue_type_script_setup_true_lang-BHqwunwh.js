@@ -1,5 +1,0 @@
-<<<<<<<< HEAD:public/build/assets/DialogTrigger.vue_vue_type_script_setup_true_lang-B_afX5H4.js
-import{s as a}from"./DialogTitle.vue_vue_type_script_setup_true_lang-BgILrpbb.js";import{d as r,j as s,o as n,u as i,y as l,w as p,k as g}from"./app-DxcfcLTv.js";const f=r({__name:"DialogTrigger",props:{asChild:{type:Boolean},as:{type:[String,Object,Function]}},setup(e){const o=e;return(t,c)=>(n(),s(i(a),l({"data-slot":"dialog-trigger"},o),{default:p(()=>[g(t.$slots,"default")]),_:3},16))}});export{f as _};
-========
-import{s as a}from"./DialogTitle.vue_vue_type_script_setup_true_lang-DWQhbLw0.js";import{d as r,j as s,o as n,u as i,y as l,w as p,k as g}from"./app-DzlptF85.js";const f=r({__name:"DialogTrigger",props:{asChild:{type:Boolean},as:{type:[String,Object,Function]}},setup(e){const o=e;return(t,c)=>(n(),s(i(a),l({"data-slot":"dialog-trigger"},o),{default:p(()=>[g(t.$slots,"default")]),_:3},16))}});export{f as _};
->>>>>>>> sam:public/build/assets/DialogTrigger.vue_vue_type_script_setup_true_lang-BHqwunwh.js
