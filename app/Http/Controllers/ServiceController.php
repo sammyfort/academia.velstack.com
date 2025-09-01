@@ -106,7 +106,7 @@ class ServiceController extends Controller
 
         DB::beginTransaction();
         try{   
-        if (isset($data['category_id']) && !is_numeric($data['category_id'])) {
+            if (isset($data['category_id']) && !is_numeric($data['category_id'])) {
                 $category = ServiceCategory::firstOrCreate(['name' => $data['category_id']]);
                 $data['category_id'] = $category->id;
             }
