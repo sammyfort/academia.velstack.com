@@ -12,6 +12,7 @@ use Codebyray\ReviewRateable\Traits\ReviewRateable;
 use CyrildeWit\EloquentViewable\Contracts\Viewable;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -48,6 +49,14 @@ class Signboard extends Model implements HasMedia, Viewable
         HasSlug, HasPromotion, RatingsAttributesTrait;
 
 
+    protected $appends = [
+        "total_average_rating",
+        "reviews_count",
+        "created_at_str",
+        "active_promotion",
+        "user_id",
+    ];
+
     public function getSlugOptions() : SlugOptions
     {
         return SlugOptions::create()
@@ -70,13 +79,6 @@ class Signboard extends Model implements HasMedia, Viewable
             ->useFallbackUrl(asset('images/logo-blur.png'));
         $this->addMediaCollection('gallery');
     }
-
-    protected $appends = [
-        "total_average_rating",
-        "reviews_count",
-        "created_at_str",
-        "active_promotion"
-    ];
 
     public function service(): BelongsTo
     {
@@ -106,5 +108,13 @@ class Signboard extends Model implements HasMedia, Viewable
             'signboard_id',
             'category_id'
         );
+    }
+
+    public function userId(): Attribute
+    {
+        return Attribute::get(function (){
+            if ($this->created_by_id) return $this->created_by_id;
+            return $this->service->user_id;
+        });
     }
 }

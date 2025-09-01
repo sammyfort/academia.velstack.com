@@ -61,6 +61,13 @@ const user = computed(() => page.props.auth.user)
                     </div>
                     <div class="flex items-center">
                         <TextLink
+                            class="font-bold py-1.5 no-underline w-full ps-2"
+                            :class="{ 'mobile-active-nav': $page.component === 'Jobs/Jobs' || $page.component === 'Products/Products' }"
+                            :href="route('products.index')"
+                        >Shops</TextLink>
+                    </div>
+                    <div class="flex items-center">
+                        <TextLink
                             class="font-bold py-1.5 no-underline ps-2 w-full"
                             :class="{ 'mobile-active-nav': $page.component === 'AboutUs' }"
                             :href="route('about-us')"
