@@ -128,8 +128,7 @@ class PromotionController extends Controller
         ];
 
         $payment = $this->hubtelService->initializePayment($data);
-
-        if ($payment && isset($payment['checkoutUrls'])){
+        if ($payment && isset($payment['checkoutUrl'])){
             $promotable->promotions()->create([
                 'plan_id' => $plan->id,
                 'payment_reference' => $reference,
@@ -138,7 +137,7 @@ class PromotionController extends Controller
                 'amount' => $plan->price,
                 'payment_platform' => PaymentPlatform::HUBTEL,
             ]);
-            return back()->with(successRes('Url generated', ['authorization_url' => $payment['checkoutUrls']]));
+            return back()->with(successRes('Url generated', ['authorization_url' => $payment['checkoutUrl']]));
         }
         return back()->with(errorRes());
     }
