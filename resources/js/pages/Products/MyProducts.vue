@@ -16,7 +16,7 @@ const props = defineProps<{
 }>()
 
 onMounted(()=>{
-    console.log(props.products)
+  //  console.log(props.products)
 })
 const sortOrder = ref(props.sort || 'desc')
 const onSortChange = () => {

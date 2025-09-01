@@ -28,8 +28,8 @@ const props = defineProps<{
 const galleryUploadRef = ref();
 const featureUploadRef = ref();
 const form = useForm({
-    country_id: props.product?.country_id || '',
-    region_id: props.product?.region_id || '',
+    country_id:  Number(props.product?.country_id) || '',
+    region_id: Number(props.product?.region_id) || '',
     name: props.product?.name || '',
     status: props.product?.status || '',
     description: props.product?.description || '',
