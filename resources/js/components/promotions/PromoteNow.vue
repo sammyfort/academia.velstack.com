@@ -61,7 +61,7 @@ const promoteUsingPoints = () => {
 <template>
     <div class="mb-4 border-t border-gray-100 pt-4 p-3 shadow-lg shadow-primary">
         <div class="mb-3 flex items-center justify-between">
-            <h4 class="font-black animate-bounce text-secondary text-2xl">Promote Now</h4>
+            <h4 class="font-semibold text-gray-900">Promote Now</h4>
             <button
                 @click="showPlans = !showPlans"
                 class="text-sm font-medium text-primary transition-colors hover:text-primary/80"
