@@ -101,19 +101,28 @@ class ServiceController extends Controller
 
     public function update(UpdateServiceRequest $request, string $service): RedirectResponse
     {
-        $service = auth()->user()->services()->findOrFail($service);
+        $service = auth()->user()->services()->find($service);
         $data = $request->validated();
 
-        DB::transaction(function () use ($service, $data, $request) {
-            if (isset($data['category_id']) && !is_numeric($data['category_id'])) {
+        DB::beginTransaction();
+        try{   
+        if (isset($data['category_id']) && !is_numeric($data['category_id'])) {
                 $category = ServiceCategory::firstOrCreate(['name' => $data['category_id']]);
                 $data['category_id'] = $category->id;
             }
             $service->update(Arr::except($data, ['featured', 'gallery', 'removed_gallery_urls']));
             $service->handleMediaUpdate($request);
-        });
 
+            DB::commit();
         return back()->with(successRes("Service updated successfully."));
+        }
+        catch(\Exception $e){
+
+        return back()->with(errorRes($e->getMessage()));
+        }
+       
+        
+       
     }
 
 
