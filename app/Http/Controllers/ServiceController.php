@@ -104,7 +104,7 @@ class ServiceController extends Controller
         $service = auth()->user()->services()->find($id);
         $data = $request->validated();
 
-        info("Service id: $id");
+        info("updating Service id: $id");
 
         DB::beginTransaction();
         try{   
