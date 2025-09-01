@@ -48,7 +48,7 @@ const form = useForm({
 
 onMounted(() => {
     const job = props.job;
-    form.country_id = job.country_id;
+    form.country_id = Number(job.country_id);
     form.company_name = job.company_name || '';
     form.title = job.title || '';
     form.categories = (job.categories || []).map((cat: any) => cat.id);
@@ -56,7 +56,7 @@ onMounted(() => {
     form.work_mode = job.work_mode || '';
     form.status = job.status || '';
     form.deadline = job.deadline ? new Date(job.deadline).toISOString().split('T')[0] : '';
-    form.region_id = job.region_id || '';
+    form.region_id = Number(job.region_id) || '';
     form.town = job.town || '';
     form.salary = job.salary || '';
     form.summary = job.summary || '';

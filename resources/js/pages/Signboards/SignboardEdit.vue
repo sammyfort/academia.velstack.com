@@ -26,7 +26,7 @@ const form = useForm({
     country_id: props.signboard?.country_id ?? '',
     service_id: props.signboard?.service_id ?? '',
     name: props.signboard?.name ?? '',
-    region_id: props.signboard?.region_id ?? '',
+    region_id: Number(props.signboard?.region_id) ?? '',
     categories: props.signboard?.categories?.map(cat => cat.id) ?? [],
     town: props.signboard?.town ?? '',
     street: props.signboard?.street ?? '',

@@ -25,7 +25,7 @@ const props = defineProps<{
 const galleryUploadRef = ref();
 const featureUploadRef = ref();
 const form = useForm({
-    country_id: props.service.country_id ?? '',
+    country_id: Number(props.service.country_id) ?? '',
     title: props.service.title ?? '',
     description: props.service.description ?? '',
     first_mobile: props.service.first_mobile ?? '',
@@ -37,8 +37,8 @@ const form = useForm({
     address: props.service.address ?? '',
     town: props.service.town ?? '',
     gps: props.service.gps ?? '',
-    region_id: props.service.region_id ?? '',
-    category_id: props.service.category_id ?? null,
+    region_id: Number(props.service.region_id) ?? '',
+    category_id: Number(props.service.category_id )?? null,
     featured: null,
     gallery: [] as File[],
     removed_gallery_urls: [] as string[],
@@ -122,7 +122,7 @@ const updateService = () => {
                             <TagSelect
                                 :form="form"
                                 model="category_id"
-                                label="Field"
+                                label="Field of Service"
                                 :options="categories"
                                 :size="1"
                                 :addable="true"
