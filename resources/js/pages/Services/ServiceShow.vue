@@ -221,59 +221,66 @@ const handleShare = () => {
                             </div>
                         </div>
 
-                        <div class="space-y-6">
-                            <div class="sticky top-6 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-                                <h3 class="mb-6 text-xl font-bold text-slate-900">Service Details</h3>
+                        <div class="space-y-1">
+                            <div class="mt-5 border-t pt-3 lg:col-span-1">
+                                    <ActivePromotionInfo :promotable="service" />
+                                </div>
+                                <div class="lg:col-span-1">
+                                    <PromoteNow :promotable="service" :plans="plans" :promotable-type="PromotableE.SERVICE" />
+                                </div>
+                                
+                            <div class="sticky top-6 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                                <h3 class="mb-2 text-xl font-bold text-slate-900">Service Details</h3>
 
-                                <div class="space-y-4">
-                                    <div class="flex items-center justify-between border-b border-slate-100 py-3">
+                                <div class="space-y-1">
+                                    <div class="flex items-center justify-between border-b border-slate-100 py-1">
                                         <span class="text-slate-600">Status</span>
                                         <span class="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-800"> Active </span>
                                     </div>
 
-                                    <div class="flex items-center justify-between border-b border-slate-100 py-3">
+                                    <div class="flex items-center justify-between border-b border-slate-100 py-1">
                                         <span class="text-slate-600">Created</span>
                                         <span class="font-semibold text-slate-900">
                                             {{ new Date(service.created_at).toLocaleDateString() }}
                                         </span>
                                     </div>
 
-                                    <div class="flex items-center justify-between py-3">
+                                    <div class="flex items-center justify-between py-1">
                                         <span class="text-slate-600">Years of Expeirience</span>
                                         <span class="font-semibold text-slate-900">
                                             {{ service.years_experience ?? "N/A" }}
                                         </span>
                                     </div>
 
-                                    <div class="flex items-center justify-between py-3">
+                                    <div class="flex items-center justify-between py-1">
                                         <span class="text-slate-600">First Mobile</span>
                                         <span class="font-semibold text-slate-900">
                                             {{ service.first_mobile }}
                                         </span>
                                     </div>
 
-                                    <div class="flex items-center justify-between py-3">
+                                    <div class="flex items-center justify-between py-1">
                                         <span class="text-slate-600">Second Mobile</span>
                                         <span class="font-semibold text-slate-900">
                                             {{ service.second_mobile }}
                                         </span>
                                     </div>
 
-                                    <div v-if="service.region" class="flex items-center justify-between py-3">
+                                    <div v-if="service.region" class="flex items-center justify-between py-1">
                                         <span class="text-slate-600">Region</span>
                                         <span class="font-semibold text-slate-900">
                                             {{ service.region.name }}
                                         </span>
                                     </div>
 
-                                    <div class="flex items-center justify-between py-3">
+                                    <div class="flex items-center justify-between py-1">
                                         <span class="text-slate-600">Town</span>
                                         <span class="font-semibold text-slate-900">
                                             {{ service.town }}
                                         </span>
                                     </div>
 
-                                    <div class="flex items-center justify-between py-3">
+                                    <div class="flex items-center justify-between py-1">
                                         <span class="text-slate-600">Address</span>
                                         <span class="font-semibold text-slate-900">
                                             {{ service.address }}
@@ -309,12 +316,7 @@ const handleShare = () => {
                                         </Button>
                                     </ConfirmDialogue>
                                 </div>
-                                <div class="mt-5 border-t pt-3 lg:col-span-1">
-                                    <ActivePromotionInfo :promotable="service" />
-                                </div>
-                                <div class="lg:col-span-1">
-                                    <PromoteNow :promotable="service" :plans="plans" :promotable-type="PromotableE.SERVICE" />
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
