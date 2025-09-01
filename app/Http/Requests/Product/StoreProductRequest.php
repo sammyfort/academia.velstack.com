@@ -38,7 +38,7 @@ class StoreProductRequest extends FormRequest
             'first_mobile' => ['required', new MobileNumber()],
             'second_mobile' => ['nullable', new MobileNumber()],
             'whatsapp_mobile' => ['nullable', new MobileNumber()],
-            'website' => ['nullable', 'string'],
+            'website' => ['nullable', 'url'],
             'town' => ['required', 'string'],
             'description' => ['required', new RichEditorRule()],
             'categories' => ['required', 'array'],
