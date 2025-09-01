@@ -16,6 +16,7 @@ class SignboardObserver
 //            $signboard->gps_lat = $location->centerLongitude;
 //            $signboard->gps_lon = $location->centerLatitude;
 //        }
+        $signboard->created_by_id = auth()->id();
     }
 
     public function created(Signboard $signboard): void

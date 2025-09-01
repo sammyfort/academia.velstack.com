@@ -29,12 +29,12 @@ const totalAverageRating = ref<number>(props.ratable.total_average_rating)
     <div :class="cn('p-4 border-t text-fade', props.class)">
         <div class="flex items-center">
             <div class="font-medium text-lg">Reviews</div>
-            <div v-if="user?.id !== ratable.created_by_id" class="ms-auto md:block hidden">
+            <div v-if="user?.id !== ratable.user_id" class="ms-auto md:block hidden">
                 <RatePopover :ratable="ratable" :ratable_type="ratable_type" @rated="(value)=>{totalAverageRating = value}">
                     <Button size="sm">{{ props.ratable.reviews?.length ? 'Update review' : 'Write review' }}</Button>
                 </RatePopover>
             </div>
-            <div class="ms-auto md:hidden" v-if="user?.id !== ratable.created_by_id">
+            <div class="ms-auto md:hidden" v-if="user?.id != ratable.user_id">
                 <RateDialog :ratable="ratable" :ratable_type="ratable_type" @rated="(value)=>{totalAverageRating = value}">
                     <Button size="sm">{{ props.ratable.reviews?.length ? 'Update review' : 'Write review' }}</Button>
                 </RateDialog>

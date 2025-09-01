@@ -10,7 +10,6 @@ import { HandHelping, UserRoundCog, LayoutDashboard } from 'lucide-vue-next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import MobileNav from '@/layouts/MobileNav.vue';
 import CompanyNavPopover from '@/components/Nav/CompanyNavPopover.vue';
-import SignboardNavPopover from '@/components/Nav/SignboardNavPopover.vue';
 import ServiceNavPopover from '@/components/Nav/ServiceNavPopover.vue';
 
 
@@ -58,7 +57,7 @@ const user = computed(() => page.props.auth.user)
                                 :class="{ 'active-nav': $page.component === 'Products/Products' }"
                                 :href="route('products.index')"
                                 class="hover:text-primary py-4 text-center"
-                            >Shop</Link>
+                            >Shops</Link>
 
                             <CompanyNavPopover>
                                 <span
