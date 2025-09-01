@@ -99,7 +99,7 @@ class ServiceController extends Controller
         ]));
     }
 
-    public function update(UpdateServiceRequest $request, string $service): RedirectResponse
+    public function update(UpdateServiceRequest $request, int $service): RedirectResponse
     {
         $service = auth()->user()->services()->find($service);
         $data = $request->validated();
