@@ -12,8 +12,8 @@ class DashboardController extends Controller
     public function index(): Response
     {
         $user = auth()->user()->loadMissing([
-            'signboards.business',
-            'businesses',
+            'signboards.service',
+           // 'businesses',
             'products',
             'services',
             'jobs',
@@ -27,7 +27,7 @@ class DashboardController extends Controller
             'user' => $user,
             'promotions' => $promotions,
             'signboards' => $user->signboards,
-            'businesses' => $user->businesses,
+           // 'businesses' => $user->businesses,
             'products' => $user->products,
             'services' => $user->services,
             'jobs' => $user->jobs,
