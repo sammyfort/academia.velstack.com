@@ -117,11 +117,10 @@ class ServiceController extends Controller
         return back()->with(successRes("Service updated successfully."));
         }
         catch(\Exception $e){
+            logger($e->getMessage());
 
         return back()->with(errorRes($e->getMessage()));
         }
-       
-        
        
     }
 
