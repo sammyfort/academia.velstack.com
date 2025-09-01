@@ -128,7 +128,7 @@ use Illuminate\Notifications\Notifiable;
 
     public function services(): HasMany
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(Service::class, 'user_id', 'id');
     }
 
     public function jobs(): HasMany
