@@ -71,7 +71,7 @@ if (!function_exists('cediSign')){
 }
 
 if (! function_exists('toLabelValue')) {
-    function toLabelValue(iterable $values, string $labelKey = null, string $valueKey = null): array
+    function toOption(iterable $values, string $labelKey = null, string $valueKey = null): array
     {
         return collect($values)->map(function ($item) use ($labelKey, $valueKey) {
             if ($labelKey && $valueKey) {

@@ -21,7 +21,7 @@ const attrs = useAttrs()
 
 <template>
     <div :class="cn('grid gap-2', props.containerClass)" v-if="form">
-        <Label class="text-secondary" :for="id">{{ props.label }}
+        <Label class="text-foreground" :for="id">{{ props.label }}
             <span class="text-red-500" v-show="label && attrs.hasOwnProperty('required')">*</span>
         </Label>
         <Input

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Enums\Subjects;
 
 class StudentController extends Controller
 {
@@ -11,11 +12,7 @@ class StudentController extends Controller
         $this->props = [
             'categories' => toLabelValue(JobCategory::query()->select('id', 'name')->get(), 'name', 'id'),
             'statuses' => toLabelValue(JobStatus::toArray()),
-            'types' => toLabelValue(JobType::toArray()),
-            'modes' => toLabelValue(JobMode::toArray()),
-            'regions' => toLabelValue(Region::query()->select('id', 'name')->get(), 'name', 'id'),
-            'apply_modes' => toLabelValue(JobModeOfApply::toArray()),
-            'countries' => toLabelValue(Country::query()->select('id', 'name')->get(), 'name', 'id'),
+       
         ];
     }
 

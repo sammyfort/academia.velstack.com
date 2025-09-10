@@ -1,0 +1,177 @@
+<script setup lang="ts">
+import AppLayout from "@/layouts/app/AppLayout.vue";
+import { InputSelectOption, Subject } from "@/types";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+ 
+import { Badge } from "@/components/ui/badge";
+import { PlusIcon, CreditCard, Calendar, Search, X } from "lucide-vue-next";
+import SelectOption from "@/components/forms/SelectOption.vue";
+import SubjectCreate from "@/pages/Subject/SubjectCreate.vue";
+import { ref } from "vue";
+import SubjectEdit from "./SubjectEdit.vue";
+import ConfirmDialogue from "@/components/helpers/ConfirmDialogue.vue";
+import { Head, Link, router } from '@inertiajs/vue3';
+import { toastError, toastSuccess } from '@/lib/helpers';
+const props = defineProps<{
+  subjects: Subject[];
+  available_subjects: InputSelectOption[]
+}>();
+
+const filterOptions = [
+    {label: 'Today', value: 'today'},
+    {label: 'This Week', value: 'this_week'},
+    {label: 'This Month', value: 'this_month'},
+    {label: 'This Year', value: 'this_year'}
+]
+
+const filter = ref('');
+const isDeleting = ref(false);
+
+const handleDelete = (id: number|string) => {
+    isDeleting.value = true;
+    router.delete(route('subjects.destroy', id ), {
+        onSuccess: (res) => {
+            if (res.props.success) {
+                toastSuccess(res.props.message);
+            } else {
+                toastError(res.props.message);
+            }
+        },
+        onFinish: () => {
+            isDeleting.value = false;
+        },
+    });
+};
+</script>
+
+<template>
+  <AppLayout>
+    <div
+      class="rounded-2xl border border-border bg-background p-6 shadow-sm mt-4"
+    >
+      <!-- Header -->
+      <div class="mb-6 flex items-center justify-between">
+        <h2 class="flex items-center gap-2 text-2xl font-bold text-foreground">
+          <CreditCard class="h-6 w-6 text-primary" />
+          Subjects
+        </h2>
+      </div>
+
+      <!-- Filters + Add -->
+      <div class="mb-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          
+          <!-- Left controls: Search, Filter, Clear -->
+          <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <!-- Search -->
+            <div class="relative flex-1 sm:w-85">
+              <Search
+                class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              />
+              <Input placeholder="Search..." class="pl-10 w-full" />
+            </div>
+
+            <!-- Filter and Clear buttons -->
+            <div class="flex gap-2">
+               
+              <SelectOption placeholder="Filter by Date" :options="filterOptions"  v-model="filter" />
+
+              <Button
+                variant="outline"
+                size="sm"
+                class="flex items-center gap-1 whitespace-nowrap"
+              >
+                <X  />
+                Clear
+              </Button>
+            </div>
+          </div>
+
+          <!-- Right button: Add Subject -->
+          <div class="w-full sm:w-auto mt-4 sm:mt-0">
+          <SubjectCreate :available_subjects="available_subjects" @created="$inertia.reload({ only: ['subjects'] })">
+          <Button
+              class="w-full sm:w-auto flex items-center gap-x-2 rounded-xl border border-white/30 bg-primary text-white backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-primary/30"
+            >
+              <PlusIcon class="h-5 w-5" />
+              <span>Add Subject</span>
+            </Button>
+          </SubjectCreate>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead class="text-left">Name</TableHead>
+              <TableHead class="text-left">Classes</TableHead>
+              <TableHead class="text-left">Students</TableHead>
+              <TableHead class="text-left">Created</TableHead>
+              <TableHead class="text-left">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="subject in subjects" :key="subject.id">
+              <TableCell class="flex flex-col gap-2">
+                <span class="font-semibold">{{ subject.name }}</span>
+                <Badge variant="outline" class="text-xs">
+                  <span>{{ subject.code }}</span>
+                </Badge>
+              </TableCell>
+              <TableCell>{{ subject.classes_count }}</TableCell>
+              <TableCell>{{ subject.students_count }}</TableCell>
+
+              <TableCell>
+                <div class="flex items-center gap-1.5 text-muted-foreground">
+                  <Calendar class="h-4 w-4" />
+                  {{ subject.created_at }}
+                </div>
+              </TableCell>
+
+              <TableCell>
+                <div class="flex gap-2">
+                <SubjectEdit :subject="subject" :available_subjects="available_subjects"  @updated="$inertia.reload()"">
+                 <Button size="sm" variant="outline">Edit</Button>
+                </SubjectEdit>
+                 
+                  <ConfirmDialogue
+                      :title="'Delete Subject'"
+                      :description="'Are you sure you want to delete this subject? This action cannot be undone.'"
+                      :confirmText="'Delete'"
+                      :cancelText="'Cancel'"
+                      :isProcessing="isDeleting"
+                      @confirm="handleDelete(subject.id)"
+                    >
+                      <Button size="sm" variant="destructive">Delete</Button>
+                    </ConfirmDialogue>
+               
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <!-- Empty State -->
+      <div v-if="subjects.length === 0" class="text-center py-8">
+        <CreditCard
+          class="h-12 w-12 text-muted-foreground mx-auto mb-4"
+        />
+        <p class="text-muted-foreground">No subject found</p>
+      </div>
+    </div>
+  </AppLayout>
+</template>

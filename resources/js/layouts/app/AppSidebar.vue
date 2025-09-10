@@ -23,64 +23,82 @@ const props = withDefaults(defineProps(), {
 });
 
 const sidebarData = [
+   {
+    label: "Home",
+    items: [{ title: "Dashboard", routeName: "dashboard", icon: Bot, visible: true }],
+  },
   {
     label: "ACADEMICS",
     items: [
-      { title: "Dashboard", routeName: "dashboard", icon: SquareTerminal, visible: true },
+       
       {
         title: "Classes",
         icon: Frame,
         visible: true,
         items: [
           { title: "Class List", routeName: "classes.index", visible: true },
-          { title: "Create Class", routeName: "classes.create", visible: true }, 
+          { title: "Create Class", routeName: "classes.create", visible: true },
         ],
       },
+
+      { title: "Subjects",routeName: "subjects.index", icon: SquareTerminal,visible: true, },
+      { title: "Semesters", routeName: "semesters.index", icon: SquareTerminal, visible: true },
+      { title: "Timetable", routeName: "timetables.index", icon: SquareTerminal, visible: true },
+
     ],
   },
-
   {
     label: "Management",
     items: [
-        { title: "Fees", routeName: "fees.index", icon: Bot, visible: true },
-    
+      { title: "Students", routeName: "students.index", icon: Bot, visible: true },
+      { title: "Staff", routeName: "staff.index", icon: Bot, visible: true },
+      { title: "Parents", routeName: "parents.index", icon: Bot, visible: true }
+
     ],
+    
+  },
+
+  {
+    label: "Finance",
+    items: [
+      { title: "Fees", routeName: "fees.index", icon: Bot, visible: true },
+      { title: "Billing", routeName: "fees.index", icon: Bot, visible: true },
+      { title: "Payments", routeName: "fees.index", icon: Bot, visible: true },
+    ],
+    
   },
 ];
- 
 </script>
 
 <template>
-  
-    <Sidebar :collapsible="'icon'">
-      <SidebarHeader>
-        <TeamSwitcher />
-      </SidebarHeader>
+  <Sidebar :collapsible="'icon'">
+    <SidebarHeader>
+      <TeamSwitcher />
+    </SidebarHeader>
 
-      <SidebarContent>
-        <template v-for="group in sidebarData" :key="group.label">
-          <SidebarGroup>
-            <SidebarGroupLabel>{{ group.label }}</SidebarGroupLabel>
-            <SidebarMenu>
-              <SidebarItem
-                v-for="item in group.items"
-                :key="item.title"
-                :title="item.title"
-                :route-name="item.routeName"
-                :icon="item.icon"
-                :items="item.items"
-                :visible="item.visible"
-              />
-            </SidebarMenu>
-          </SidebarGroup>
-        </template>
-      </SidebarContent>
+    <SidebarContent>
+      <template v-for="group in sidebarData" :key="group.label">
+        <SidebarGroup>
+          <SidebarGroupLabel>{{ group.label }}</SidebarGroupLabel>
+          <SidebarMenu>
+            <SidebarItem
+              v-for="item in group.items"
+              :key="item.title"
+              :title="item.title"
+              :route-name="item.routeName"
+              :icon="item.icon"
+              :items="item.items"
+              :visible="item.visible"
+            />
+          </SidebarMenu>
+        </SidebarGroup>
+      </template>
+    </SidebarContent>
 
-      <SidebarFooter>
-        <NavUser />
-      </SidebarFooter>
+    <SidebarFooter>
+      <NavUser />
+    </SidebarFooter>
 
-      <SidebarRail />
-    </Sidebar>
-  
+    <SidebarRail />
+  </Sidebar>
 </template>

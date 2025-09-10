@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('school_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('code');
+             $table->string('slug')->nullable()->unique();
             $table->foreignId('created_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
             $table->softDeletes();
