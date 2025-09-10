@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\LoginType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -26,8 +27,13 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        $request->user()->touch('last_login');
-        return redirect()->intended(route('home', absolute: false));
+        $fallback = match ($request->login_as) {
+            LoginType::ADMIN->value => route('admin.dashboard', [], false),
+            LoginType::PARENT->value => route('parent.dashboard', [], false),
+            default => route('staff.dashboard', [], false),
+        };
+
+        return redirect()->intended($fallback);
     }
 
     public function destroy(Request $request): RedirectResponse

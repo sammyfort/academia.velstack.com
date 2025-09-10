@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class StaffController extends Controller
 {
@@ -10,6 +11,7 @@ class StaffController extends Controller
     public function dashboard()
     {
 
+        return Inertia::render('Staff/StaffDashboard');
     }
     /**
      * Display a listing of the resource.

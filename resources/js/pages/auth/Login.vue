@@ -32,7 +32,7 @@ const options = [
 
 <template>
   <Head title="Log in" />
-  
+
   <GuestLayout>
     <template #content>
       <form @submit.prevent="login" class="space-y-6">
@@ -59,6 +59,7 @@ const options = [
             :options="options"
             placeholder="Select login type"
             label="Login As"
+            :error="form.errors.login_as"
           />
         </div>
 
@@ -66,7 +67,7 @@ const options = [
           <InputText
             :form="form"
             model="email"
-            type="email"
+
             required
             autofocus
             autocomplete="email"
@@ -96,7 +97,7 @@ const options = [
             autocomplete="current-password"
             v-model="form.password"
             placeholder="Enter your password"
-            class="h-12"
+
           />
           <InputError :message="form.errors.password" />
         </div>

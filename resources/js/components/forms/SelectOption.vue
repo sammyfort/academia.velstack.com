@@ -9,11 +9,14 @@ import {
 import { InputSelectOption } from "@/types";
 import {Label} from "@/components/ui/label";
 import {useAttrs} from "vue";
+import InputError from "@/components/InputError.vue";
 
 const props = defineProps<{
     modelValue: string | number | null;
     options: InputSelectOption[];
     label: string
+    error?: string | null;
+
 }>();
 
 const emit = defineEmits<{
@@ -42,4 +45,6 @@ const attrs = useAttrs()
             </SelectItem>
         </SelectContent>
     </Select>
+    <InputError :message="props.error" />
+
 </template>

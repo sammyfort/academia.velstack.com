@@ -41,19 +41,19 @@ class LoginRequest extends FormRequest
     ];
 
     $mobileCredentials = [
-        'mobile'   => $this->email,
+        'phone'   => $this->email,
         'password' => $this->password,
     ];
 
     $remember = $this->boolean('remember');
 
     $guard = match ($this->login_as) {
-        LoginType::ADMIN->value  => 'web', 
+        LoginType::ADMIN->value  => 'web',
         LoginType::PARENT->value => 'parent',
         default                  => 'staff',
     };
 
-     
+
 
     // Try login with email OR mobile
     if (
@@ -63,11 +63,13 @@ class LoginRequest extends FormRequest
         RateLimiter::hit($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'form.email' => trans('auth.failed'),
+            'email' => trans('auth.failed'),
         ]);
     }
 
     RateLimiter::clear($this->throttleKey());
+
+
     }
 
     public function ensureIsNotRateLimited(): void

@@ -74,10 +74,10 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        'users' => [
-            'driver' => 'eloquent',
-            'table' => 'users',
-        ],
+//        'users' => [
+//            'driver' => 'eloquent',
+//            'table' => 'users',
+//        ],
 
         'parents' => [
             'driver' => 'eloquent',
