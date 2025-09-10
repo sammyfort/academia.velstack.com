@@ -7,7 +7,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import TextLink from '@/components/TextLink.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { LoaderCircle, Lock, CheckCircle } from 'lucide-vue-next'
-import Layout from '@/layouts/Layout.vue'
+import Layout from '@/layouts/GuestLayout.vue'
 
 defineProps<{
     status?: string

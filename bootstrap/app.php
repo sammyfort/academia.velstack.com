@@ -27,7 +27,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo('/login');
 
         $middleware->alias([
-            'verify.payment.ip' => VerifyPaymentProviderIPs::class,
+            'check.account.suspension' => \App\Http\Middleware\CheckAccountSuspension::class,
+            'subscribed' => \App\Http\Middleware\SubscriptionMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

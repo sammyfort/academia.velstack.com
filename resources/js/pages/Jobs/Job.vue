@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { JobI } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

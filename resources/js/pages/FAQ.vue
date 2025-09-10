@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
 
 const intenseC = "font-bold text-secondary"

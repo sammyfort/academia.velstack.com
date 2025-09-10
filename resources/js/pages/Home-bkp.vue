@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import HeroSection from '@/components/home/HeroSection.vue';
 import TrustedBusinessesSection from '@/components/home/TrustedBusinessesSection.vue';
 import Purpose from '@/components/home/Purpose.vue';

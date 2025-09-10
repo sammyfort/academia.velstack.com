@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { Briefcase, CalendarDays, MapPin, Star, Trophy, Plus, Edit3, Trash2, PlusIcon, EyeIcon } from 'lucide-vue-next';
 import MyBusinessUpdate from '@/pages/Businesses/MyBusinessUpdate.vue';

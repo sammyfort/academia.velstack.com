@@ -14,7 +14,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle, Lock, CheckCircle } from 'lucide-vue-next';
 import TextLink from '@/components/TextLink.vue';
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 
 interface Props {
     token: string;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import SignboardCardV1 from '@/components/signboard/SignboardCardV1.vue';
 import { PaginatedDataI, RegionI, SignboardCategoryI, SignboardI } from '@/types';

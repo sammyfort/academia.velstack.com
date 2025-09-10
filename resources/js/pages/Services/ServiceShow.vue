@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import { ArrowLeft, Edit, Trash2, Eye, MapPin, Star, Building2, Share2, Award, PlusIcon, VideoIcon } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { AverageRatingsI, PaymentStatusI, PromotionPlanI, RatingsDistributionI, ServiceI } from '@/types';

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { MediaI, ProductI } from '@/types';
 import RateDialog from '@/components/RateDialog.vue';

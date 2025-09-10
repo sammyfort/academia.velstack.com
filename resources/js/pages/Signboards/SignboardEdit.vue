@@ -4,7 +4,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { toastSuccess, toastError } from '@/lib/helpers';
 import { Edit3 } from 'lucide-vue-next';
 
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import PageHeader from '@/pages/Signboards/blocks/PageHeader.vue';
 import FormComponent from '@/components/FormComponent.vue';
 import InputSelect from '@/components/InputSelect.vue';

@@ -14,21 +14,5 @@ class HomeController extends Controller
         return Inertia::render('Home');
     }
 
-    public function searchDirectory(Request $request): \Illuminate\Http\RedirectResponse
-    {
-        $query = $request->input('q');
 
-        switch ($request->input('directory')){
-            case 'services':
-                return redirect(route('services.index')."?filter[q]=".$query);
-            case 'signboards':
-                return redirect(route('signboards.index')."?filter[q]=".$query);
-            case 'jobs':
-                return redirect(route('jobs.index')."?filter[q]=".$query);
-            case 'products':
-                return redirect(route('products.index')."?filter[q]=".$query);
-            default:
-                return back();
-        }
-    }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { Briefcase, Building, Edit, Loader2, MapPin, PlusIcon, Trash2, Eye } from 'lucide-vue-next';
 import { toastError, toastSuccess } from '@/lib/helpers';

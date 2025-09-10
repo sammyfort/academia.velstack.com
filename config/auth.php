@@ -40,6 +40,15 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'parent' => [
+            'driver' => 'session',
+            'provider' => 'parents',
+        ],
+
+        'staff' => [
+            'driver' => 'session',
+            'provider' => 'staff',
+        ],
     ],
 
     /*
@@ -65,10 +74,20 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'users' => [
+            'driver' => 'eloquent',
+            'table' => 'users',
+        ],
+
+        'parents' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\_Parent::class,
+        ],
+
+        'staff' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Staff::class,
+        ],
     ],
 
     /*
@@ -96,6 +115,27 @@ return [
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
+        ],
+
+        'students' => [
+            'provider' => 'students',
+            'table' => 'password_reset_tokens',
+            'expire' => 15,
+            'throttle' => 7200,
+        ],
+
+        'staff' => [
+            'provider' => 'staff',
+            'table' => 'password_reset_tokens',
+            'expire' => 15,
+            'throttle' => 7200,
+        ],
+
+        'parents' => [
+            'provider' => '__parents',
+            'table' => 'password_reset_tokens',
+            'expire' => 15,
+            'throttle' => 7200,
         ],
     ],
 

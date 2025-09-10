@@ -3,7 +3,7 @@ import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
-import Layout from '@/layouts/Layout.vue';
+import Layout from '@/layouts/GuestLayout.vue';
 import InputText from '@/components/InputText.vue';
 import { onMounted, ref } from 'vue';
 import TypeIt from 'typeit';
