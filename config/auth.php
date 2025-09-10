@@ -42,7 +42,7 @@ return [
         ],
         'parent' => [
             'driver' => 'session',
-            'provider' => '__parents',
+            'provider' => 'parents',
         ],
 
         'staff' => [
@@ -74,12 +74,12 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'users' => [
+            'driver' => 'eloquent',
+            'table' => 'users',
+        ],
 
-        '__parents' => [
+        'parents' => [
             'driver' => 'eloquent',
             'model' => App\Models\_Parent::class,
         ],
