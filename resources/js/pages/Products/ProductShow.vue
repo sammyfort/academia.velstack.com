@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3'
-import Layout from '@/layouts/Layout.vue'
+import Layout from '@/layouts/GuestLayout.vue'
 import {
     ArrowLeft,
     Edit,

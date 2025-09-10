@@ -2,8 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Announcement;
-use Illuminate\Foundation\Inspiring;
+
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -38,15 +37,12 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $announcement = Announcement::query()
-            ->where('is_active', true)
-            ->latest()
-            ->first();
+
 
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'announcement' => $announcement,
+
             'auth' => [
                 'user' => $request->user()?->load('country'),
             ],
