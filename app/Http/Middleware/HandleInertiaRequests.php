@@ -50,6 +50,8 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+              'currentRoute' => $request->route()?->getName(), // Current route name
+            'currentRouteParams' => $request->route()?->parameters(), // Route parameters
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'success' => fn () => $request->session()->get('success') ?? true,
             'message' => fn () => $request->session()->get('message') ?? "",

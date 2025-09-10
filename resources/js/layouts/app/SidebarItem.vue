@@ -30,27 +30,15 @@ interface SidebarItemProps {
 const props = defineProps<SidebarItemProps>();
 const page = usePage();
 
-// Helper function to safely get route URL
-const getRouteUrl = (routeName: string): string => {
-    try {
-        return route(routeName);
-    } catch (error) {
-        console.warn(`Route ${routeName} not found:`, error);
-        return '#';
-    }
-};
+// Get current route from middleware (shared props)
+const currentRoute = computed(() => page.props.currentRoute as string | undefined);
 
-// Check if current route matches
+// Check if current route matches using middleware data
 const isCurrentRoute = (routeName: string): boolean => {
-    try {
-        return route(routeName) === page.url;
-    } catch (error) {
-        console.warn(`Route ${routeName} not found for comparison:`, error);
-        return false;
-    }
+    return currentRoute.value === routeName;
 };
 
-// recursive function to check if any sub-item is active
+// Recursive function to check if any sub-item is active
 const isActive = (): boolean => {
     const checkItems = (items?: SubItem[]): boolean => {
         if (!items) return false;
@@ -68,7 +56,7 @@ const isActive = (): boolean => {
 const open = ref(isActive());
 
 // Watch for route changes and update open state
-watch(() => page.url, () => {
+watch(() => page.props.currentRoute, () => {
     open.value = isActive();
 }, { immediate: true });
 </script>
@@ -95,7 +83,7 @@ watch(() => page.url, () => {
                             <SidebarMenuSubButton as-child>
                                 <Link
                                     v-if="sub.routeName"
-                                    :href="getRouteUrl(sub.routeName)"
+                                    :href="route(sub.routeName)"
                                     :class="{
                                         'bg-sidebar-accent text-sidebar-accent-foreground font-medium': isCurrentRoute(sub.routeName)
                                     }"
@@ -114,7 +102,7 @@ watch(() => page.url, () => {
         <SidebarMenuButton v-else as-child :tooltip="props.title">
             <Link
                 v-if="props.routeName"
-                :href="getRouteUrl(props.routeName)"
+                :href="route(props.routeName)"
                 :class="{
                     'bg-sidebar-accent text-sidebar-accent-foreground font-medium': isCurrentRoute(props.routeName)
                 }"
