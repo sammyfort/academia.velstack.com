@@ -51,7 +51,7 @@ const sidebarData = [
 </script>
 
 <template>
-  <SidebarProvider :defaultOpen="true">
+  
     <Sidebar :collapsible="'icon'">
       <SidebarHeader>
         <TeamSwitcher />
@@ -82,5 +82,5 @@ const sidebarData = [
 
       <SidebarRail />
     </Sidebar>
-  </SidebarProvider>
+  
 </template>
