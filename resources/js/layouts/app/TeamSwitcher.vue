@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Component } from "vue"
 
-import { ChevronsUpDown, Plus } from "lucide-vue-next"
+import {AudioWaveform, ChevronsUpDown, Command, GalleryVerticalEnd, Plus} from "lucide-vue-next"
 import { ref } from "vue"
 import {
   DropdownMenu,
@@ -21,15 +21,29 @@ import {
 } from "@/components/ui/sidebar"
 
 const props = defineProps<{
-  teams: {
-    name: string
-    logo: Component
-    plan: string
-  }[]
+
 }>()
 
 const { isMobile } = useSidebar()
-const activeTeam = ref(props.teams[0])
+
+const teams =  [
+    {
+        name: "Acme Inc",
+        logo: GalleryVerticalEnd,
+        plan: "Enterprise",
+    },
+    {
+        name: "Acme Corp.",
+        logo: AudioWaveform,
+        plan: "Startup",
+    },
+    {
+        name: "Evil Corp.",
+        logo: Command,
+        plan: "Free",
+    },
+]
+const activeTeam = ref(teams[0])
 </script>
 
 <template>

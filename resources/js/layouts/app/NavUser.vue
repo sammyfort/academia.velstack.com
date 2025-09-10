@@ -28,12 +28,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-
+import { Link, router, usePage } from '@inertiajs/vue3';
+import {computed} from 'vue'
 
 
 const { isMobile } = useSidebar()
-import { Link, router, usePage } from '@inertiajs/vue3';
-import {computed} from 'vue'
+
 
 const page = usePage()
 const user = computed(() => page.props.auth.user)
@@ -49,7 +49,7 @@ const user = computed(() => page.props.auth.user)
             class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
             <Avatar class="h-8 w-8 rounded-lg">
-              <AvatarImage :src="user?.avatar" :alt="user?.fullname" />
+<!--              <AvatarImage :src="user?.avatar" :alt="user?.fullname" />-->
               <AvatarFallback class="rounded-lg">
                 CN
               </AvatarFallback>
@@ -70,7 +70,7 @@ const user = computed(() => page.props.auth.user)
           <DropdownMenuLabel class="p-0 font-normal">
             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar class="h-8 w-8 rounded-lg">
-                <AvatarImage :src="user?.avatar" :alt="user?.fullname" />
+<!--                <AvatarImage :src="user?.avatar" :alt="user?.fullname" />-->
                 <AvatarFallback class="rounded-lg">
                   CN
                 </AvatarFallback>
@@ -105,8 +105,16 @@ const user = computed(() => page.props.auth.user)
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <LogOut />
-            Log out
+
+              <Link
+                  :href="route('logout')"
+                  method="post"
+                  class="p-1.5 border-0 text-destructive cursor-pointer   items-center hover:text-destructive-foreground flex gap-2"
+              >
+
+                  <LogOut />
+                  Log out
+              </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

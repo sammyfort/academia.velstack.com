@@ -27,7 +27,7 @@ const attrs = useAttrs()
 </script>
 
 <template>
-    <Label :for="id">{{ props.label }} <span class="text-red-500" v-show="label && attrs.hasOwnProperty('required')">*</span></Label>
+    <Label class="text-secondary" :for="id">{{ props.label }} <span class="text-red-500" v-show="label && attrs.hasOwnProperty('required')">*</span></Label>
     <Select
         :model-value="props.modelValue"
         @update:model-value="(val) => emit('update:modelValue', val)"

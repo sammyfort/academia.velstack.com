@@ -15,6 +15,7 @@ import {
 
 <template>
     <AppLayout>
-       <h1>Dashboard</h1>
+
+        <h1>Fee Index</h1>
     </AppLayout>
 </template>

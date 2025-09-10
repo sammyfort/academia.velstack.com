@@ -21,7 +21,9 @@ const attrs = useAttrs()
 
 <template>
     <div :class="cn('grid gap-2', props.containerClass)" v-if="form">
-        <Label :for="id">{{ props.label }} <span class="text-red-500" v-show="label && attrs.hasOwnProperty('required')">*</span></Label>
+        <Label class="text-secondary" :for="id">{{ props.label }}
+            <span class="text-red-500" v-show="label && attrs.hasOwnProperty('required')">*</span>
+        </Label>
         <Input
             v-if="!props.textarea"
             :id="id"
@@ -43,7 +45,7 @@ const attrs = useAttrs()
         <InputError :message="form.errors[model]" />
     </div>
     <div v-else :class="cn('grid gap-2', props.containerClass)">
-        <Label :for="id">{{ props.label }}</Label>
+        <Label class="text-accent-foreground" :for="id">{{ props.label }}</Label>
         <Input v-show="!props.textarea" :id="id" v-bind="attrs" />
         <Textarea   v-show="props.textarea" :id="id" v-bind="attrs" />
     </div>

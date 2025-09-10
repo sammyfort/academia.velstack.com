@@ -20,30 +20,25 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 
 Route::middleware(['auth:staff', 'subscribed', 'check.account.suspension'])->group(callback: function () {
+    Route::resources([
+        'staff' => StaffController::class,
+        'students' => StudentController::class,
+        'parents' => ParentController::class,
+        'semesters' => SemesterController::class,
+        'subjects' => SubjectController::class,
+        'timetables' => TimetableController::class,
+        'classes' => ClassController::class,
+        'score-types' => ScoreTypeController::class,
+        'fees' => FeeController::class,
+    ]);
 
-    // STAFF
-    Route::prefix('staff')->as('staff.')->group(function () {
-        Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
+    
+      Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
+   
 
-        Route::resources([
-            'staff' => StaffController::class,
-            'students' => StudentController::class,
-            'parents' => ParentController::class,
-            'semesters' => SemesterController::class,
-            'subjects' => SubjectController::class,
-            'timetables' => TimetableController::class,
-            'classes' => ClassController::class,
-            'score-types' => ScoreTypeController::class,
-            'fees' => FeeController::class,
-        ]);
-
-    });
 
 
 //    Route::prefix('classes')->as('classes.')->group(function () {
