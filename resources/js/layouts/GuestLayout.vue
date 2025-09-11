@@ -26,10 +26,10 @@ onMounted(() => {
 
 <template>
     <div
-    class="bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 flex items-center justify-center p-4 lg:p-4 "
+    class="bg-background flex items-center justify-center p-4 lg:p-4 "
   >
     <div class="w-full max-w-6xl">
-      <Card class="overflow-hidden shadow-sm border-0 bg-white backdrop-blur-sm">
+      <Card class="overflow-hidden shadow-sm border-0 bg-background backdrop-blur-sm">
         <CardContent class="p-0">
           <!-- Equal-height grid with flexible height -->
           <div class="grid grid-cols-1 lg:grid-cols-2">
@@ -116,18 +116,18 @@ onMounted(() => {
             </div>
 
             <!-- FORM -->
-            <div class="flex items-center justify-center bg-white lg:py-12">
+            <div class="flex items-center justify-center bg-background/80 lg:py-12">
               <div class="px-8 w-full max-w-lg">
                 <slot name="content"/>
               </div>
             </div>
-               
+
           </div>
         </CardContent>
       </Card>
 
       <!-- Terms -->
-      <div class="mt-6 text-center text-sm text-gray-500">
+      <div class="mt-6 text-center text-sm text-foreground">
         By clicking continue, you agree to our
         <a
           href="#"
@@ -142,7 +142,7 @@ onMounted(() => {
         >.
       </div>
 
-      
+
     </div>
   </div>
 </template>

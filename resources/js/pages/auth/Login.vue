@@ -37,10 +37,10 @@ const options = [
     <template #content>
       <form @submit.prevent="login" class="space-y-6">
         <div class="text-center space-y-3 mb-4">
-          <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight">
+          <h1 class="text-2xl lg:text-3xl font-bold text-foreground tracking-tight">
             Welcome Back!
           </h1>
-          <p class="text-gray-600 text-base">Sign in to continue to OpenPortal.</p>
+          <p class="text-muted-foreground text-base">Sign in to continue to OpenPortal.</p>
         </div>
 
         <div
@@ -79,7 +79,7 @@ const options = [
 
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <Label for="password" class="text-sm font-medium text-gray-700"
+            <Label for="password" class="text-sm font-medium text-foreground"
               >Password</Label
             >
             <TextLink
@@ -104,7 +104,7 @@ const options = [
 
         <div class="flex items-center space-x-2 pt-2">
           <Checkbox id="remember" v-model:checked="form.remember" />
-          <Label for="remember" class="text-sm text-gray-600 cursor-pointer"
+          <Label for="remember" class="text-sm text-foreground cursor-pointer"
             >Remember me</Label
           >
         </div>
@@ -123,7 +123,7 @@ const options = [
             <div class="w-full border-t border-gray-300"></div>
           </div>
           <div class="relative flex justify-center text-sm">
-            <span class="px-4 bg-white text-gray-500">Or continue with</span>
+            <span class="px-4 bg-background text-foreground">Or continue with</span>
           </div>
         </div>
 
@@ -142,7 +142,7 @@ const options = [
           Login with Google
         </Button>
 
-        <div class="text-center text-sm text-gray-600 pt-1">
+        <div class="text-center text-sm text-foreground pt-1">
           Don't have an account?
           <a href="#" class="font-semibold text-primary hover:text-primary/80 ml-1"
             >Sign up</a
