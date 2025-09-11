@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/app/AppLayout.vue";
-import { InputSelectOption, Subject } from "@/types";
+import {InputSelectOption, PaginatedDataI, Subject} from "@/types";
 import {
   Table,
   TableBody,
@@ -16,32 +16,40 @@ import { Badge } from "@/components/ui/badge";
 import { PlusIcon, CreditCard, Calendar, Search, X } from "lucide-vue-next";
 import SelectOption from "@/components/forms/SelectOption.vue";
 import SubjectCreate from "@/pages/Subject/SubjectCreate.vue";
-import { ref, watch} from "vue";
+import { ref, watch, computed} from "vue";
 import SubjectEdit from "./SubjectEdit.vue";
 import ConfirmDialogue from "@/components/helpers/ConfirmDialogue.vue";
 import { Head, Link, router } from '@inertiajs/vue3';
 import {dateAndTime, toastError, toastSuccess} from '@/lib/helpers';
 import debounce from "lodash/debounce";
+import Paginator from "@/components/helpers/Paginator.vue";
 const props = defineProps<{
-  subjects: Subject[];
+  subjects: PaginatedDataI<Subject>
   available_subjects: InputSelectOption[]
-
+    filters: {
+        search: string
+        page: number
+    }
 }>();
 
 
-const search = ref( "");
+const search = ref(props.filters.search || "");
+
 
 watch(
     search,
-    debounce((value) => {
-        router.reload({
-            data: { search: value },
-            only: ['subjects'],
-            preserveState: true,
-            replace: true,
-        });
-    }, 300)
+    debounce((value: string) => {
+        router.get(route('subjects.index'),
+            { search: value, page: 1 }, // always reset page
+            {
+                only: ["subjects", "filters"],
+                replace: true,
+                preserveScroll: true,
+            }
+        );
+    }, 2000)
 );
+
 
 const filterOptions = [
     {label: 'Today', value: 'today'},
@@ -69,6 +77,27 @@ const handleDelete = (id: number|string) => {
         },
     });
 };
+
+const goToPage = (page: number) => {
+    router.get(route('subjects.index'), {
+        page,
+        search: search.value  || undefined,
+    }, {
+        preserveScroll: true,
+        preserveState: true,
+    });
+};
+
+const reset = () => {
+    search.value = "";
+    router.get(route("subjects.index"), { search: "", page: 1 }, {
+        only: ["subjects", "filters"],
+        replace: true,
+        preserveScroll: true,
+    });
+};
+
+
 </script>
 
 <template>
@@ -98,8 +127,8 @@ const handleDelete = (id: number|string) => {
                               class="w-[200px]"
                               v-model="filter" />
               <Button
-                  v-if="search"
-                  @click="search = ''"
+                  v-if="search || props.subjects.current_page > 1"
+                  @click="reset"
                 variant="outline"
                 size="sm"
                 class="flex items-center gap-1 whitespace-nowrap"
@@ -137,7 +166,7 @@ const handleDelete = (id: number|string) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="subject in subjects" :key="subject.id">
+            <TableRow v-for="subject in props.subjects.data as Subject[]" :key="subject.id">
               <TableCell class="flex flex-col gap-2">
                 <span class="font-semibold">{{ subject.name }}</span>
                 <Badge variant="outline" class="text-xs">
@@ -178,7 +207,17 @@ const handleDelete = (id: number|string) => {
           </TableBody>
         </Table>
       </div>
-      <div v-if="subjects.length === 0" class="text-center py-8">
+        <div class="mt-8 flex justify-center w-full">
+            <Paginator
+                v-if="props.subjects.last_page > 1"
+                       :total="props.subjects.total"
+                       :per-page="props.subjects.per_page"
+                       :current-page="props.subjects.current_page"
+                       @page-change="goToPage"
+            />
+        </div>
+
+      <div v-if="subjects?.data?.length === 0" class="text-center py-8">
         <CreditCard
           class="h-12 w-12 text-muted-foreground mx-auto mb-4"
         />

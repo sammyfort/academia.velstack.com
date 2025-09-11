@@ -24,16 +24,20 @@ class SubjectController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('search', '');
 
         $subjects = school()->subjects()
             ->withCount(['classes', 'students'])
-            ->search($request->input('search'))
-            ->get();
+            ->search($search)
+            ->paginate(15);
+
 
         return Inertia::render('Subject/SubjectIndex', array_merge($this->props, [
             'subjects' => $subjects,
-
+            'filters' => [
+                'search' =>$search,
+                'page'   => $request->input('page', 1),
+            ],
         ]));
     }
 
@@ -41,7 +45,8 @@ class SubjectController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {
+    public function create()
+    {
 //        $subjects = school()->subjects()
 //            ->withCount(['classes', 'students'])
 //            ->where(function ($q) use ($request) {
@@ -58,9 +63,9 @@ class SubjectController extends Controller
     }
 
     /**Create', $this->props);
-    }
-
-    /**
+     * }
+     *
+     * /**
      * Store a newly created resource in storage.
      */
     public function store(StoreSubjectRequest $request)
@@ -94,7 +99,7 @@ class SubjectController extends Controller
     public function update(updateSubjectRequest $request, string $id)
     {
         school()->subjects()->findOrFail($id)->update($request->validated());
-         return back()->with(successRes("Subject updated successfully."));
+        return back()->with(successRes("Subject updated successfully."));
     }
 
     /**
@@ -102,7 +107,7 @@ class SubjectController extends Controller
      */
     public function destroy(string $id)
     {
-          school()->subjects()->findOrFail($id)->delete();
-         return back()->with(successRes("Subject deleted successfully."));
+        school()->subjects()->findOrFail($id)->delete();
+        return back()->with(successRes("Subject deleted successfully."));
     }
 }

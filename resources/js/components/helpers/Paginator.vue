@@ -55,7 +55,7 @@ const goToPage = (page: number) => {
     >
         <PaginationContent class="flex flex-wrap gap-2 items-center">
             <PaginationItem :value="props.currentPage - 1">
-                <PaginationPrevious class="me-8"
+                <PaginationPrevious class="me-12"
                     :disabled="props.currentPage === 1"
                     @click="goToPage(props.currentPage - 1)"
                 />
@@ -63,7 +63,7 @@ const goToPage = (page: number) => {
 
             <PaginationItem v-if="visiblePages[0] > 1" :value="1">
                 <button
-                    class="px-3 py-1 rounded hover:bg-gray-100"
+                    class="px-3 py-1 rounded hover:bg-background"
                     @click="goToPage(1)"
                 >1</button>
             </PaginationItem>
@@ -80,8 +80,8 @@ const goToPage = (page: number) => {
                     @click="goToPage(page)"
                     class="px-3 py-1 rounded transition-colors"
                     :class="{
-                        'bg-orange-500 text-white hover:bg-orange-600': page === props.currentPage,
-                        'hover:bg-gray-100': page !== props.currentPage
+                        'bg-background text-foreground hover:bg-background': page === props.currentPage,
+                        'hover:bg-background': page !== props.currentPage
                     }"
                 >
                     {{ page }}
@@ -95,7 +95,7 @@ const goToPage = (page: number) => {
                 :value="totalPages"
             >
                 <button
-                    class="px-3 py-1 rounded hover:bg-gray-100"
+                    class="px-3 py-1 rounded hover:bg-background"
                     @click="goToPage(totalPages)"
                 >
                     {{ totalPages }}
@@ -103,6 +103,7 @@ const goToPage = (page: number) => {
             </PaginationItem>
             <PaginationItem :value="props.currentPage + 1">
                 <PaginationNext
+                    class="ml-12"
                     :disabled="props.currentPage === totalPages"
                     @click="goToPage(props.currentPage + 1)"
                 />
