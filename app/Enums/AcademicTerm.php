@@ -17,6 +17,9 @@ enum AcademicTerm: string
 
     case TERM_2023_2024_TERM_ONE = '2023/24 TERM ONE';
 
-    
+    public static function toArray(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
 
 }

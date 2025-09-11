@@ -16,7 +16,7 @@ type Props = {
   form?: Record<string, any>;
   model?: string;
   label?: string;
-  options: InputSelectOption[];
+  options: InputSelectOption[] | undefined;
   containerClass?: HTMLAttributes["class"];
   placeholder?: string;
 };
@@ -32,7 +32,7 @@ const attrs = useAttrs();
 
 <template>
   <div :class="cn(' ', props.containerClass)" v-if="form && model">
-    <Label class="text-foreground" :for="id">
+    <Label v-if="label"  class="text-foreground mb-2" :for="id">
       {{ props.label }}
       <span
         class="text-red-500"
@@ -63,7 +63,7 @@ const attrs = useAttrs();
   </div>
 
   <div v-else :class="cn(' ', props.containerClass)">
-    <Label class="text-foreground" :for="id">
+    <Label v-if="label" class="text-foreground mb-2" :for="id">
       {{ props.label }}
       <span
         class="text-red-500"

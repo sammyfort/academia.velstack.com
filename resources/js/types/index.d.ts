@@ -37,7 +37,16 @@ export interface Subject extends ModelI {
     students_count: number
 }
 
- 
+export interface Semester extends ModelI {
+    name: string
+    status: string
+    start_date: string
+    end_date: string
+    days: number
+    next_term_begins: string
+}
+
+
 
 export interface User extends ModelI {
     firstname: string;
@@ -48,14 +57,14 @@ export interface User extends ModelI {
     email: string;
     email_verified_at: string | null;
     password: string;
-   
+
 }
 
- 
 
- 
 
- 
+
+
+
 
 export interface MediaI {
     'id': number,
@@ -74,16 +83,16 @@ export interface MediaI {
     'url': string,
     'original_url': string,
 }
- 
 
- 
+
+
 
 export interface RegionI extends ModelI {
     name: string;
     slug: string;
     country: CountryI,
 }
- 
+
 
 export interface PaginationLinkI {
     active: boolean;
@@ -107,10 +116,9 @@ export interface PaginatedDataI<DT> {
     total: number,
 }
 
- 
+
 
 export type InputSelectOption = {
     label: string
     value: number|string
 }
- 

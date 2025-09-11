@@ -1,0 +1,179 @@
+<script setup lang="ts">
+import AppLayout from "@/layouts/app/AppLayout.vue";
+import {InputSelectOption, Semester, Subject} from "@/types";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+import { Badge } from "@/components/ui/badge";
+import { PlusIcon, CreditCard, Calendar, Search, X } from "lucide-vue-next";
+import SelectOption from "@/components/forms/SelectOption.vue";
+import SemesterCreate from "@/pages/Semester/SemesterCreate.vue";
+import { ref } from "vue";
+import SemesterEdit from "./SemesterEdit.vue";
+import ConfirmDialogue from "@/components/helpers/ConfirmDialogue.vue";
+import { Head, Link, router } from '@inertiajs/vue3';
+import { toastError, toastSuccess } from '@/lib/helpers';
+const props = defineProps<{
+    semesters: Semester[];
+    available_semesters: InputSelectOption[]
+}>();
+
+const filterOptions = [
+    {label: 'Today', value: 'today'},
+    {label: 'This Week', value: 'this_week'},
+    {label: 'This Month', value: 'this_month'},
+    {label: 'This Year', value: 'this_year'}
+]
+
+const filter = ref('');
+const isDeleting = ref(false);
+
+const handleDelete = (id: number|string) => {
+    isDeleting.value = true;
+    router.delete(route('semesters.destroy', id ), {
+        onSuccess: (res) => {
+            console.log(res)
+            if (res.props.success) {
+                toastSuccess(res.props.message);
+            } else {
+                toastError(res.props.message);
+            }
+        },
+        onFinish: () => {
+            isDeleting.value = false;
+        },
+    });
+};
+</script>
+
+<template>
+    <AppLayout>
+        <div
+            class="rounded-2xl border border-border bg-background p-6 shadow-sm mt-4"
+        >
+            <!-- Header -->
+            <div class="mb-6 flex items-center justify-between">
+                <h2 class="flex items-center gap-2 text-2xl font-bold text-foreground">
+                    <CreditCard class="h-6 w-6 text-primary" />
+                    Semesters
+                </h2>
+            </div>
+            <div class="mb-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                        <div class="relative flex-1 sm:w-85">
+                            <Search
+                                class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                            />
+                            <Input placeholder="Search..." class="pl-10 w-full" />
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <SelectOption placeholder="Filter by Date"
+                                          :options="filterOptions"
+                                          class="w-[200px]"
+                                          v-model="filter" />
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                class="flex items-center gap-1 whitespace-nowrap"
+                            >
+                                <X  />
+                                Clear
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-auto mt-4 sm:mt-0">
+                        <SemesterCreate :available_semesters="available_semesters"  @created="$inertia.reload({ only: ['semesters'] })">
+                            <Button
+                                class="w-full sm:w-auto flex items-center gap-x-2 rounded-xl border border-white/30 bg-primary text-white backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-primary/30"
+                            >
+                                <PlusIcon class="h-5 w-5" />
+                                <span>Add Semester</span>
+                            </Button>
+                        </SemesterCreate>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="overflow-x-auto">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead class="text-left">Semester Name</TableHead>
+                            <TableHead class="text-left">Starts At</TableHead>
+                            <TableHead class="text-left">Ends At</TableHead>
+                            <TableHead class="text-left">Next Term Begins</TableHead>
+                            <TableHead class="text-left">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow v-for="semester in semesters" :key="semester.id">
+                            <TableCell class="flex flex-col gap-2">
+                                <span class="font-semibold">{{ semester.name }}</span>
+                                <Badge variant="outline" class="text-xs uppercase">
+                                    <span>{{ semester.status }}</span>
+                                </Badge>
+                            </TableCell>
+                            <TableCell>
+                                <div class="flex items-center gap-1.5 text-muted-foreground">
+                                    <Calendar class="h-4 w-4" />
+                                    {{ semester.start_date }}
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <div class="flex items-center gap-1.5 text-muted-foreground">
+                                    <Calendar class="h-4 w-4" />
+                                    {{ semester.end_date }}
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <div class="flex items-center gap-1.5 text-muted-foreground">
+                                    <Calendar class="h-4 w-4" />
+                                    {{ semester.next_term_begins }}
+                                </div>
+                            </TableCell>
+
+                            <TableCell>
+                                <div class="flex gap-2">
+                                    <SemesterEdit :semester="semester" :available_semesters="available_semesters"  @updated="$inertia.reload()">
+                                        <Button size="sm" variant="outline">Edit</Button>
+                                    </SemesterEdit>
+
+                                    <ConfirmDialogue
+                                        :title="'Delete Subject'"
+                                        :description="'Are you sure you want to delete this semester? This action cannot be undone.'"
+                                        :confirmText="'Delete'"
+                                        :cancelText="'Cancel'"
+                                        :isProcessing="isDeleting"
+                                        @confirm="handleDelete(semester.id)"
+                                        :loading="isDeleting"
+                                    >
+                                        <Button size="sm" variant="destructive">Delete</Button>
+                                    </ConfirmDialogue>
+
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+            <div v-if="semesters.length === 0" class="text-center py-8">
+                <CreditCard
+                    class="h-12 w-12 text-muted-foreground mx-auto mb-4"
+                />
+                <p class="text-muted-foreground">No semester found</p>
+            </div>
+        </div>
+    </AppLayout>
+</template>

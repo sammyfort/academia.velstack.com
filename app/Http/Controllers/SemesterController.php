@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AcademicTerm;
+use App\Enums\TermStatus;
+use App\Http\Requests\Semester\storeSemesterRequest;
+use App\Http\Requests\Semester\updateSemesterRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class SemesterController extends Controller
 {
@@ -11,7 +17,10 @@ class SemesterController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Semester/SemesterIndex', [
+            'semesters' => school()->semesters()->latest()->get(),
+            'available_semesters' => toOption(AcademicTerm::toArray())
+        ]);
     }
 
     /**
@@ -25,9 +34,26 @@ class SemesterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(storeSemesterRequest $request)
     {
-        //
+
+        DB::beginTransaction();
+        try {
+            $semester = school()->semesters()->create($request->validated());
+
+            if ($semester->status == TermStatus::ACTIVE->value) {
+                $exists = school()->semesters()->where('status', TermStatus::ACTIVE->value)->get()->except($semester->id);
+                foreach ($exists as $semester) {
+                    $semester->update(['status' => TermStatus::ENDED->value]);
+                }
+            }
+            DB::commit();
+            return back()->with(successRes("Semester created successfully."));
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            // throw($exception);
+            return back()->with(errorRes($exception->getMessage()));
+        }
     }
 
     /**
@@ -49,9 +75,26 @@ class SemesterController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(updateSemesterRequest $request, string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $semester = school()->semesters()->findOrFail($id);
+            $semester->update($request->validated());
+
+            if ($semester->status == TermStatus::ACTIVE->value) {
+                $exists = school()->semesters()->where('status', TermStatus::ACTIVE->value)->get()->except($semester->id);
+                foreach ($exists as $semester) {
+                    $semester->update(['status' => TermStatus::ENDED->value]);
+                }
+            }
+            DB::commit();
+            return back()->with(successRes("Semester updated successfully."));
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            // throw($exception);
+            return back()->with(errorRes($exception->getMessage()));
+        }
     }
 
     /**

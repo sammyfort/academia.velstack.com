@@ -14,8 +14,8 @@ class TermObserver
      */
     public function created(Term $term): void
     {
-        $this->refreshCache($term);
-        $this->logCreated($term, $term->name, 'calenders.index');
+//        $this->refreshCache($term);
+//        $this->logCreated($term, $term->name, 'calenders.index');
     }
 
     /**
@@ -23,8 +23,8 @@ class TermObserver
      */
     public function updated(Term $term): void
     {
-        $this->refreshCache($term);
-        $this->logUpdated($term, $term->name, 'calenders.index');
+//        $this->refreshCache($term);
+//        $this->logUpdated($term, $term->name, 'calenders.index');
     }
 
     /**
@@ -32,8 +32,8 @@ class TermObserver
      */
     public function deleted(Term $term): void
     {
-        $this->refreshCache($term);
-        $this->logDeleted($term, $term->name);
+//        $this->refreshCache($term);
+//        $this->logDeleted($term, $term->name);
     }
 
     /**
@@ -41,8 +41,8 @@ class TermObserver
      */
     public function restored(Term $term): void
     {
-        $this->refreshCache($term);
-        $this->logRestored($term, $term->name, 'calenders.index');
+//        $this->refreshCache($term);
+//        $this->logRestored($term, $term->name, 'calenders.index');
     }
 
     /**
@@ -50,8 +50,8 @@ class TermObserver
      */
     public function forceDeleted(Term $term): void
     {
-        $this->refreshCache($term);
-        $this->logDeleted($term, $term->name);
+//        $this->refreshCache($term);
+//        $this->logDeleted($term, $term->name);
     }
 
     private function refreshCache(Term $term): void

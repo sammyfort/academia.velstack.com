@@ -56,7 +56,7 @@ class School extends Model implements HasMedia
         return $this->hasMany(ReportRemark::class);
     }
 
-    public function terms(): HasMany
+    public function semesters(): HasMany
     {
         return $this->hasMany(Term::class);
     }
