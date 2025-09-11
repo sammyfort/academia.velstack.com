@@ -38,17 +38,16 @@ const search = ref(props.filters.search || "");
 
 watch(
     search,
-    debounce((value: string) => {
-        router.get(route('subjects.index'),
-            { search: value, page: 1 }, // always reset page
-            {
-                only: ["subjects", "filters"],
-                replace: true,
-                preserveScroll: true,
-            }
-        );
-    }, 2000)
+    debounce((value) => {
+        router.reload({
+            data: { search: value },
+            only: ['subjects', 'filters'],
+            preserveState: true,
+            replace: true,
+        });
+    }, 200)
 );
+
 
 
 const filterOptions = [
@@ -109,7 +108,7 @@ const reset = () => {
       <div class="mb-6 flex items-center justify-between">
         <h2 class="flex items-center gap-2 text-2xl font-bold text-foreground">
           <CreditCard class="h-6 w-6 text-primary" />
-          Subjects
+          Subjects ({{props.subjects.total}})
         </h2>
       </div>
       <div class="mb-6">
