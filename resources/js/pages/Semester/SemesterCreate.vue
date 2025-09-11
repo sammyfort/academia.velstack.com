@@ -15,6 +15,7 @@ import {ref } from 'vue';
 import { LoaderCircle } from 'lucide-vue-next';
 import { InputSelectOption } from '@/types';
 import SelectOption from "@/components/forms/SelectOption.vue";
+import Datepicker from "@/components/forms/Datepicker.vue";
 
 const props = defineProps<{
     available_semesters?: InputSelectOption[]
@@ -61,10 +62,10 @@ const createSemester = ()=>{
                 <SelectOption label="Status" placeholder="Select"
                               :options="[{label: 'Active', value: 'active'}, {label: 'Ended', value: 'ended'}]"
                               :form="form" model="status" required  />
-                <InputText :form="form" label="Start Date" model="start_date" type="date" required  />
-                <InputText :form="form" label="End Date" model="end_date" type="date" required   />
+                <Datepicker :form="form" label="Start Date" model="start_date" type="date" required  />
+                <Datepicker :form="form" label="End Date" model="end_date" type="date" required   />
                 <InputText :form="form" label="Number of Days" model="days"    />
-                <InputText :form="form" label="Next Term Begin" model="next_term_begins" type="date" required  />
+                <Datepicker :form="form" label="Next Term Begin" model="next_term_begins" type="date" required  />
 
 
             </form>

@@ -25,7 +25,7 @@ const props = defineProps<{
     semesters: Semester[];
     available_semesters: InputSelectOption[]
 }>();
-
+import { dateAndTime, number_format } from '@/lib/helpers';
 const filterOptions = [
     {label: 'Today', value: 'today'},
     {label: 'This Week', value: 'this_week'},
@@ -128,19 +128,19 @@ const handleDelete = (id: number|string) => {
                             <TableCell>
                                 <div class="flex items-center gap-1.5 text-muted-foreground">
                                     <Calendar class="h-4 w-4" />
-                                    {{ semester.start_date }}
+                                    {{ dateAndTime(semester.start_date )}}
                                 </div>
                             </TableCell>
                             <TableCell>
                                 <div class="flex items-center gap-1.5 text-muted-foreground">
                                     <Calendar class="h-4 w-4" />
-                                    {{ semester.end_date }}
+                                    {{ dateAndTime(semester.end_date) }}
                                 </div>
                             </TableCell>
                             <TableCell>
                                 <div class="flex items-center gap-1.5 text-muted-foreground">
                                     <Calendar class="h-4 w-4" />
-                                    {{ semester.next_term_begins }}
+                                    {{ dateAndTime(semester.next_term_begins) }}
                                 </div>
                             </TableCell>
 

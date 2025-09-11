@@ -20,7 +20,7 @@ import { ref } from "vue";
 import SubjectEdit from "./SubjectEdit.vue";
 import ConfirmDialogue from "@/components/helpers/ConfirmDialogue.vue";
 import { Head, Link, router } from '@inertiajs/vue3';
-import { toastError, toastSuccess } from '@/lib/helpers';
+import {dateAndTime, toastError, toastSuccess} from '@/lib/helpers';
 const props = defineProps<{
   subjects: Subject[];
   available_subjects: InputSelectOption[]
@@ -131,7 +131,7 @@ const handleDelete = (id: number|string) => {
               <TableCell>
                 <div class="flex items-center gap-1.5 text-muted-foreground">
                   <Calendar class="h-4 w-4" />
-                  {{ subject.created_at_str }}
+                  {{ dateAndTime(subject.created_at, true )}}
                 </div>
               </TableCell>
 

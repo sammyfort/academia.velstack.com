@@ -66,15 +66,23 @@ export const number_format = (val: number, decimal=2)=> {
     return num.toFixed(decimal);
 }
 
-export const dateAndTime = (dateStr: string)=>{
-    return new Date(dateStr).toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    })
+export const dateAndTime = (dateStr: string, withTime: boolean = false) => {
+    const date = new Date(dateStr)
+    return date.toLocaleString("en-US", withTime
+        ? {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        }
+        : {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        }
+    )
 }
 
 export function ucFirst(str: string): string {
