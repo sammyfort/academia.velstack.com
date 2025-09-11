@@ -20,6 +20,8 @@ class Subject extends Model
     use HasFactory, HasAuditFields, SoftDeletes;
 
     protected $guarded = ['id', 'uuid', 'created_at', 'updated_at', 'deleted_at', 'deleted_by', 'created_by'];
+
+    protected $appends = ['created_at_str'];
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class)
@@ -38,12 +40,7 @@ class Subject extends Model
         );
     }
 
-//    public function name(): Attribute
-//    {
-//        return new Attribute(
-//            get: fn($value) => strtoupper($value),
-//        );
-//    }
+
 
     public function school(): BelongsTo
     {

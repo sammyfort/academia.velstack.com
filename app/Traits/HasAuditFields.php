@@ -6,6 +6,7 @@ namespace App\Traits;
 use App\Models\Staff;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -29,6 +30,12 @@ trait HasAuditFields
     public function createdByName() : Attribute {
         return new Attribute(
             get: fn() => $this->created_by ? $this->createdBy->full_name : '',
+        );
+    }
+
+    public function createdAtStr() : Attribute {
+        return new Attribute(
+            get: fn() => Carbon::parse($this->created_at)->format('D, d M Y H:i'),
         );
     }
 

@@ -66,8 +66,6 @@ const handleDelete = (id: number|string) => {
           Subjects
         </h2>
       </div>
-
-      <!-- Filters + Add -->
       <div class="mb-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
@@ -133,7 +131,7 @@ const handleDelete = (id: number|string) => {
               <TableCell>
                 <div class="flex items-center gap-1.5 text-muted-foreground">
                   <Calendar class="h-4 w-4" />
-                  {{ subject.created_at }}
+                  {{ subject.created_at_str }}
                 </div>
               </TableCell>
 
@@ -161,8 +159,6 @@ const handleDelete = (id: number|string) => {
           </TableBody>
         </Table>
       </div>
-
-
       <div v-if="subjects.length === 0" class="text-center py-8">
         <CreditCard
           class="h-12 w-12 text-muted-foreground mx-auto mb-4"
