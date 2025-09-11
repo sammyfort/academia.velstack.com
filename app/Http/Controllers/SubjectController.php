@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Subjects;
 use App\Http\Requests\Subject\StoreSubjectRequest;
 use App\Http\Requests\Subject\updateSubjectRequest;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class SubjectController extends Controller
@@ -21,17 +22,40 @@ class SubjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+
+        $subjects = school()->subjects()
+            ->withCount(['classes', 'students'])
+            ->search($request->input('search'))
+            ->get();
+
         return Inertia::render('Subject/SubjectIndex', array_merge($this->props, [
-            'subjects' => staff()->school->subjects()->withCount(['classes', 'students'])->get(),
+            'subjects' => $subjects,
+
         ]));
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {}
+    public function create() {
+//        $subjects = school()->subjects()
+//            ->withCount(['classes', 'students'])
+//            ->where(function ($q) use ($request) {
+//                $q->search($request->input('search'))
+//                    ->orWhereHas('classes', function ($q) use ($request) {
+//                        $q->search($request->input('search'));
+//                    })
+//                    ->orWhereHas('students', function ($q) use ($request) {
+//                        $q->search($request->input('search'));
+//                    });
+//            })
+//            ->get();
+
+    }
 
     /**Create', $this->props);
     }

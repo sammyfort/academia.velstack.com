@@ -16,15 +16,32 @@ import { Badge } from "@/components/ui/badge";
 import { PlusIcon, CreditCard, Calendar, Search, X } from "lucide-vue-next";
 import SelectOption from "@/components/forms/SelectOption.vue";
 import SubjectCreate from "@/pages/Subject/SubjectCreate.vue";
-import { ref } from "vue";
+import { ref, watch} from "vue";
 import SubjectEdit from "./SubjectEdit.vue";
 import ConfirmDialogue from "@/components/helpers/ConfirmDialogue.vue";
 import { Head, Link, router } from '@inertiajs/vue3';
 import {dateAndTime, toastError, toastSuccess} from '@/lib/helpers';
+import debounce from "lodash/debounce";
 const props = defineProps<{
   subjects: Subject[];
   available_subjects: InputSelectOption[]
+
 }>();
+
+
+const search = ref( "");
+
+watch(
+    search,
+    debounce((value) => {
+        router.reload({
+            data: { search: value },
+            only: ['subjects'],
+            preserveState: true,
+            replace: true,
+        });
+    }, 300)
+);
 
 const filterOptions = [
     {label: 'Today', value: 'today'},
@@ -73,7 +90,7 @@ const handleDelete = (id: number|string) => {
               <Search
                 class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
               />
-              <Input placeholder="Search..." class="pl-10 w-full" />
+              <Input  v-model="search" placeholder="Search..." class="pl-10 w-full" />
             </div>
             <div class="flex items-center gap-2">
                 <SelectOption placeholder="Filter by Date"
@@ -81,6 +98,8 @@ const handleDelete = (id: number|string) => {
                               class="w-[200px]"
                               v-model="filter" />
               <Button
+                  v-if="search"
+                  @click="search = ''"
                 variant="outline"
                 size="sm"
                 class="flex items-center gap-1 whitespace-nowrap"

@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-
+use Illuminate\Database\Eloquent\Builder;
 trait HasAuditFields
 {
     protected static function bootHasAuditFields(): void
@@ -67,5 +67,18 @@ trait HasAuditFields
         });
     }
 
+    public function scopeSearch(Builder $query, ?string $term): Builder
+    {
+        if (empty($term)) {
+            return $query;
+        }
 
+        $fields = $this->getSearchableFields();
+
+        return $query->where(function ($q) use ($fields, $term) {
+            foreach ($fields as $field) {
+                $q->orWhere($field, 'like', "%{$term}%");
+            }
+        });
+    }
 }

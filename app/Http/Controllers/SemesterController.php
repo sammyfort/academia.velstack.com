@@ -15,10 +15,12 @@ class SemesterController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $semesters = school()->semesters()->search($request->input('search'))->latest()->get();
+
         return Inertia::render('Semester/SemesterIndex', [
-            'semesters' => school()->semesters()->latest()->get(),
+            'semesters' => $semesters,
             'available_semesters' => toOption(AcademicTerm::toArray())
         ]);
     }
