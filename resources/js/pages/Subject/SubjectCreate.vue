@@ -15,7 +15,7 @@ import {ref } from 'vue';
 import { LoaderCircle } from 'lucide-vue-next';
 import { InputSelectOption } from '@/types';
 import SelectOption from "@/components/forms/SelectOption.vue";
- 
+
 const props = defineProps<{
    available_subjects?: InputSelectOption[]
 }>();
@@ -56,9 +56,9 @@ const createSubject = ()=>{
 
                  <SelectOption label="Subject Name" placeholder="Select Subject"
                   :options="available_subjects" :form="form" model="name" required  />
-                    
+
                     <InputText :form="form" label="Subject code" model="code"   />
-                 
+
 
                 </form>
                 <DialogFooter class="p-3">

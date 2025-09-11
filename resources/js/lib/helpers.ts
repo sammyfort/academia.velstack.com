@@ -23,6 +23,7 @@ export const toastInfo = (message: string, description?: string, options? : type
 }
 
 export const getRandomAuthImage = ()=>{
+
     const files = [
         "/images/auth/1.png",
         "/images/auth/2.png",

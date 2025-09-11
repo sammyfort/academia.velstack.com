@@ -31,7 +31,7 @@ const attrs = useAttrs();
 </script>
 
 <template>
-  <div :class="cn('grid gap-2', props.containerClass)" v-if="form && model">
+  <div :class="cn(' ', props.containerClass)" v-if="form && model">
     <Label class="text-foreground" :for="id">
       {{ props.label }}
       <span
@@ -62,7 +62,7 @@ const attrs = useAttrs();
     <InputError :message="form.errors[model]" />
   </div>
 
-  <div v-else :class="cn('grid gap-2', props.containerClass)">
+  <div v-else :class="cn(' ', props.containerClass)">
     <Label class="text-foreground" :for="id">
       {{ props.label }}
       <span

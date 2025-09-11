@@ -38,12 +38,12 @@ class Subject extends Model
         );
     }
 
-    public function name(): Attribute
-    {
-        return new Attribute(
-            get: fn($value) => strtoupper($value),
-        );
-    }
+//    public function name(): Attribute
+//    {
+//        return new Attribute(
+//            get: fn($value) => strtoupper($value),
+//        );
+//    }
 
     public function school(): BelongsTo
     {

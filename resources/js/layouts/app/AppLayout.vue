@@ -9,7 +9,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import Header from "@/layouts/app/Header.vue"
- 
+import { Toaster } from 'vue-sonner'
 </script>
 
 <template>
@@ -18,6 +18,7 @@ import Header from "@/layouts/app/Header.vue"
     <SidebarInset>
        <Header />
         <main class="p-6">
+            <Toaster richColors position="top-right" />
         <slot />
       </main>
     </SidebarInset>

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
- 
+
 import { Badge } from "@/components/ui/badge";
 import { PlusIcon, CreditCard, Calendar, Search, X } from "lucide-vue-next";
 import SelectOption from "@/components/forms/SelectOption.vue";
@@ -40,6 +40,7 @@ const handleDelete = (id: number|string) => {
     isDeleting.value = true;
     router.delete(route('subjects.destroy', id ), {
         onSuccess: (res) => {
+            console.log(res)
             if (res.props.success) {
                 toastSuccess(res.props.message);
             } else {
@@ -69,22 +70,18 @@ const handleDelete = (id: number|string) => {
       <!-- Filters + Add -->
       <div class="mb-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          
-          <!-- Left controls: Search, Filter, Clear -->
           <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <!-- Search -->
             <div class="relative flex-1 sm:w-85">
               <Search
                 class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
               />
               <Input placeholder="Search..." class="pl-10 w-full" />
             </div>
-
-            <!-- Filter and Clear buttons -->
-            <div class="flex gap-2">
-               
-              <SelectOption placeholder="Filter by Date" :options="filterOptions"  v-model="filter" />
-
+            <div class="flex items-center gap-2">
+                <SelectOption placeholder="Filter by Date"
+                              :options="filterOptions"
+                              class="w-[200px]"
+                              v-model="filter" />
               <Button
                 variant="outline"
                 size="sm"
@@ -96,7 +93,6 @@ const handleDelete = (id: number|string) => {
             </div>
           </div>
 
-          <!-- Right button: Add Subject -->
           <div class="w-full sm:w-auto mt-4 sm:mt-0">
           <SubjectCreate :available_subjects="available_subjects" @created="$inertia.reload({ only: ['subjects'] })">
           <Button
@@ -106,12 +102,12 @@ const handleDelete = (id: number|string) => {
               <span>Add Subject</span>
             </Button>
           </SubjectCreate>
-            
+
           </div>
         </div>
       </div>
 
-      <!-- Table -->
+
       <div class="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -143,10 +139,10 @@ const handleDelete = (id: number|string) => {
 
               <TableCell>
                 <div class="flex gap-2">
-                <SubjectEdit :subject="subject" :available_subjects="available_subjects"  @updated="$inertia.reload()"">
+                <SubjectEdit :subject="subject" :available_subjects="available_subjects"  @updated="$inertia.reload()">
                  <Button size="sm" variant="outline">Edit</Button>
                 </SubjectEdit>
-                 
+
                   <ConfirmDialogue
                       :title="'Delete Subject'"
                       :description="'Are you sure you want to delete this subject? This action cannot be undone.'"
@@ -154,10 +150,11 @@ const handleDelete = (id: number|string) => {
                       :cancelText="'Cancel'"
                       :isProcessing="isDeleting"
                       @confirm="handleDelete(subject.id)"
+                      :loading="isDeleting"
                     >
                       <Button size="sm" variant="destructive">Delete</Button>
                     </ConfirmDialogue>
-               
+
                 </div>
               </TableCell>
             </TableRow>
@@ -165,7 +162,7 @@ const handleDelete = (id: number|string) => {
         </Table>
       </div>
 
-      <!-- Empty State -->
+
       <div v-if="subjects.length === 0" class="text-center py-8">
         <CreditCard
           class="h-12 w-12 text-muted-foreground mx-auto mb-4"

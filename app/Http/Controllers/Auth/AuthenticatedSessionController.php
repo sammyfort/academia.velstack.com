@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
         $fallback = match ($request->login_as) {
             LoginType::ADMIN->value => route('admin.dashboard', [], false),
             LoginType::PARENT->value => route('parent.dashboard', [], false),
-            default => route('staff.dashboard', [], false),
+            default => route('dashboard', [], false),
         };
 
         return redirect()->intended($fallback);
@@ -38,7 +38,6 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
-
 
         $guard = null;
 

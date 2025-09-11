@@ -1,9 +1,7 @@
-
 <script setup lang="ts">
 import { ref, defineEmits } from 'vue'
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -12,7 +10,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-
+import { Button } from '@/components/ui/button'
 
 const props = defineProps<{
     title?: string
@@ -21,33 +19,41 @@ const props = defineProps<{
     cancelText?: string
     loading?: boolean
 }>()
+
 const isOpen = ref(false)
-const emit = defineEmits(['confirm'])
+const emit = defineEmits<{
+    (e: 'confirm', done: () => void): void
+}>()
 
-
-
-
+const handleConfirm = () => {
+    emit('confirm', () => {
+        isOpen.value = false
+    })
+}
 </script>
 
 <template>
     <AlertDialog v-model:open="isOpen">
         <AlertDialogTrigger as-child>
-
-            <slot/>
+            <slot />
         </AlertDialogTrigger>
+
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>{{ props.title || 'Are you sure?' }}</AlertDialogTitle>
-                <AlertDialogDescription>{{ props.description || 'This action cannot be undone.' }}</AlertDialogDescription>
+                <AlertDialogDescription>
+                    {{ props.description || 'This action cannot be undone.' }}
+                </AlertDialogDescription>
             </AlertDialogHeader>
 
             <AlertDialogFooter>
                 <AlertDialogCancel :disabled="props.loading">
                     {{ props.cancelText || 'Cancel' }}
                 </AlertDialogCancel>
-                <AlertDialogAction :disabled="props.loading" @click="emit('confirm')">
-                    {{ props.confirmText || 'Confirm' }}
-                </AlertDialogAction>
+
+                <Button :disabled="props.loading" @click="handleConfirm">
+                    {{ props.loading ? 'Please wait...' : props.confirmText || 'Confirm' }}
+                </Button>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
