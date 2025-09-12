@@ -27,7 +27,7 @@ class updateClassRequest extends FormRequest
         return [
             'name' => ['required', Rule::unique('classrooms', 'name')
                 ->where('school_id', school()->id)
-                ->ignore($this->route('classes'))
+                ->ignore($this->route('class'))
             ],
             'level' => ['required', Rule::in(ClassLevel::toArray())],
             'group' => ['required', Rule::in(ClassGroup::toArray())],

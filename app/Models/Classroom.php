@@ -28,6 +28,7 @@ class Classroom extends Model
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
+
     }
     public function name(): Attribute
     {

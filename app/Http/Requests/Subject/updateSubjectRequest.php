@@ -23,7 +23,7 @@ class updateSubjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        $subjectId = $this->route('subject');
+        $subjectId = $this->route('subjects');
         return [
             'name' =>  [
                 'required',
