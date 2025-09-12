@@ -30,14 +30,15 @@ const sidebarData = [
   {
     label: "ACADEMICS",
     items: [
-       
+
       {
         title: "Classes",
         icon: Frame,
         visible: true,
         items: [
           { title: "Class List", routeName: "classes.index", visible: true },
-          { title: "Create Class", routeName: "classes.create", visible: true },
+          { title: "Assign Subjects", routeName: "classes.create", visible: true },
+            { title: "Assign Staff", routeName: "classes.create", visible: true },
         ],
       },
 
@@ -55,7 +56,7 @@ const sidebarData = [
       { title: "Parents", routeName: "parents.index", icon: Bot, visible: true }
 
     ],
-    
+
   },
 
   {
@@ -65,7 +66,7 @@ const sidebarData = [
       { title: "Billing", routeName: "fees.index", icon: Bot, visible: true },
       { title: "Payments", routeName: "fees.index", icon: Bot, visible: true },
     ],
-    
+
   },
 ];
 </script>

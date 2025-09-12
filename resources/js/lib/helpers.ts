@@ -1,28 +1,31 @@
-import { toast } from 'vue-sonner'
-import { Page } from '@inertiajs/core'
+import {toast} from 'vue-sonner'
+import {Page} from '@inertiajs/core'
+import {watch, Ref} from "vue";
+import {router} from "@inertiajs/vue3";
+import {debounce} from "lodash-es";
 
-export const toastSuccess = (message: string, description?: string, options? : typeof toast) => {
+export const toastSuccess = (message: string, description?: string, options?: typeof toast) => {
     toast.success(message, {
         description: description,
         ...options
     })
 }
 
-export const toastError = (message: string, description?: string, options? : typeof toast) => {
+export const toastError = (message: string, description?: string, options?: typeof toast) => {
     toast.error(message, {
         description: description,
         ...options
     })
 }
 
-export const toastInfo = (message: string, description?: string, options? : typeof toast) => {
+export const toastInfo = (message: string, description?: string, options?: typeof toast) => {
     toast.info(message, {
         description: description,
         ...options
     })
 }
 
-export const getRandomAuthImage = ()=>{
+export const getRandomAuthImage = () => {
 
     const files = [
         "/images/auth/1.png",
@@ -43,8 +46,7 @@ export const alertResponse = (res: Page, sCallback?: CallableFunction, eCallback
     if (res.props.success) {
         toastSuccess(message);
         if (sCallback) sCallback()
-    }
-    else {
+    } else {
         toastError(message);
         if (eCallback) eCallback()
     }
@@ -58,7 +60,7 @@ export const chunkArray = <T>(array: T[], size: number): [T[]] => {
     return result as unknown as [T[]]
 }
 
-export const number_format = (val: number, decimal=2)=> {
+export const number_format = (val: number, decimal = 2) => {
     const num = (Math.ceil(val * Math.pow(10, decimal)) / Math.pow(10, decimal));
     if (Number.isNaN(num)) {
         return "0.0";
@@ -126,11 +128,11 @@ export function copyContent(code: string, message? = 'Content copied to clipboar
     }
 }
 
-export function cediSign(): string{
+export function cediSign(): string {
     return "₵"
 }
 
-export function generateShareLinks(url: string|null = null, text = "Check this out!") {
+export function generateShareLinks(url: string | null = null, text = "Check this out!") {
     const shareUrl = encodeURIComponent(url || window.location.href);
     const shareText = encodeURIComponent(text);
 
@@ -161,4 +163,27 @@ export function whatsappChatLink(mobileNumber: string, message: string) {
     }
     const encodedMessage = encodeURIComponent(message);
     return `https://wa.me/${cleanedNumber}?text=${encodedMessage}`;
+}
+
+
+interface ReloadOptions<T> {
+    sources: Ref<T>[],               // refs to watch
+    mapData: (values: T[]) => any,   // function to map sources into request data
+    only?: string[],                 // inertia "only" keys
+    replace?: boolean,               // inertia replace flag
+    debounceMs?: number,             // debounce time
+}
+
+export function useReloadOnChange<T>({sources, mapData, only = [], replace = true, debounceMs = 1000,}: ReloadOptions<T>) {
+    watch(
+        sources,
+        debounce((values: T[]) => {
+            router.reload({
+                data: mapData(values),
+                only,
+                replace,
+            });
+        }, debounceMs),
+        {deep: true}
+    );
 }

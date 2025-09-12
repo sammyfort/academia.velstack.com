@@ -20,8 +20,8 @@ import {ref, watch, computed} from "vue";
 import SubjectEdit from "./SubjectEdit.vue";
 import ConfirmDialogue from "@/components/helpers/ConfirmDialogue.vue";
 import {Head, Link, router} from '@inertiajs/vue3';
-import {dateAndTime, toastError, toastSuccess} from '@/lib/helpers';
-import debounce from "lodash/debounce";
+import {dateAndTime, toastError, toastSuccess, useReloadOnChange} from '@/lib/helpers';
+
 import Paginator from "@/components/helpers/Paginator.vue";
 import Datepicker from "@/components/forms/Datepicker.vue";
 
@@ -40,47 +40,16 @@ const search = ref(props.filters.search || "");
 const date = ref<string | null>(props.filters.date ?? null);
 
 
-watch([search, date],
-    debounce(([newSearch, newDate]) => {
-        router.reload({
-            data: {
-                search: newSearch,
-                date: newDate,
-            },
-            only: ['subjects', 'filters'],
-            replace: true,
-        });
-    }, 1000)
-);
 
-
-const filterOptions = [
-    {label: 'Today', value: 'today'},
-    {label: 'This Week', value: 'this_week'},
-    {label: 'This Month', value: 'this_month'},
-    {label: 'This Year', value: 'this_year'}
-]
-
-const filter = ref('');
-const isDeleting = ref(false);
-
-const handleDelete = (id: number | string) => {
-    isDeleting.value = true;
-    router.delete(route('subjects.destroy', id), {
-        onSuccess: (res) => {
-            console.log(res)
-            if (res.props.success) {
-                toastSuccess(res.props.message);
-            } else {
-                toastError(res.props.message);
-            }
-        },
-        onFinish: () => {
-            isDeleting.value = false;
-        },
-    });
-};
-
+useReloadOnChange({
+    sources: [search, date],
+    mapData: ([newSearch, newDate]) => ({
+        search: newSearch,
+        date: newDate,
+    }),
+    only: ["subjects", "filters"],
+    debounceMs: 500
+});
 const goToPage = (page: number) => {
     router.get(route('subjects.index'), {
         page,
@@ -102,6 +71,31 @@ const reset = () => {
             preserveScroll: true,
         });
 };
+
+
+const filterOptions = [
+    {label: 'Today', value: 'today'},
+    {label: 'This Week', value: 'this_week'},
+    {label: 'This Month', value: 'this_month'},
+    {label: 'This Year', value: 'this_year'}
+]
+
+
+const isDeleting = ref(false);
+const handleDelete = (id: number | string) => {
+    isDeleting.value = true;
+    router.delete(route('subjects.destroy', id), {
+        onSuccess: (res) => {
+            console.log(res)
+            if (res.props.success)toastSuccess(res.props.message);
+            else toastError(res.props.message);
+        },
+        onFinish: () => {
+            isDeleting.value = false;
+        },
+    });
+};
+
 
 
 </script>

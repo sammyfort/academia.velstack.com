@@ -11,7 +11,7 @@ import InputError from "@/components/InputError.vue";
 import { HTMLAttributes, useAttrs } from "vue";
 import { cn } from "@/lib/utils";
 import type { InputSelectOption } from "@/types";
-
+import {LoaderCircle} from 'lucide-vue-next'
 type Props = {
   form?: Record<string, any>;
   model?: string;
@@ -19,6 +19,7 @@ type Props = {
   options: InputSelectOption[] | undefined;
   containerClass?: HTMLAttributes["class"];
   placeholder?: string;
+    loading?: boolean
 };
 
 const props = defineProps<Props>();
@@ -44,9 +45,11 @@ const attrs = useAttrs();
     <Select
       :model-value="form[model]"
       @update:model-value="(val) => (form[model] = val)"
+      :disabled="props.loading"
     >
       <SelectTrigger class="w-full">
-        <SelectValue :placeholder="placeholder || 'Select'" />
+        <SelectValue   :placeholder="props.loading ? 'Loading...' : props.placeholder || 'Select'"
+        />
       </SelectTrigger>
       <SelectContent>
         <SelectItem
@@ -58,6 +61,7 @@ const attrs = useAttrs();
         </SelectItem>
       </SelectContent>
     </Select>
+
 
     <InputError :message="form.errors[model]" />
   </div>
@@ -76,9 +80,11 @@ const attrs = useAttrs();
       v-bind="attrs"
       :model-value="$attrs.modelValue"
       @update:model-value="(val) => emit('update:modelValue', val)"
+      :disabled="props.loading"
     >
       <SelectTrigger class="w-full">
-        <SelectValue :placeholder="placeholder || 'Select'" />
+        <SelectValue   :placeholder="props.loading ? 'Loading...' : props.placeholder || 'Select'"
+        />
       </SelectTrigger>
       <SelectContent>
         <SelectItem
@@ -90,7 +96,6 @@ const attrs = useAttrs();
         </SelectItem>
       </SelectContent>
     </Select>
-
     <InputError :message="attrs.error" />
   </div>
 </template>

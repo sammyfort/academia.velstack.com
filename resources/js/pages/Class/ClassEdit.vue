@@ -13,20 +13,23 @@ import {useForm} from '@inertiajs/vue3';
 import {toastError, toastSuccess} from '@/lib/helpers';
 import {ref, watch} from 'vue';
 import {LoaderCircle} from 'lucide-vue-next';
-import {InputSelectOption} from '@/types';
+import {Classroom, InputSelectOption} from '@/types';
 import SelectOption from "@/components/forms/SelectOption.vue";
 import axios from 'axios'
 
-const props = defineProps<{}>();
+const props = defineProps<{
+    classroom: Classroom
+}>();
 
 const isOpen = ref(false)
 const levels = ref<InputSelectOption[]>([])
 const groups = ref<InputSelectOption[]>([])
 const loading = ref(false)
+
 const form = useForm({
-    name: "",
-    level: "",
-    group: "",
+    name: props.classroom.name,
+    level: props.classroom.level,
+    group: props.classroom.group,
 
 })
 
@@ -44,8 +47,8 @@ watch(isOpen, async (open) => {
         }
     }
 })
-const createClass = () => {
-    form.post(route('classes.store'), {
+const updateClass = () => {
+    form.put(route('classes.update', props.classroom.id), {
         onSuccess: (res) => {
             const message = res.props.message
             if (res.props.success) toastSuccess(message)
@@ -65,12 +68,12 @@ const createClass = () => {
         </DialogTrigger>
         <DialogContent class="sm:max-w-[500px] max-h-[90dvh] overflow-y-auto">
             <DialogHeader class="p-6 pb-0">
-                <DialogTitle>Add New Class</DialogTitle>
+                <DialogTitle>Update  Class</DialogTitle>
                 <DialogDescription>
-                    Add New Class to your school
+                    Update Class to your school
                 </DialogDescription>
             </DialogHeader>
-            <form @submit.prevent="createClass" id="add-subject" class="grid gap-4 py-4">
+            <form @submit.prevent="updateClass" id="add-subject" class="grid gap-4 py-4">
                 <InputText :form="form" label="Class Name" model="name"/>
                 <SelectOption label="Class Level"
                               placeholder="Class Level"
@@ -91,7 +94,7 @@ const createClass = () => {
             <DialogFooter class="p-3">
                 <Button :disabled="form.processing" type="submit" form="add-subject">
                     <LoaderCircle v-if="form.processing" class="mr-2 h-4 w-4 animate-spin"/>
-                    {{ form.processing ? 'Please wait...' : 'Add Class' }}
+                    {{ form.processing ? 'Please wait...' : 'Update Class' }}
                 </Button>
             </DialogFooter>
         </DialogContent>

@@ -46,7 +46,15 @@ export interface Semester extends ModelI {
     next_term_begins: string
 }
 
+export interface Classroom extends ModelI {
+    school_id: number
+    name: string
+    level: string
+    group: string
+    slug: string
+    students_count: number
 
+}
 
 export interface User extends ModelI {
     firstname: string;

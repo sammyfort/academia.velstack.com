@@ -13,13 +13,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Sluggable\SlugOptions;
+use Spatie\Sluggable\HasSlug;
+
 
 #[ObservedBy(ClassroomObserver::class)]
 class Classroom extends Model
 {
-    use HasFactory, HasAuditFields, SoftDeletes;
+    use HasFactory,HasSlug, HasAuditFields, SoftDeletes;
     protected $guarded = ['id', 'uuid', 'created_at', 'updated_at', 'deleted_at', 'deleted_by', 'created_by'];
 
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
     public function name(): Attribute
     {
         return new Attribute(

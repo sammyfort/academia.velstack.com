@@ -3,10 +3,11 @@
 namespace App\Models;
 
 
-use App\Enum\AllowanceType;
-use App\Enum\Gender;
+use App\Enums\AllowanceType;
+use App\Enums\Gender;
 use App\Observers\StaffObserver;
 use App\Traits\HasAuditFields;
+use App\Traits\HasMediaUploads;
 use App\Traits\PasswordReset;
 use App\Traits\SalaryCalculator;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -26,15 +27,23 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 #[ObservedBy(StaffObserver::class)]
-class Staff extends Authenticatable
+class Staff extends Authenticatable implements HasMedia
 {
-    use HasFactory, HasAuditFields, HasPermissions, HasRoles, Notifiable, PasswordReset, SalaryCalculator;
+    use HasFactory, InteractsWithMedia, HasMediaUploads, HasAuditFields, HasPermissions, HasRoles, Notifiable, PasswordReset, SalaryCalculator;
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('image')
+            ->singleFile()
+            ->useFallbackUrl(asset('images/logo-blur.png'));
+    }
 
     protected string $guard = 'staff';
-     protected $guard_name = 'staff'; 
+     protected $guard_name = 'staff';
 
     protected $guarded = ['id', 'uuid', 'created_at', 'updated_at', 'deleted_at', 'deleted_by', 'created_by'];
 
@@ -81,33 +90,6 @@ class Staff extends Authenticatable
         return new Attribute(
             get: fn() => "$this->first_name  $this->last_name | $this->staff_id"
         );
-    }
-
-
-
-    public function image(): string
-    {
-        if ($this->profile_image){
-            return Storage::disk('public')->url("staff/profile/$this->id/$this->profile_image");
-        }
-        $fallback = $this->gender === Gender::MALE->value ? 'm_default.png' : 'f_default.png';
-        return Storage::disk('public')->url("images/$fallback");
-    }
-
-    public function appointmentLetter(): string
-    {
-        if ($this->appointment_letter){
-            return Storage::disk('public')->url("staff/appointment-letter/$this->id/$this->appointment_letter");
-        }
-        return '';
-    }
-
-    public function certificateImage(): string
-    {
-        if ($this->certificate_image){
-            return Storage::disk('public')->url("staff/certificate/$this->id/$this->certificate_image");
-        }
-        return '';
     }
 
 

@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use App\Enum\Gender;
+use App\Enums\Gender;
 use App\Observers\StudentObserver;
 use App\Traits\HasAuditFields;
+use App\Traits\HasMediaUploads;
 use App\Traits\TerminalReport;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -21,13 +22,22 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 #[ObservedBy(StudentObserver::class)]
-class Student extends Model
+class Student extends Model implements HasMedia
 {
-    use HasFactory, HasAuditFields, SoftDeletes, TerminalReport;
+    use HasFactory, InteractsWithMedia, HasMediaUploads, HasAuditFields, SoftDeletes, TerminalReport;
     protected string $guard = 'student';
     protected $guarded = ['id', 'uuid', 'created_at', 'updated_at', 'deleted_at', 'deleted_by', 'created_by'];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('image')
+            ->singleFile()
+            ->useFallbackUrl(asset('images/logo-blur.png'));
+    }
 
     public function fullname(): Attribute
     {
@@ -89,14 +99,7 @@ class Student extends Model
         return $this->belongsTo(School::class);
     }
 
-    public function image(): string
-    {
-        if ($this->image){
-            return Storage::disk('public')->url("student/$this->id/$this->image");
-        }
-        $fallback = $this->gender === Gender::MALE->value ? 'm_default.png' : 'f_default.png';
-        return Storage::disk('public')->url("images/$fallback");
-    }
+
 
     public function class(): BelongsTo
     {

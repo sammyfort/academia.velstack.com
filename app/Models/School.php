@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Jobs\SMSSenderJob;
 use App\Observers\SchoolObserver;
 use App\Traits\HasAuditFields;
+use App\Traits\HasMediaUploads;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,7 +25,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 #[ObservedBy(SchoolObserver::class)]
 class School extends Model implements HasMedia
 {
-    use HasAuditFields, HasFactory, InteractsWithMedia, SoftDeletes;
+    use HasAuditFields, HasMediaUploads, HasFactory, InteractsWithMedia, SoftDeletes;
 
     protected $guarded = ['id', 'uuid', 'created_at', 'updated_at', 'deleted_at', 'deleted_by', 'created_by'];
 

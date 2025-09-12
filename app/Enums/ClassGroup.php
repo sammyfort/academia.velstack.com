@@ -22,7 +22,10 @@ enum ClassGroup: string
     case SHS_ONE = 'SHS ONE';
     case SHS_TWO = 'SHS TWO';
     case SHS_THREE = 'SHS THREE';
-
+    public static function toArray(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
     public static function values(): array
     {
         return array_column(self::cases(), 'value');

@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ClassGroup;
+use App\Enums\ClassLevel;
+use App\Http\Requests\Class\storeClassRequest;
+use App\Http\Requests\Class\updateClassRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -10,9 +14,29 @@ class ClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Class/ClassIndex');
+        $search = $request->input('search', '');
+        $date = $request->input('date');
+        $classes = school()->classes()
+            ->withCount(['students'])
+            ->when($search, function ($q, $search) {
+                $q->search($search);
+            })
+            ->when($date, function ($q) use ($date) {
+                $q->whereDate('created_at', $date);
+            })
+            ->paginate(10)
+            ->withQueryString();
+
+        return Inertia::render('Class/ClassIndex', [
+            'classes' => $classes,
+            'filters' => [
+                'search' => $search,
+                'page' => $request->input('page', 1),
+                'date' => $date
+            ],
+        ]);
     }
 
     /**
@@ -20,23 +44,31 @@ class ClassController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Class/ClassCreate');
+        return response()->json([
+            'levels' => toOption(ClassLevel::toArray()),
+            'groups' => toOption(ClassGroup::toArray()),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(storeClassRequest $request)
     {
-        //
+        school()->classes()->create($request->validated());
+        return back()->with(successRes("Class created successfully."));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        //
+        return Inertia::render('Class/ClassShow', [
+            'class' => school()->classes()->where('slug', $slug)
+                ->with(['students', 'subjects', 'scoreTypes', 'subjects.scoreTypes', 'subjects.students'])
+                ->firstOrFail()
+        ]);
     }
 
     /**
@@ -50,9 +82,11 @@ class ClassController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(updateClassRequest $request, string $id)
     {
-        //
+        $class = school()->classes()->findOrFail($id);
+        $class->update($request->validated());
+        return back()->with(successRes("Class updated successfully."));
     }
 
     /**
