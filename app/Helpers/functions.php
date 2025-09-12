@@ -406,3 +406,16 @@ if (!function_exists('randomColor'))
         return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
 }
+if (!function_exists('getDateRange'))
+{
+    function getDateRange( string $filter): array
+    {
+        return match ($filter) {
+            'today' => [now()->startOfDay(), now()->endOfDay()],
+            'this_week' => [now()->startOfWeek(), now()->endOfWeek()],
+            'this_month' => [now()->startOfMonth(), now()->endOfMonth()],
+            'this_year' => [now()->startOfYear(), now()->endOfYear()],
+            default => [now()->subYears(100), now()] // fallback (all)
+        };
+    }
+}

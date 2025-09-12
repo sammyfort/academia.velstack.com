@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/app/AppLayout.vue";
-import {InputSelectOption, Semester, Subject} from "@/types";
+import {InputSelectOption, PaginatedDataI, Semester} from "@/types";
 import {
     Table,
     TableBody,
@@ -23,45 +23,64 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { toastError, toastSuccess } from '@/lib/helpers';
 import debounce from "lodash/debounce";
 const props = defineProps<{
-    semesters: Semester[];
-    available_semesters: InputSelectOption[]
+    semesters: PaginatedDataI<Semester>
+    available_semesters: InputSelectOption[];
+    filters: {
+        search: string
+        page: number
+        date: string
+    }
 }>();
 import { dateAndTime, number_format } from '@/lib/helpers';
+import Datepicker from "@/components/forms/Datepicker.vue";
+import Paginator from "@/components/helpers/Paginator.vue";
 
 
-const search = ref( "");
+const search = ref(props.filters.search || "");
+const date = ref<string | null>(props.filters.date ?? null);
 
-watch(
-    search,
-    debounce((value) => {
+watch([search, date],
+    debounce(([newSearch, newDate]) => {
         router.reload({
-            data: { search: value },
-            only: ['semesters'],
-            preserveState: true,
+            data: {
+                search: newSearch,
+                date: newDate,
+            },
+            only: ['semesters', 'filters'],
             replace: true,
         });
-    }, 300)
+    }, 1000)
 );
-const filterOptions = [
-    {label: 'Today', value: 'today'},
-    {label: 'This Week', value: 'this_week'},
-    {label: 'This Month', value: 'this_month'},
-    {label: 'This Year', value: 'this_year'}
-]
 
-const filter = ref('');
+const goToPage = (page: number) => {
+    router.get(route('semesters.index'), {
+        page,
+        search: search.value  || undefined,
+        date: date.value || undefined
+    }, {
+        preserveScroll: true,
+        preserveState: true,
+    });
+};
+
+const reset = () => {
+    search.value = "";
+    router.get(route("semesters.index"),
+        { search: "", date:"", page: 1 },
+        {
+            only: ["semesters", "filters"],
+            replace: true,
+            preserveScroll: true,
+        });
+};
+
 const isDeleting = ref(false);
-
 const handleDelete = (id: number|string) => {
     isDeleting.value = true;
     router.delete(route('semesters.destroy', id ), {
         onSuccess: (res) => {
-            console.log(res)
-            if (res.props.success) {
-                toastSuccess(res.props.message);
-            } else {
-                toastError(res.props.message);
-            }
+            if (res.props.success) toastSuccess(res.props.message);
+            else toastError(res.props.message);
         },
         onFinish: () => {
             isDeleting.value = false;
@@ -79,7 +98,7 @@ const handleDelete = (id: number|string) => {
             <div class="mb-6 flex items-center justify-between">
                 <h2 class="flex items-center gap-2 text-2xl font-bold text-foreground">
                     <CreditCard class="h-6 w-6 text-primary" />
-                    Semesters
+                    Semesters ({{semesters.total}})
                 </h2>
             </div>
             <div class="mb-6">
@@ -92,18 +111,10 @@ const handleDelete = (id: number|string) => {
                             <Input v-model="search" placeholder="Search..." class="pl-10 w-full" />
                         </div>
                         <div class="flex items-center gap-2">
-                            <SelectOption placeholder="Filter by Date"
-                                          :options="filterOptions"
-                                          class="w-[200px]"
-                                          v-model="filter" />
-                            <Button
-                                v-if="search"
-                                @click="search = ''"
-                                variant="outline"
-                                size="sm"
-                                class="flex items-center gap-1 whitespace-nowrap"
-                            >
-                                <X  />
+                            <Datepicker v-model="date" placeholder="Filter by Date" />
+                            <Button v-if="search || props.semesters.current_page > 1 || date"
+                                    @click="reset" variant="outline" size="sm" class="flex items-center gap-1 whitespace-nowrap">
+                                <X/>
                                 Clear
                             </Button>
                         </div>
@@ -136,7 +147,7 @@ const handleDelete = (id: number|string) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow v-for="semester in semesters" :key="semester.id">
+                        <TableRow v-for="semester in semesters.data as Semester[]" :key="semester.id">
                             <TableCell class="flex flex-col gap-2">
                                 <span class="font-semibold">{{ semester.name }}</span>
                                 <Badge variant="outline" class="text-xs uppercase">
@@ -186,7 +197,16 @@ const handleDelete = (id: number|string) => {
                     </TableBody>
                 </Table>
             </div>
-            <div v-if="semesters.length === 0" class="text-center py-8">
+            <div class="mt-8 flex justify-center w-full">
+                <Paginator
+                    v-if="props.semesters.last_page > 1"
+                    :total="props.semesters.total"
+                    :per-page="props.semesters.per_page"
+                    :current-page="props.semesters.current_page"
+                    @page-change="goToPage"
+                />
+            </div>
+            <div v-if="semesters?.data?.length === 0" class="text-center py-8">
                 <CreditCard
                     class="h-12 w-12 text-muted-foreground mx-auto mb-4"
                 />

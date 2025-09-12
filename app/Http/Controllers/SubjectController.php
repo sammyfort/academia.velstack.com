@@ -25,11 +25,18 @@ class SubjectController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search', '');
-
+        $date   = $request->input('date');
         $subjects = school()->subjects()
             ->withCount(['classes', 'students'])
-            ->search($search)
-            ->paginate(15);
+            ->when($search, function ($q, $search) {
+                $q->search($search);
+
+            })
+            ->when($date, function ($q) use ($date) {
+                $q->whereDate('created_at', $date);
+            })
+            ->paginate(10)
+            ->withQueryString();
 
 
         return Inertia::render('Subject/SubjectIndex', array_merge($this->props, [
@@ -37,6 +44,7 @@ class SubjectController extends Controller
             'filters' => [
                 'search' =>$search,
                 'page'   => $request->input('page', 1),
+                'date' => $date
             ],
         ]));
     }

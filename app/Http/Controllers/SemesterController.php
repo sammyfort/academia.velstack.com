@@ -17,11 +17,28 @@ class SemesterController extends Controller
      */
     public function index(Request $request)
     {
-        $semesters = school()->semesters()->search($request->input('search'))->latest()->get();
+        $search = $request->input('search', '');
+        $date   = $request->input('date');
+        $semesters = school()->semesters()
+            ->when($search, function ($q, $search) {
+                $q->search($search);
+            })
+            ->when($date, function ($q) use ($date) {
+                $q->whereDate('created_at', $date)
+                    ->orWhere('start_date', $date)
+                    ->orWhere('end_date', $date)
+                    ->orWhere('next_term_begins', $date);
+            })
+            ->latest()->paginate();
 
         return Inertia::render('Semester/SemesterIndex', [
             'semesters' => $semesters,
-            'available_semesters' => toOption(AcademicTerm::toArray())
+            'available_semesters' => toOption(AcademicTerm::toArray()),
+            'filters' => [
+                'search' =>$search,
+                'page'   => $request->input('page', 1),
+                'date' => $date
+            ],
         ]);
     }
 

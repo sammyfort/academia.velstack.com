@@ -42,13 +42,24 @@ const value = ref<CalendarDate | undefined>(
         : undefined
 )
 
+const emit = defineEmits<{
+    (e: "update:modelValue", value: string | null): void
+}>()
+
 watch(value, (val) => {
+    const formatted = val ? val.toString() : null
+
     if (props.form && props.model) {
-        props.form[props.model] = val ? val.toString() : null
+        // Form mode
+        props.form[props.model] = formatted
+    } else {
+        // v-model mode
+        emit("update:modelValue", formatted)
     }
-    // Close popover when a date is selected
+
     popoverOpen.value = false
 })
+
 
 watch(
     () => props.form?.[props.model ?? ""],
