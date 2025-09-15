@@ -23,7 +23,7 @@ class StoreSubjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' =>  ['required', Rule::in(Subjects::cases()),
+            'name' =>  ['required', Rule::in(Subjects::toArray()),
                  Rule::unique('subjects', 'name')
                  ->where('school_id', school()->id)],
 

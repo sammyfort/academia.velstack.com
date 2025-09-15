@@ -37,6 +37,15 @@ export interface Subject extends ModelI {
     students_count: number
 }
 
+export interface Guardian extends ModelI {
+    name: string
+    email: string
+    phone: string
+    identity_number: string
+    address: string
+    occupation: string
+}
+
 export interface Semester extends ModelI {
     name: string
     status: string

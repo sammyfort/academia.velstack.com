@@ -37,7 +37,7 @@ const currentRoute = computed(() => page.props.currentRoute as string | undefine
 const isCurrentRoute = (routeName: string): boolean => {
     return currentRoute.value === routeName;
 };
-
+console.log(page.props.currentRoute);
 // Recursive function to check if any sub-item is active
 const isActive = (): boolean => {
     const checkItems = (items?: SubItem[]): boolean => {

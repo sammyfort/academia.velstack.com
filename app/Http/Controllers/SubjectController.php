@@ -32,6 +32,7 @@ class SubjectController extends Controller
                 $q->search($search);
 
             })
+
             ->when($date, function ($q) use ($date) {
                 $q->whereDate('created_at', $date);
             })

@@ -23,11 +23,11 @@ class updateSubjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        $subjectId = $this->route('subjects');
+        $subjectId = $this->route('subject');
         return [
             'name' =>  [
                 'required',
-                Rule::in(Subjects::cases()),
+                Rule::in(Subjects::toArray()),
                 Rule::unique('subjects', 'name')
                     ->where('school_id', school()->id)
                     ->ignore($subjectId),
