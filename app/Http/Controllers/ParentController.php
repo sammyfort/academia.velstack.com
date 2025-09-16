@@ -88,6 +88,7 @@ class ParentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        school()->parents()->findOrFail($id)->delete();
+        return back()->with(successRes("Parent deleted successfully."));
     }
 }

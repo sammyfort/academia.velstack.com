@@ -32,11 +32,20 @@ class Student extends Model implements HasMedia
     protected string $guard = 'student';
     protected $guarded = ['id', 'uuid', 'created_at', 'updated_at', 'deleted_at', 'deleted_by', 'created_by'];
 
+    protected $appends = ['fullname', 'image'];
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('image')
             ->singleFile()
             ->useFallbackUrl(asset('images/logo-blur.png'));
+    }
+
+     protected function image(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->getFirstMediaUrl('image') ?: null,
+        );
     }
 
     public function fullname(): Attribute
@@ -101,7 +110,7 @@ class Student extends Model implements HasMedia
 
 
 
-    public function class(): BelongsTo
+    public function classroom(): BelongsTo
     {
         return $this->belongsTo(Classroom::class, 'class_id', 'id');
     }

@@ -161,7 +161,6 @@ const handleDelete = (id: number | string) => {
                     </TableHeader>
                     <TableBody>
                         <TableRow v-for="parent in props.parents.data as Guardian[]" :key="parent.id">
-
                             <TableCell>{{ parent.name }}</TableCell>
                             <TableCell>{{ parent.email }}</TableCell>
                             <TableCell>{{ parent.phone }}</TableCell>

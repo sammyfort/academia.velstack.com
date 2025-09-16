@@ -36,6 +36,38 @@ export interface Subject extends ModelI {
     classes_count: number
     students_count: number
 }
+export interface StudentI extends ModelI {
+    school_id: number
+    previous_school_id?: number | null;
+    class_id: number;
+    classroom: Classroom
+    transportation_id?: number | null;
+
+    first_name: string ;
+    middle_name?: string | null;
+    last_name: string ;
+    fullname: string
+    index_number: string;
+
+    email?: string | null;
+    phone?: string | null;
+    gender?: string | null;
+    dob?: string | null;
+    religion?: string | null;
+    region?: string | null;
+    city?: string | null;
+    bio?: string | null;
+    allergies?: string | null;
+
+    fingerprint_hash?: string | null;
+    suspended: boolean;
+    suspended_reason?: string | null;
+
+    status?: string | null;
+    password: string;
+    image: string
+
+}
 
 export interface Guardian extends ModelI {
     name: string

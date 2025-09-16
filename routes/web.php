@@ -20,9 +20,8 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
-
-
 Route::middleware(['auth:staff', 'subscribed', 'check.account.suspension'])->group(callback: function () {
+    Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
     Route::resources([
         'staff' => StaffController::class,
         'students' => StudentController::class,
@@ -35,10 +34,9 @@ Route::middleware(['auth:staff', 'subscribed', 'check.account.suspension'])->gro
         'fees' => FeeController::class,
     ]);
 
-    
-      Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('dashboard');
-   
-
+    Route::prefix('student')->as('student.')->group(function () {
+        Route::delete('bulk-destroy', [StudentController::class, 'bulkDestroy'])->name('bulk-destroy');
+    });
 
 
 //    Route::prefix('classes')->as('classes.')->group(function () {

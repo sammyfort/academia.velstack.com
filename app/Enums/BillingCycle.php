@@ -10,4 +10,8 @@ enum BillingCycle: string
     case WEEKLY = 'Weekly';
 
     case DAILY = 'Daily';
+    public static function toArray(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
 }

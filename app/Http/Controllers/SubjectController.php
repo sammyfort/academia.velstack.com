@@ -119,4 +119,7 @@ class SubjectController extends Controller
         school()->subjects()->findOrFail($id)->delete();
         return back()->with(successRes("Subject deleted successfully."));
     }
+
+
+
 }

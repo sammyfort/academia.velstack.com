@@ -16,17 +16,16 @@ return new class extends Migration
             $table->uuid()->unique();
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
             $table->foreignId('previous_school_id')->nullable()->constrained('schools');
-            $table->foreignId('class_id')->constrained('classrooms')->cascadeOnDelete();
+            $table->foreignId('class_id')->constrained('classrooms');
             $table->foreignId('transportation_id')->nullable()->constrained()->nullOnDelete();
             $table->string('first_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('index_number')->unique();
 
-            $table->string('password');
+
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-            $table->string('image')->nullable();
             $table->string('gender')->nullable();
             $table->date('dob')->nullable();
             $table->string('religion')->nullable();
@@ -34,13 +33,15 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('bio')->nullable();
             $table->string('allergies')->nullable();
-            $table->boolean('is_completed')->default(false);
+
+            $table->string('status')->nullable();
 
             $table->text('fingerprint_hash')->nullable();
-            $table->boolean('suspended')->default(false);
             $table->text('suspended_reason')->nullable();
 
 
+
+            $table->string('password');
             $table->foreignId('created_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
             $table->softDeletes();

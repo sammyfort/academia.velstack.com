@@ -1,0 +1,289 @@
+<script setup lang="ts">
+import AppLayout from "@/layouts/app/AppLayout.vue";
+import {InputSelectOption, PaginatedDataI, StudentI} from "@/types";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {Checkbox} from "@/components/ui/checkbox"
+import {PlusIcon, CreditCard, Edit, Trash2, Search, X, Upload, MoreVertical, MenuIcon,} from "lucide-vue-next";
+import SelectOption from "@/components/forms/SelectOption.vue";
+import {ref, onMounted} from "vue";
+import ConfirmDialogue from "@/components/helpers/ConfirmDialogue.vue";
+import {Link,} from "@inertiajs/vue3";
+import {dateAndTime} from "@/lib/helpers";
+import { useDelete } from "@/composables/useDelete";
+import Paginator from "@/components/helpers/Paginator.vue";
+import Datepicker from "@/components/forms/Datepicker.vue";
+const { isDeletingOne, isDeletingMany, deleteOne, deleteMany } = useDelete();
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
+import {useFilter} from "@/composables/useFilter";
+import { useSelectable } from "@/composables/useSelectable";
+
+const props = defineProps<{
+    students: PaginatedDataI<StudentI>;
+    classes: InputSelectOption[]
+    studentStatus: InputSelectOption[]
+    filters: {
+        search: string;
+        paginate: string | number
+        page: number;
+        date: string;
+        status: string;
+        classroom: number
+    };
+}>();
+const { selected, allSelected, toggleSelect, toggleSelectAll, clearSelection } = useSelectable(props.students.data || []);
+const search = ref(props.filters.search || "");
+const pagination = ref(props.filters.paginate || 1);
+const date = ref<string | null>(props.filters.date ?? null);
+const status = ref(props.filters.search || "");
+const classroom = ref(props.filters.search || "");
+
+const paginateOption = [
+    {label: '1', value: 1},
+    {label: '5', value: 5},
+    {label: '10', value: 10},
+    {label: '25', value: 25},
+    {label: '50', value: 50},
+    {label: '100', value: 100},
+    {label: '500', value: 500},
+    {label: 'All', value: 'all'}
+]
+
+onMounted(() => {
+    console.log(props.students);
+});
+
+const { goToPage, reset } = useFilter({
+    sources: [search, pagination, date, status, classroom],
+    mapData: ([newSearch, newPagination, newDate, newStatus, newClassroom]) => ({
+        search: newSearch,
+        paginate: newPagination,
+        date: newDate,
+        status: newStatus,
+        classroom: newClassroom,
+    }),
+    only: ["students", "filters"],
+    debounceMs: 500,
+    routeName: "students.index",
+});
+
+</script>
+
+<template>
+    <AppLayout>
+        <div class="rounded-2xl border border-border bg-background p-6 shadow-sm mt-4">
+            <!-- Header -->
+            <div class="mb-6 flex items-center justify-between">
+                <h2 class="flex items-center gap-2 text-2xl font-bold text-foreground">
+                    <CreditCard class="h-6 w-6 text-primary"/>
+                    Students ({{ props.students.total }})
+                </h2>
+            </div>
+            <div class="mb-6">
+                <div
+                    class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                    <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                        <div class="relative flex-1 sm:w-85">
+                            <Search
+                                class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                            />
+                            <Input v-model="search" placeholder="Search..." class="pl-10 w-full"/>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <SelectOption v-model="pagination" :options="paginateOption" placeholder="Showing results"/>
+                            <Datepicker v-model="date" placeholder="Filter by Date Added"/>
+                            <SelectOption v-model="status" :options="studentStatus" placeholder="Sort by status"/>
+                            <SelectOption v-model="classroom" :options="classes" placeholder="Sort by class"/>
+                            <Button
+                                v-if="search || pagination || status || classroom || props.students.current_page > 1 || date"
+                                @click="reset"
+                                variant="outline"
+                                size="sm"
+                                class="flex items-center gap-1 whitespace-nowrap"
+                            >
+                                <X/>
+                                Clear
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-auto mt-4 sm:mt-0">
+                        <Link
+                            :href="route('students.create')"
+                            class="w-full sm:w-auto flex items-center gap-x-2 rounded-xl border
+                            py-2 px-2 border-white/30 bg-primary text-white backdrop-blur-sm transition-all
+                            duration-200 hover:scale-105 hover:bg-primary/70"
+                        >
+                            <PlusIcon class="h-5 w-5"/>
+                            <span>Add New Student</span>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <Table class="w-full">
+                    <TableHeader v-if="students.data?.length">
+                        <TableRow>
+                            <TableHead class="w-10">
+                                <Checkbox
+                                    :model-value="allSelected"
+                                    @update:model-value="toggleSelectAll"
+                                />
+                            </TableHead>
+                            <TableHead class="w-1/3">
+                                <div class="flex items-center gap-2">
+                                    <span>Select All</span>
+                                    <DropdownMenu v-if="selected.length">
+                                        <DropdownMenuTrigger as-child>
+                                            <Button variant="outline" size="sm" class="flex items-center gap-2  ">
+                                                <span>With Select
+                                                    <span v-if="selected.length" class="text-muted-foreground">({{ selected.length }})</span></span>
+                                                <MenuIcon class="h-4 w-4"/>
+                                            </Button>
+                                        </DropdownMenuTrigger>
+
+                                        <DropdownMenuContent align="start" class="w-40">
+                                            <DropdownMenuItem class="flex items-center gap-2">
+                                                <Upload class="h-4 w-4"/>
+                                                <span>Import</span>
+                                            </DropdownMenuItem>
+                                            <ConfirmDialogue
+                                                @confirm="(done: () => void ) => deleteMany('student.bulk-destroy', selected, done,
+                                               () => clearSelection)"
+                                                :title="'Delete Students'"
+                                                :description="'Are you sure you want to delete the selected students? This action cannot be undone.'"
+                                                :confirmText="'Delete'"
+                                                :cancelText="'Cancel'"
+                                                :isProcessing="isDeletingMany"
+                                                :loading="isDeletingMany"
+                                            >
+                                                <button
+                                                    class="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-red-500
+                                                    hover:text-red-700 bg-muted transition"
+                                                >
+                                                    <Trash2 class="h-4 w-4"/>
+                                                    <span>Delete</span>
+                                                </button>
+                                            </ConfirmDialogue>
+
+                                        </DropdownMenuContent>
+
+                                    </DropdownMenu>
+                                </div>
+                            </TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow
+                            v-for="student in props.students.data as StudentI[]"
+                            :key="student.id"
+                            class="border-b border-border hover:bg-muted/30 transition-colors"
+                        >
+                            <TableCell class="w-10">
+                                <Checkbox
+                                    :model-value="selected.includes(student.id)"
+                                    @update:model-value="(val: boolean) => toggleSelect(student.id, val)"
+                                />
+                            </TableCell>
+                            <TableCell class="w-1/3 min-w-[200px] border-0">
+                                <div class="flex items-center gap-3">
+                                    <img
+                                        :src="student.image"
+                                        alt="avatar"
+                                        class="h-12 w-12 rounded-full border border-border object-cover"
+                                    />
+                                    <div class="min-w-0">
+                                        <h3 class="truncate font-semibold text-foreground uppercase">
+                                            {{ student.fullname }}
+                                        </h3>
+                                        <p class="text-sm text-muted-foreground truncate">
+                                            {{ student.classroom?.name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </TableCell>
+                            <TableCell class="w-1/3 hidden md:table-cell border-0 text-sm align-top">
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm text-muted-foreground">Index Number</p>
+                                    <p class="font-medium text-foreground">
+                                        {{ student.index_number }}
+                                    </p>
+                                </div>
+                            </TableCell>
+                            <TableCell class="w-1/3 hidden md:table-cell border-0 text-sm align-top">
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm text-muted-foreground">Admission Date</p>
+                                    <p class="font-medium text-foreground">
+                                        {{ dateAndTime(student.created_at) }}
+                                    </p>
+                                </div>
+                            </TableCell>
+                            <TableCell class="w-1/3 border-0 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <Link
+                                        :href="route('students.show', student.id)"
+                                        class="px-3 py-1.5 rounded-md border text-sm font-medium hover:bg-muted transition"
+                                    >
+                                        View Profile
+                                    </Link>
+
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger as-child>
+                                            <Button variant="ghost" size="icon"> ⋮</Button>
+                                        </DropdownMenuTrigger>
+
+                                        <DropdownMenuContent align="end" class="w-44 p-1">
+                                            <Link
+                                                :href="route('students.edit', student.id)"
+                                                class="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm
+                                                text-foreground hover:bg-muted focus:bg-muted transition"
+                                            >
+                                                <Edit class="h-4 w-4 text-muted-foreground"/>
+                                                <span>Edit</span>
+                                            </Link>
+                                            <ConfirmDialogue
+                                                @confirm="deleteOne('students.destroy',student.id)"
+                                                :title="'Delete Student'"
+                                                :description="'Are you sure you want to delete this student? This action cannot be undone.'"
+                                                :confirmText="'Delete'"
+                                                :cancelText="'Cancel'"
+                                                :isProcessing="isDeletingOne"
+                                                :loading="isDeletingOne"
+                                            >
+                                                <button
+                                                    class="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-red-500
+                                                    hover:text-red-700 bg-muted transition"
+                                                >
+                                                    <Trash2 class="h-4 w-4"/>
+                                                    <span>Delete</span>
+                                                </button>
+                                            </ConfirmDialogue>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+
+            <div class="mt-8 flex justify-center w-full">
+                <Paginator
+                    v-if="props.students.last_page > 1"
+                    :total="props.students.total"
+                    :per-page="props.students.per_page"
+                    :current-page="props.students.current_page"
+                    @page-change="goToPage"
+                />
+            </div>
+
+            <div v-if="students?.data?.length === 0" class="text-center py-8">
+                <CreditCard class="h-12 w-12 text-muted-foreground mx-auto mb-4"/>
+                <p class="text-muted-foreground">No student found</p>
+            </div>
+        </div>
+    </AppLayout>
+</template>

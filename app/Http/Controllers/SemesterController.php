@@ -121,6 +121,7 @@ class SemesterController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        school()->semesters()->findOrFail($id)->delete();
+        return back()->with(successRes("Semester deleted successfully."));
     }
 }

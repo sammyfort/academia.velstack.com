@@ -2,12 +2,12 @@
 
 namespace App\Enums;
 
-enum JobStatus: string
+enum StudentStatus: string
 {
     case ACTIVE = 'active';
-    case INACTIVE = 'inactive';
-
-    case PAUSED = 'paused';
+    case COMPLETED = 'completed';
+    case STOPPED = 'stopped';
+    case SUSPENDED = 'suspended';
 
     public static function toArray(): array
     {

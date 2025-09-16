@@ -20,4 +20,9 @@ enum Region: string
     case SAVANNAH = 'Savannah';
     case OTI = 'Oti';
     case WESTERN_NORTH = 'Western North';
+    public static function toArray(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
+
 }

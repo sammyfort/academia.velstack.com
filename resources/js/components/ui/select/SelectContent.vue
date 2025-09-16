@@ -23,12 +23,14 @@ type Props = {
     class?: HTMLAttributes['class'],
     options?: InputSelectOption[],
     slice? : number|'all'
+    searchable?: boolean
 }
 
 const props = withDefaults(
   defineProps<SelectContentProps & Props>(),
   {
     position: 'popper',
+      searchable: false
   },
 )
 const emits = defineEmits<SelectContentEmits>()
@@ -72,7 +74,7 @@ const filteredOptions = computed(() => {
 
       <SelectViewport :class="cn('p-1', position === 'popper' && 'h-[var(--reka-select-trigger-height)] w-full min-w-[var(--reka-select-trigger-width)] scroll-my-1')">
           <template v-if="options">
-              <div class="p-2 border-b border-border">
+              <div v-if="searchable" class="p-2 border-b border-border">
                   <div class="relative">
                       <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
