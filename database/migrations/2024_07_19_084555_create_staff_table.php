@@ -39,12 +39,11 @@ return new class extends Migration {
             $table->string('licence_no')->nullable()->unique();
             $table->string('qualification');
             $table->string('experience');
-            $table->string('profile_image')->nullable();
-            $table->string('certificate_image')->nullable();
-            $table->string('appointment_letter')->nullable();
 
+
+            $table->string('status')->nullable();
             $table->text('fingerprint_hash')->nullable();
-            $table->boolean('suspended')->default(false);
+
             $table->text('suspended_reason')->nullable();
 
             $table->foreignId('created_by')->nullable();

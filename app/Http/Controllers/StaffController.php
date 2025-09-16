@@ -2,11 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Gender;
+use App\Enums\Region;
+use App\Enums\Religion;
+use App\Enums\StudentStatus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class StaffController extends Controller
 {
+    public function __construct(protected $props = [])
+    {
+        $this->props = [
+            'regions' => toOption(Region::toArray()),
+            'religions' => toOption(Religion::toArray()),
+            'gender' => toOption(Gender::toArray()),
+            'classes' => toOption(school()->classes()->get(), 'name', 'id'),
+            'semesters' => toOption(school()->semesters()->get(), 'name', 'id'),
+            'parents' => toOption(school()->parents()->get(), 'name', 'id'),
+            'studentStatus' => toOption(StudentStatus::toArray())
+        ];
+    }
+
 
     public function dashboard()
     {
@@ -16,9 +33,38 @@ class StaffController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $search = $request->input('search', '');
+        $status = $request->input('status', '');
+        $date   = $request->input('date');
+        $paginate   = $request->input('paginate', 10);
+        $staffQuery =  school()->staff()
+            ->when($search, fn($q) => $q->search($search))
+            ->when(!empty($status), fn($q) => $q->whereIn('status', $status))
+            ->when($date, fn($q) => $q->whereDate('created_at', $date))
+            ->latest();
+        $staff = $paginate === 'all'
+            ? [
+                'data' => $staffQuery->get(),
+                'total' => $staffQuery->count(),
+                'current_page' => 1,
+                'last_page' => 1,
+                'per_page' => $staffQuery->count(),
+            ]
+            : $staffQuery->paginate(intval($paginate));
+
+        return Inertia::render('Staff/StaffIndex', [
+            'staff' => $staff,
+            'filters' => [
+                'search' =>$search,
+                'page'   => $request->input('page', 1),
+                'date' => $date,
+                'status' => $status,
+                'paginate' => $paginate
+            ],
+        ]);
+
     }
 
     /**
@@ -26,7 +72,9 @@ class StaffController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Staff/StaffCreate', array_merge($this->props, [
+
+        ]));
     }
 
     /**

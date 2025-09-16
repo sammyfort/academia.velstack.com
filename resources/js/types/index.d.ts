@@ -36,6 +36,45 @@ export interface Subject extends ModelI {
     classes_count: number
     students_count: number
 }
+
+export interface StaffI extends ModelI {
+    school_id: number
+    title?: number | null;
+    classroom: Classroom
+    parents: GuardianI[]
+    staff_id?: number | null;
+    email?: string | null;
+    phone?: string | null;
+    gender?: string | null;
+    dob?: string | null;
+
+    first_name: string ;
+    middle_name?: string | null;
+    last_name: string ;
+    fullname: string
+
+
+    designation: string
+    national_id: string
+    marital_status: string
+    religion?: string | null;
+    region?: string | null;
+    city?: string | null;
+    bio?: string | null;
+    licence_no: string
+    qualification: string
+    experience: string
+    basic_salary: string
+
+
+    fingerprint_hash?: string | null;
+    suspended_reason?: string | null;
+
+    status?: string | null;
+    password: string;
+    image: string
+
+}
 export interface StudentI extends ModelI {
     school_id: number
     previous_school_id?: number | null;

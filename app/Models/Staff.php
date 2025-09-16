@@ -31,10 +31,12 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
+
 #[ObservedBy(StaffObserver::class)]
 class Staff extends Authenticatable implements HasMedia
 {
     use HasFactory, InteractsWithMedia, HasMediaUploads, HasAuditFields, HasPermissions, HasRoles, Notifiable, PasswordReset, SalaryCalculator;
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('image')
@@ -43,10 +45,16 @@ class Staff extends Authenticatable implements HasMedia
     }
 
     protected string $guard = 'staff';
-     protected $guard_name = 'staff';
+    protected $guard_name = 'staff';
 
     protected $guarded = ['id', 'uuid', 'created_at', 'updated_at', 'deleted_at', 'deleted_by', 'created_by'];
-
+    protected $appends = ['fullname', 'image'];
+    protected function image(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->getFirstMediaUrl('image') ?: null,
+        );
+    }
 
 
     public function cachedPermissions()
@@ -65,6 +73,7 @@ class Staff extends Authenticatable implements HasMedia
     {
         Cache::forget("staff_permissions:$this->id");
     }
+
     protected function casts(): array
     {
         return [
@@ -179,6 +188,7 @@ class Staff extends Authenticatable implements HasMedia
     {
         return $this->morphMany(LentBook::class, 'lentable');
     }
+
     public function attendances(): MorphMany
     {
         return $this->morphMany(Attendance::class, 'attendable');
@@ -223,8 +233,7 @@ class Staff extends Authenticatable implements HasMedia
                         ->orWhere('last_name', 'like', '%' . $search . '%')
                         ->orWhere('email', 'like', '%' . $search . '%')
                         ->orWhere('phone', 'like', '%' . $search . '%')
-                        ->orWhere('uuid', 'like', '%' . $search . '%')
-                    ;
+                        ->orWhere('uuid', 'like', '%' . $search . '%');
                 });
             });
     }

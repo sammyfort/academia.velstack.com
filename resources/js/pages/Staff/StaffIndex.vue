@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/app/AppLayout.vue";
-import {InputSelectOption, PaginatedDataI, StudentI} from "@/types";
+import {InputSelectOption, PaginatedDataI, StaffI, StudentI} from "@/types";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -20,7 +20,7 @@ import {useFilter} from "@/composables/useFilter";
 import { useSelectable } from "@/composables/useSelectable";
 
 const props = defineProps<{
-    students: PaginatedDataI<StudentI>;
+    staff: PaginatedDataI<StaffI>;
     classes: InputSelectOption[]
     studentStatus: InputSelectOption[]
     filters: {
@@ -29,15 +29,15 @@ const props = defineProps<{
         page: number;
         date: string;
         status: string[];
-        classroom: number[]
+
     };
 }>();
-const { selected, allSelected, toggleSelect, toggleSelectAll, clearSelection } = useSelectable(props.students.data || []);
+const { selected, allSelected, toggleSelect, toggleSelectAll, clearSelection } = useSelectable(props.staff.data || []);
 const search = ref(props.filters.search || "");
 const pagination = ref(props.filters.paginate || 10);
 const date = ref<string | null>(props.filters.date ?? null);
 const status = ref<string[]>(props.filters.status || []);
-const classroom = ref<number[]>(props.filters.classroom || []);
+
 
 
 const paginateOption = [
@@ -52,19 +52,18 @@ const paginateOption = [
 ]
 
 
-
 const { goToPage, reset } = useFilter({
-    sources: [search, pagination, date, status, classroom],
-    mapData: ([newSearch, newPagination, newDate, newStatus, newClassroom]) => ({
+    sources: [search, pagination, date, status],
+    mapData: ([newSearch, newPagination, newDate, newStatus,]) => ({
         search: newSearch,
         paginate: newPagination,
         date: newDate,
         status: newStatus && newStatus.length ? newStatus : undefined,
-        classroom: newClassroom && newClassroom.length ? newClassroom : undefined,
+
     }),
-    only: ["students", "filters"],
+    only: ["staff", "filters"],
     debounceMs: 500,
-    routeName: "students.index",
+    routeName: "staff.index",
 
 });
 
@@ -77,7 +76,7 @@ const { goToPage, reset } = useFilter({
             <div class="mb-6 flex items-center justify-between">
                 <h2 class="flex items-center gap-2 text-2xl font-bold text-foreground">
                     <CreditCard class="h-6 w-6 text-primary"/>
-                    Students ({{ props.students.total }})
+                    Staff ({{ props.staff.total }})
                 </h2>
             </div>
             <div class="mb-6">
@@ -115,15 +114,6 @@ const { goToPage, reset } = useFilter({
                                 class="w-full sm:w-auto"
                             />
 
-                            <SelectOption
-                                v-model="classroom"
-                                :options="classes"
-                                placeholder="Sort by class"
-                                multiple
-                                searchable
-                                class="w-full sm:w-auto"
-                            />
-
                             <Datepicker
                                 v-model="date"
                                 placeholder="Filter by Date Added"
@@ -131,7 +121,7 @@ const { goToPage, reset } = useFilter({
                             />
 
                             <Button
-                                v-if="search || status.length || classroom.length || props.students.current_page > 1 || date"
+                                v-if="search || status.length   || props.staff.current_page > 1 || date"
                                 @click="reset"
                                 variant="outline"
                                 size="sm"
@@ -146,20 +136,22 @@ const { goToPage, reset } = useFilter({
                     <!-- Add New Student -->
                     <div class="w-full sm:w-auto">
                         <Link
-                            :href="route('students.create')"
+                            :href="route('staff.create')"
                             class="w-full sm:w-auto flex items-center justify-center gap-x-2 rounded-xl border
         py-2 px-2 border-white/30 bg-primary text-white backdrop-blur-sm transition-all
         duration-200 hover:scale-105 hover:bg-primary/70"
                         >
                             <PlusIcon class="h-5 w-5"/>
-                            <span>Add New Student</span>
+                            <span>Add New Staff</span>
                         </Link>
                     </div>
                 </div>
             </div>
+
+
             <div class="overflow-x-auto">
                 <Table class="w-full">
-                    <TableHeader v-if="students.data?.length">
+                    <TableHeader v-if="staff.data?.length">
                         <TableRow>
                             <TableHead class="w-10">
                                 <Checkbox
@@ -188,7 +180,7 @@ const { goToPage, reset } = useFilter({
                                                 @confirm="(done: () => void ) => deleteMany('student.bulk-destroy', selected, done,
                                                () => selected = [])"
                                                 :title="'Delete Students'"
-                                                :description="'Are you sure you want to delete the selected students? This action cannot be undone.'"
+                                                :description="'Are you sure you want to delete the selected staff? This action cannot be undone.'"
                                                 :confirmText="'Delete'"
                                                 :cancelText="'Cancel'"
                                                 :isProcessing="isDeletingMany"
@@ -212,53 +204,53 @@ const { goToPage, reset } = useFilter({
                     </TableHeader>
                     <TableBody>
                         <TableRow
-                            v-for="student in props.students.data as StudentI[]"
-                            :key="student.id"
+                            v-for="employee in props.staff.data as StaffI[]"
+                            :key="employee.id"
                             class="border-b border-border hover:bg-muted/30 transition-colors"
                         >
                             <TableCell class="w-10">
                                 <Checkbox
-                                    :model-value="selected.includes(student.id)"
-                                    @update:model-value="(val: boolean) => toggleSelect(student.id, val)"
+                                    :model-value="selected.includes(employee.id)"
+                                    @update:model-value="(val: boolean) => toggleSelect(employee.id, val)"
                                 />
                             </TableCell>
                             <TableCell class="w-1/3 min-w-[200px] border-0">
                                 <div class="flex items-center gap-3">
                                     <img
-                                        :src="student.image"
+                                        :src="employee.image"
                                         alt="avatar"
                                         class="h-12 w-12 rounded-full border border-border object-cover"
                                     />
                                     <div class="min-w-0">
                                         <h3 class="truncate font-semibold text-foreground uppercase">
-                                            {{ student.fullname }}
+                                            {{ employee.fullname }}
                                         </h3>
                                         <p class="text-sm text-muted-foreground truncate">
-                                            {{ student.classroom?.name }}
+                                            {{ employee?.title }}
                                         </p>
                                     </div>
                                 </div>
                             </TableCell>
                             <TableCell class="w-1/3 hidden md:table-cell border-0 text-sm align-top">
                                 <div class="flex flex-col gap-2">
-                                    <p class="text-sm text-muted-foreground">Index Number</p>
+                                    <p class="text-sm text-muted-foreground">Staff ID</p>
                                     <p class="font-medium text-foreground">
-                                        {{ student.index_number }}
+                                        {{ employee.staff_id }}
                                     </p>
                                 </div>
                             </TableCell>
                             <TableCell class="w-1/3 hidden md:table-cell border-0 text-sm align-top">
                                 <div class="flex flex-col gap-2">
-                                    <p class="text-sm text-muted-foreground">Admission Date</p>
+                                    <p class="text-sm text-muted-foreground">Employment Date</p>
                                     <p class="font-medium text-foreground">
-                                        {{ dateAndTime(student.created_at) }}
+                                        {{ dateAndTime(employee.created_at) }}
                                     </p>
                                 </div>
                             </TableCell>
                             <TableCell class="w-1/3 border-0 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     <Link
-                                        :href="route('students.show', student.id)"
+                                        :href="route('staff.show', employee.id)"
                                         class="px-3 py-1.5 rounded-md border text-sm font-medium hover:bg-muted transition"
                                     >
                                         View Profile
@@ -271,7 +263,7 @@ const { goToPage, reset } = useFilter({
 
                                         <DropdownMenuContent align="end" class="w-44 p-1">
                                             <Link
-                                                :href="route('students.edit', student.id)"
+                                                :href="route('staff.edit', employee.id)"
                                                 class="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm
                                                 text-foreground hover:bg-muted focus:bg-muted transition"
                                             >
@@ -279,9 +271,9 @@ const { goToPage, reset } = useFilter({
                                                 <span>Edit</span>
                                             </Link>
                                             <ConfirmDialogue
-                                                @confirm="deleteOne('students.destroy',student.id)"
-                                                :title="'Delete Student'"
-                                                :description="'Are you sure you want to delete this student? This action cannot be undone.'"
+                                                @confirm="deleteOne('staff.destroy',employee.id)"
+                                                :title="'Delete Staff'"
+                                                :description="'Are you sure you want to delete this staff? This action cannot be undone.'"
                                                 :confirmText="'Delete'"
                                                 :cancelText="'Cancel'"
                                                 :isProcessing="isDeletingOne"
@@ -307,17 +299,17 @@ const { goToPage, reset } = useFilter({
 
             <div class="mt-8 flex justify-center w-full">
                 <Paginator
-                    v-if="props.students.last_page > 1"
-                    :total="props.students.total"
-                    :per-page="props.students.per_page"
-                    :current-page="props.students.current_page"
+                    v-if="props.staff.last_page > 1"
+                    :total="props.staff.total"
+                    :per-page="props.staff.per_page"
+                    :current-page="props.staff.current_page"
                     @page-change="goToPage"
                 />
             </div>
 
-            <div v-if="students?.data?.length === 0" class="text-center py-8">
+            <div v-if="staff?.data?.length === 0" class="text-center py-8">
                 <CreditCard class="h-12 w-12 text-muted-foreground mx-auto mb-4"/>
-                <p class="text-muted-foreground">No student found</p>
+                <p class="text-muted-foreground">No staff found</p>
             </div>
         </div>
     </AppLayout>
