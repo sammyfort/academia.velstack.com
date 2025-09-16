@@ -86,39 +86,72 @@ const { goToPage, reset } = useFilter({
                 <div
                     class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                 >
+                    <!-- Filters block -->
                     <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                        <div class="relative flex-1 sm:w-85">
+                        <!-- Search -->
+                        <div class="relative w-full sm:w-64">
                             <Search
                                 class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
                             />
-                            <Input v-model="search" placeholder="Search..." class="pl-10 w-full"/>
+                            <Input
+                                v-model="search"
+                                placeholder="Search..."
+                                class="pl-10 w-full"
+                            />
                         </div>
-                        <div class="flex items-center gap-2">
-                            <SelectOption v-model="pagination" :options="paginateOption" placeholder="Showing results"/>
 
-                            <SelectOption v-model="status" :options="studentStatus" placeholder="Sort by status" multiple/>
-                            <SelectOption v-model="classroom" :options="classes" placeholder="Sort by class" multiple searchable/>
+                        <!-- Filters wrap -->
+                        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                            <SelectOption
+                                v-model="pagination"
+                                :options="paginateOption"
+                                placeholder="Showing results"
+                                class="w-full sm:w-auto"
+                            />
 
-                            <Datepicker v-model="date" placeholder="Filter by Date Added"/>
+                            <SelectOption
+                                v-model="status"
+                                :options="studentStatus"
+                                placeholder="Sort by status"
+                                multiple
+                                class="w-full sm:w-auto"
+                            />
+
+                            <SelectOption
+                                v-model="classroom"
+                                :options="classes"
+                                placeholder="Sort by class"
+                                multiple
+                                searchable
+                                class="w-full sm:w-auto"
+                            />
+
+                            <Datepicker
+                                v-model="date"
+                                placeholder="Filter by Date Added"
+                                class="w-full sm:w-auto"
+                            />
+
                             <Button
-                                v-if="search|| status.length || classroom.length || props.students.current_page > 1 || date"
+                                v-if="search || status.length || classroom.length || props.students.current_page > 1 || date"
                                 @click="reset"
                                 variant="outline"
                                 size="sm"
-                                class="flex items-center gap-1 whitespace-nowrap"
+                                class="flex items-center gap-1 whitespace-nowrap w-full sm:w-auto"
                             >
-                                <X/>
+                                <X />
                                 Clear
                             </Button>
                         </div>
                     </div>
 
-                    <div class="w-full sm:w-auto mt-4 sm:mt-0">
+                    <!-- Add New Student -->
+                    <div class="w-full sm:w-auto">
                         <Link
                             :href="route('students.create')"
-                            class="w-full sm:w-auto flex items-center gap-x-2 rounded-xl border
-                            py-2 px-2 border-white/30 bg-primary text-white backdrop-blur-sm transition-all
-                            duration-200 hover:scale-105 hover:bg-primary/70"
+                            class="w-full sm:w-auto flex items-center justify-center gap-x-2 rounded-xl border
+        py-2 px-2 border-white/30 bg-primary text-white backdrop-blur-sm transition-all
+        duration-200 hover:scale-105 hover:bg-primary/70"
                         >
                             <PlusIcon class="h-5 w-5"/>
                             <span>Add New Student</span>
@@ -126,6 +159,7 @@ const { goToPage, reset } = useFilter({
                     </div>
                 </div>
             </div>
+
 
             <div class="overflow-x-auto">
                 <Table class="w-full">
@@ -236,7 +270,7 @@ const { goToPage, reset } = useFilter({
 
                                     <DropdownMenu>
                                         <DropdownMenuTrigger as-child>
-                                            <Button variant="ghost" size="icon"> ⋮</Button>
+                                            <Button variant="ghost" size="icon">  <MoreVertical/> </Button>
                                         </DropdownMenuTrigger>
 
                                         <DropdownMenuContent align="end" class="w-44 p-1">

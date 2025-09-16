@@ -1,1 +1,0 @@
-import{v as r}from"./DialogTitle.vue_vue_type_script_setup_true_lang-BBZW0vOw.js";import{r as n,q as u}from"./app-DdRJSaol.js";function i(t){const e=r({dir:n("ltr")});return u(()=>{var o;return(t==null?void 0:t.value)||((o=e.dir)==null?void 0:o.value)||"ltr"})}export{i as u};

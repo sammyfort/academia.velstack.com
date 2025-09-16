@@ -6,6 +6,8 @@ use App\Enums\Gender;
 use App\Enums\Region;
 use App\Enums\Religion;
 use App\Enums\StudentStatus;
+use App\Http\Requests\Student\updateStudentRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Enums\Subjects;
 use App\Http\Requests\Student\storeStudentRequest;
@@ -134,17 +136,47 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
-        return Inertia::render('Students/StudentEdit', [
-
-        ]);
+        $student  = school()->students()
+            ->with('parents:id,name')
+            ->findOrFail($id);
+        return Inertia::render('Students/StudentEdit', array_merge($this->props, [
+            'student' => $student
+        ]));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(updateStudentRequest $request, string $id)
     {
-        //
+        $data = $request->validated();
+        $student  = school()->students()->findOrFail($id);
+        DB::beginTransaction();
+        try {
+
+
+            school()->students()->update(Arr::except($data, ['image', 'parents']));
+            $student->parents()->sync(
+                collect($data['parents'] ?? [])->mapWithKeys(fn ($parentId) => [
+                    $parentId => [
+                        'uuid' => Str::uuid(),
+                        'school_id' => school()->id,
+                    ]
+                ])
+            );
+            $student->handleUploads($request, [
+                'image' => 'image'
+            ]);
+
+            DB::commit();
+            return back()->with(successRes("Student updated successfully."));
+
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            throw $exception;
+
+        }
     }
 
     /**

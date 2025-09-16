@@ -51,7 +51,7 @@ const handleConfirm = () => {
                     {{ props.cancelText || 'Cancel' }}
                 </AlertDialogCancel>
 
-                <Button :disabled="props.loading" @click="handleConfirm">
+                <Button class="bg-red-400 hover:bg-red-500" :disabled="props.loading" @click="handleConfirm">
                     {{ props.loading ? 'Please wait...' : props.confirmText || 'Confirm' }}
                 </Button>
             </AlertDialogFooter>

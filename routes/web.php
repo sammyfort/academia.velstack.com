@@ -34,7 +34,7 @@ Route::middleware(['auth:staff', 'subscribed', 'check.account.suspension'])->gro
         'fees' => FeeController::class,
     ]);
 
-    Route::prefix('student')->as('student.')->group(function () {
+    Route::prefix('student')->as('manage-student.')->group(function () {
         Route::delete('bulk-destroy', [StudentController::class, 'bulkDestroy'])->name('bulk-destroy');
     });
 

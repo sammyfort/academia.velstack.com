@@ -41,6 +41,7 @@ export interface StudentI extends ModelI {
     previous_school_id?: number | null;
     class_id: number;
     classroom: Classroom
+    parents: GuardianI[]
     transportation_id?: number | null;
 
     first_name: string ;
@@ -69,7 +70,7 @@ export interface StudentI extends ModelI {
 
 }
 
-export interface Guardian extends ModelI {
+export interface GuardianI extends ModelI {
     name: string
     email: string
     phone: string
