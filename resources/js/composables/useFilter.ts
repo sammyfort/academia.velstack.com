@@ -36,8 +36,10 @@ export function useFilter<T>({sources, mapData, only = [], replace = true, debou
     // Reset sources and reload
     const reset = () => {
         sources.forEach((s: any) => {
-            if (s.value !== undefined) s.value = null;
+            if (Array.isArray(s.value)) s.value = [];
+            else s.value = null;
         });
+
 
         router.get(
             route(routeName || window.location.pathname),

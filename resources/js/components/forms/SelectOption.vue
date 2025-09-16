@@ -92,7 +92,7 @@ const attrs = useAttrs();
                 <SelectValue :placeholder="props.loading ? 'Loading...' : props.placeholder || 'Select'"
                 />
             </SelectTrigger>
-            <SelectContent :options="options">
+            <SelectContent :options="options" :searchable="searchable">
 
             </SelectContent>
         </Select>

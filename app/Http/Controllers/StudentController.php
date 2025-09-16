@@ -38,18 +38,16 @@ class StudentController extends Controller
     {
         $search = $request->input('search', '');
         $status = $request->input('status', '');
-        $classroom = $request->input('classroom', '');
+        $classroom = $request->input('classroom', []);
         $date   = $request->input('date');
-        $paginate   = $request->input('paginate', 1);
-
+        $paginate   = $request->input('paginate', 10);
         $studentsQuery =  school()->students()
             ->with('classroom:id,name')
             ->when($search, fn($q) => $q->search($search))
-            ->when($status, fn($q) => $q->where('status', $status))
-            ->when($classroom, fn($q) => $q->where('class_id', $classroom))
+            ->when(!empty($status), fn($q) => $q->whereIn('status', $status))
+            ->when(!empty($classroom), fn($q) => $q->whereIn('class_id', $classroom))
             ->when($date, fn($q) => $q->whereDate('created_at', $date))
             ->latest();
-
         $students = $paginate === 'all'
             ? [
                 'data' => $studentsQuery->get(),
@@ -160,14 +158,10 @@ class StudentController extends Controller
 
     public function bulkDestroy(Request $request)
     {
-
         $validated = $request->validate([
             'keys' => ['required', 'array'],
             'keys.*' => ['integer', 'exists:students,id'],
         ]);
-
-
-
         school()->students()
             ->whereIn('id', $validated['keys'])
             ->delete();

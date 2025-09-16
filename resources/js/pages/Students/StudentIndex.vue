@@ -28,26 +28,27 @@ const props = defineProps<{
         paginate: string | number
         page: number;
         date: string;
-        status: string;
-        classroom: number
+        status: string[];
+        classroom: number[]
     };
 }>();
 const { selected, allSelected, toggleSelect, toggleSelectAll, clearSelection } = useSelectable(props.students.data || []);
 const search = ref(props.filters.search || "");
-const pagination = ref(props.filters.paginate || 1);
+const pagination = ref(props.filters.paginate || 10);
 const date = ref<string | null>(props.filters.date ?? null);
-const status = ref(props.filters.search || "");
-const classroom = ref(props.filters.search || "");
+const status = ref<string[]>(props.filters.status || []);
+const classroom = ref<number[]>(props.filters.classroom || []);
+
 
 const paginateOption = [
-    {label: '1', value: 1},
-    {label: '5', value: 5},
-    {label: '10', value: 10},
-    {label: '25', value: 25},
-    {label: '50', value: 50},
-    {label: '100', value: 100},
-    {label: '500', value: 500},
-    {label: 'All', value: 'all'}
+    {label: 'Show 1', value: 1},
+    {label: 'Show 5', value: 5},
+    {label: 'Show 10', value: 10},
+    {label: 'Show 25', value: 25},
+    {label: 'Show 50', value: 50},
+    {label: 'Show 100', value: 100},
+    {label: 'Show 500', value: 500},
+    {label: 'Show All', value: 'all'}
 ]
 
 onMounted(() => {
@@ -60,12 +61,13 @@ const { goToPage, reset } = useFilter({
         search: newSearch,
         paginate: newPagination,
         date: newDate,
-        status: newStatus,
-        classroom: newClassroom,
+        status: newStatus && newStatus.length ? newStatus : undefined,
+        classroom: newClassroom && newClassroom.length ? newClassroom : undefined,
     }),
     only: ["students", "filters"],
     debounceMs: 500,
     routeName: "students.index",
+
 });
 
 </script>
@@ -93,11 +95,13 @@ const { goToPage, reset } = useFilter({
                         </div>
                         <div class="flex items-center gap-2">
                             <SelectOption v-model="pagination" :options="paginateOption" placeholder="Showing results"/>
+
+                            <SelectOption v-model="status" :options="studentStatus" placeholder="Sort by status" multiple/>
+                            <SelectOption v-model="classroom" :options="classes" placeholder="Sort by class" multiple searchable/>
+
                             <Datepicker v-model="date" placeholder="Filter by Date Added"/>
-                            <SelectOption v-model="status" :options="studentStatus" placeholder="Sort by status"/>
-                            <SelectOption v-model="classroom" :options="classes" placeholder="Sort by class"/>
                             <Button
-                                v-if="search || pagination || status || classroom || props.students.current_page > 1 || date"
+                                v-if="search|| status.length || classroom.length || props.students.current_page > 1 || date"
                                 @click="reset"
                                 variant="outline"
                                 size="sm"
@@ -152,7 +156,7 @@ const { goToPage, reset } = useFilter({
                                             </DropdownMenuItem>
                                             <ConfirmDialogue
                                                 @confirm="(done: () => void ) => deleteMany('student.bulk-destroy', selected, done,
-                                               () => clearSelection)"
+                                               () => selected = [])"
                                                 :title="'Delete Students'"
                                                 :description="'Are you sure you want to delete the selected students? This action cannot be undone.'"
                                                 :confirmText="'Delete'"
@@ -162,7 +166,7 @@ const { goToPage, reset } = useFilter({
                                             >
                                                 <button
                                                     class="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-red-500
-                                                    hover:text-red-700 bg-muted transition"
+                                                    hover:text-red-500 hover:bg-red-200 transition"
                                                 >
                                                     <Trash2 class="h-4 w-4"/>
                                                     <span>Delete</span>
@@ -255,7 +259,8 @@ const { goToPage, reset } = useFilter({
                                             >
                                                 <button
                                                     class="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-red-500
-                                                    hover:text-red-700 bg-muted transition"
+                                                     hover:text-red-500 hover:bg-red-200 transition"
+
                                                 >
                                                     <Trash2 class="h-4 w-4"/>
                                                     <span>Delete</span>
