@@ -72,6 +72,7 @@ class StaffController extends Controller
 
         return Inertia::render('Staff/StaffIndex', [
             'staff' => $staff,
+            'staffStatus' => $this->props['staffStatus'],
             'filters' => [
                 'search' => $search,
                 'page' => $request->input('page', 1),

@@ -22,7 +22,7 @@ import { useSelectable } from "@/composables/useSelectable";
 const props = defineProps<{
     staff: PaginatedDataI<StaffI>;
     classes: InputSelectOption[]
-    studentStatus: InputSelectOption[]
+    staffStatus: InputSelectOption[]
     filters: {
         search: string;
         paginate: string | number
@@ -108,7 +108,7 @@ const { goToPage, reset } = useFilter({
 
                             <SelectOption
                                 v-model="status"
-                                :options="studentStatus"
+                                :options="staffStatus"
                                 placeholder="Sort by status"
                                 multiple
                                 class="w-full sm:w-auto"
