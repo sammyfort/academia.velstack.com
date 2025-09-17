@@ -10,7 +10,16 @@ export interface ModelI {
     updated_at: string;
     created_at_str: string;
 }
+export interface RoleI extends ModelI {
+    name: string
+    guard_name: string
+    permissions: PermissionI[]
+}
 
+export interface PermissionI extends ModelI {
+    name: string
+    guard_name: string
+}
 export interface Auth {
     user: User;
 }

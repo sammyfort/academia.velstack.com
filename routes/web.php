@@ -5,6 +5,7 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\FeeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ParentController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScoreTypeController;
 use App\Http\Controllers\SemesterController;
 
@@ -32,10 +33,15 @@ Route::middleware(['auth:staff', 'subscribed', 'check.account.suspension'])->gro
         'classes' => ClassController::class,
         'score-types' => ScoreTypeController::class,
         'fees' => FeeController::class,
+        'roles' =>  RoleController::class
     ]);
 
     Route::prefix('student')->as('manage-student.')->group(function () {
         Route::delete('bulk-destroy', [StudentController::class, 'bulkDestroy'])->name('bulk-destroy');
+    });
+
+    Route::prefix('roles')->as('manage-role.')->group(function () {
+        Route::post('add-permission', [RoleController::class, 'addPermissions'])->name('permission');
     });
 
 

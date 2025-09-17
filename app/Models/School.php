@@ -46,6 +46,10 @@ class School extends Model implements HasMedia
             'suspended' => 'boolean',
         ];
     }
+    public function roles(): HasMany
+    {
+        return $this->hasMany(Role::class);
+    }
 
     public function profile(): MorphOne
     {

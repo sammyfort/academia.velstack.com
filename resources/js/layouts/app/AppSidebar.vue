@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Bot, Frame, Settings2, SquareTerminal} from "lucide-vue-next";
+import {Bot, Frame, Settings2, SquareTerminal, Trash, Logs, Building2, Subscript, FrameIcon, Users, UserCog} from "lucide-vue-next";
 
 import NavUser from "./NavUser.vue";
 import TeamSwitcher from "./TeamSwitcher.vue";
@@ -51,9 +51,9 @@ const sidebarData = [
     {
         label: "Management",
         items: [
-            {title: "Students", routeName: "students.index", icon: Bot, visible: true},
-            {title: "Staff", routeName: "staff.index", icon: Bot, visible: true},
-            {title: "Parents", routeName: "parents.index", icon: Bot, visible: true}
+            {title: "Students", routeName: "students.index", icon: UserCog, visible: true},
+            {title: "Staff", routeName: "staff.index", icon: Users, visible: true},
+            {title: "Parents", routeName: "parents.index", icon: FrameIcon, visible: true}
 
         ],
 
@@ -66,7 +66,15 @@ const sidebarData = [
             {title: "Billing", routeName: "fees.index", icon: Bot, visible: true},
             {title: "Payments", routeName: "fees.index", icon: Bot, visible: true},
         ],
+    },
 
+    {
+        label: "System",
+        items: [
+            {title: "Roles", routeName: "roles.index", icon: Bot, visible: true},
+            {title: "Trash", routeName: "roles.index", icon: Trash, visible: true},
+            {title: "Logs", routeName: "roles.index", icon: Logs, visible: true},
+        ],
     },
 ];
 </script>

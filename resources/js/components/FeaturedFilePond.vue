@@ -41,7 +41,7 @@ const handleRemoveFile = () => {
     <div class="bg-background rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="flex items-center space-x-3 mb-4">
             <div class="p-2 bg-primary rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-foreground" fill="none" viewBox="0 0 24 24"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M3 7l9-4 9 4" />
@@ -68,9 +68,21 @@ const handleRemoveFile = () => {
             @addfile="handleAddFile"
             @removefile="handleRemoveFile"
         />
+        <h3 class="font-medium text-foreground mb-2">Photo Requirements:</h3>
+        <ul class="text-sm text-muted-foreground space-y-1">
+            <li>• Recent passport-style photograph</li>
+            <li>• Clear, well-lit image</li>
+            <li>• File formats: JPG, PNG (Max 5MB)</li>
+            <li>• Recommended size: 300x300 pixels</li>
+        </ul>
         <div v-if="props.error" class="mt-2">
 
             <InputError :message="props.error"/>
         </div>
     </div>
 </template>
+<style>
+.filepond--credits{
+    display: none !important;
+}
+</style>
