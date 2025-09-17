@@ -34,11 +34,11 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 import {useFilter} from "@/composables/useFilter";
 import {useSelectable} from "@/composables/useSelectable";
 import RoleCreate from "@/pages/Roles/RoleCreate.vue";
-import SubjectCreate from "@/pages/Subject/SubjectCreate.vue";
+
 import RoleEdit from "@/pages/Roles/RoleEdit.vue";
 import RolePermissions from "@/pages/Roles/RolePermissions.vue";
 import {Badge} from "@/components/ui/badge";
-import SubjectEdit from "@/pages/Subject/SubjectEdit.vue";
+import ManageRolePermissions from "@/pages/Roles/ManageRolePermissions.vue";
 
 const props = defineProps<{
     roles: PaginatedDataI<RoleI>;
@@ -67,14 +67,12 @@ const paginateOption = [
     {label: 'Show All', value: 'all'}
 ]
 
-
 const {goToPage, reset} = useFilter({
     sources: [search, pagination, date,],
     mapData: ([newSearch, newPagination, newDate,]) => ({
         search: newSearch,
         paginate: newPagination,
         date: newDate,
-
     }),
     only: ["roles", "filters"],
     debounceMs: 500,
@@ -120,15 +118,17 @@ const {goToPage, reset} = useFilter({
                         <div v-if="selected.length" class="">
                             <DropdownMenu>
                                 <DropdownMenuTrigger as-child>
-                                    <Button variant="outline" size="sm" class="flex items-center gap-2"><span>With Selected<span v-if="selected.length" class="text-muted-foreground">({{ selected.length }})</span></span>
+                                    <Button variant="outline" size="sm" class="flex items-center gap-2"><span>With Selected<span
+                                        v-if="selected.length" class="text-muted-foreground">({{
+                                            selected.length
+                                        }})</span></span>
                                         <MenuIcon class="h-4 w-4"/>
                                     </Button>
                                 </DropdownMenuTrigger>
 
                                 <DropdownMenuContent align="start" class="w-40">
                                     <ConfirmDialogue
-                                        @confirm="(done: () => void) => deleteMany('roles.bulk-destroy', selected, done,
-        () => selected = [])"
+                                        @confirm="(done: () => void) => deleteMany('role.bulk-destroy', selected, done,() => selected = [])"
                                         :title="'Delete Roles'"
                                         :description="'Are you sure you want to delete the selected roles? This action cannot be undone.'"
                                         :confirmText="'Delete'"
@@ -137,9 +137,7 @@ const {goToPage, reset} = useFilter({
                                         :loading="isDeletingMany"
                                     >
                                         <button
-                                            class="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-red-500
-                hover:text-red-500 hover:bg-red-200 transition"
-                                        >
+                                            class="flex items-center gap-2 w-full rounded-md px-2 py-1.5 text-sm text-red-50 hover:text-red-500 hover:bg-red-200 transition">
                                             <Trash2 class="h-4 w-4"/>
                                             <span>Delete</span>
                                         </button>
@@ -181,7 +179,6 @@ const {goToPage, reset} = useFilter({
 
                     <TableBody>
                         <TableRow v-for="role in props.roles.data as RoleI[]" :key="role.id">
-                            <!-- Row checkbox -->
                             <TableCell class="w-10">
                                 <Checkbox
                                     :model-value="selected.includes(role.id)"
@@ -209,21 +206,20 @@ const {goToPage, reset} = useFilter({
                             <TableCell class="w-1/3 border-0">
                                 <div class="flex items-center gap-2">
                                     <!-- Manage Permissions -->
-                                    <RolePermissions :role="role">
+                                    <ManageRolePermissions :role="role">
                                         <Button
                                             class="w-full sm:w-auto flex items-center gap-x-2 rounded-xl border
-                     border-white/30 bg-primary text-white backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-primary/50"
+                                            border-white/30 bg-primary text-white backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-primary/50"
                                         >
                                             <MonitorCheck class="h-5 w-5"/>
                                             <span>Manage Permissions</span>
                                         </Button>
-                                    </RolePermissions>
+                                    </ManageRolePermissions>
 
                                     <!-- View Permissions -->
                                     <RolePermissions :role="role">
-                                        <Button
-                                            class="w-full sm:w-auto flex items-center gap-x-2 rounded-xl border
-                     border-white/30 bg-secondary text-white backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-primary/50"
+                                        <Button class="w-full sm:w-auto flex items-center gap-x-2 rounded-xl border border-white/30
+                                        bg-secondary text-white backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-primary/50"
                                         >
                                             <EyeIcon class="h-5 w-5"/>
                                             <span>View Permissions</span>
@@ -274,7 +270,6 @@ const {goToPage, reset} = useFilter({
                         </TableRow>
                     </TableBody>
                 </Table>
-
 
 
             </div>

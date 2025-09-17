@@ -71,9 +71,7 @@ const handleRemoveFile = () => {
         <h3 class="font-medium text-foreground mb-2">Photo Requirements:</h3>
         <ul class="text-sm text-muted-foreground space-y-1">
             <li>• Recent passport-style photograph</li>
-            <li>• Clear, well-lit image</li>
-            <li>• File formats: JPG, PNG (Max 5MB)</li>
-            <li>• Recommended size: 300x300 pixels</li>
+
         </ul>
         <div v-if="props.error" class="mt-2">
 

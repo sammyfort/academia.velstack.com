@@ -12,5 +12,9 @@ enum StaffQualification: string
     case MASTER = 'master';
     case DOCTOR = 'doctor';
     case PHD = 'phd';
+    public static function toArray(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
 
 }

@@ -221,7 +221,7 @@ if (! function_exists('generateString')) {
     function generateString($prefix = null,  $length = 12, $type = 'string'): string
     {
         $generated =  $type == 'string' ? Str::random($length) : rand(000000000,9999999);
-        return $prefix ? $prefix."_". $generated : $generated;
+        return $prefix ? $prefix."". $generated : $generated;
 
     }
 }

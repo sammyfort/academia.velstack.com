@@ -8,6 +8,7 @@ use App\Http\Requests\Role\storeRoleRequest;
 use App\Http\Requests\Role\updateRoleRequest;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use App\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -53,7 +54,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        sleep(2);
+        sleep(1);
         return response()->json([
             'permissions' => toOption(Permission::query()->get(), 'name', 'name'),
         ]);
@@ -114,5 +115,20 @@ class RoleController extends Controller
     {
         school()->roles()->findOrFail($id)->delete();
         return back()->with(successRes("Role deleted successfully."));
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        info($request);
+        $validated = $request->validate([
+            'keys' => ['required', 'array'],
+            'keys.*' => ['integer', Rule::exists('roles', 'id')->where('school_id', school()->id)],
+        ]);
+        info($request);
+        school()->roles()
+            ->whereIn('id', $validated['keys'])
+            ->delete();
+
+        return back()->with(successRes("Selected roles deleted successfully."));
     }
 }

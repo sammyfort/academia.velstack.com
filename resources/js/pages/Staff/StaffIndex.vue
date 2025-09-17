@@ -177,7 +177,7 @@ const { goToPage, reset } = useFilter({
                                                 <span>Import</span>
                                             </DropdownMenuItem>
                                             <ConfirmDialogue
-                                                @confirm="(done: () => void ) => deleteMany('student.bulk-destroy', selected, done,
+                                                @confirm="(done: () => void ) => deleteMany('staffs.bulk-destroy', selected, done,
                                                () => selected = [])"
                                                 :title="'Delete Students'"
                                                 :description="'Are you sure you want to delete the selected staff? This action cannot be undone.'"
@@ -258,7 +258,7 @@ const { goToPage, reset } = useFilter({
 
                                     <DropdownMenu>
                                         <DropdownMenuTrigger as-child>
-                                            <Button variant="ghost" size="icon">  <MoreVertical/> </Button>
+                                            <Button variant="ghost" size="icon">  <MenuIcon/> </Button>
                                         </DropdownMenuTrigger>
 
                                         <DropdownMenuContent align="end" class="w-44 p-1">

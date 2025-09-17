@@ -45,7 +45,7 @@ class StaffFactory extends Factory
             'city' => 'Tokyo',
             'bio' => null,
             'basic_salary' => 2000,
-            'designation' => StaffType::TEACHING_STAFF->value,
+
             'national_id' => 'GHA-1224343434-3',
             'qualification' => StaffQualification::cases()[0]->value,
             'experience' => StaffExperience::cases()[0]->value,

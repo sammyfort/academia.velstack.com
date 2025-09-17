@@ -4,7 +4,7 @@ import InputText from "@/components/InputText.vue";
 import {Link, useForm} from "@inertiajs/vue3";
 import {ref} from "vue";
 import FeaturedFilePond from "@/components/FeaturedFilePond.vue";
-import {Check, LoaderCircle, PlusIcon, User, UserCheck2} from "lucide-vue-next";
+import {Check, LoaderCircle, Users, User, UserCheck2, MapPin, Briefcase} from "lucide-vue-next";
 import {Button} from "@/components/ui/button";
 import PageHeader from "@/components/PageHeader.vue";
 import {InputSelectOption, PaginatedDataI, StudentI} from "@/types";
@@ -14,36 +14,56 @@ import ParentCreate from "@/pages/Parents/ParentCreate.vue";
 import {toastError, toastSuccess} from "@/lib/helpers";
 
 const props = defineProps<{
-    classes: InputSelectOption[];
+
+    titles: InputSelectOption[]
     semesters: InputSelectOption[];
     regions: InputSelectOption[];
     religions: InputSelectOption[];
     gender: InputSelectOption[];
-    parents: InputSelectOption[];
+    staffStatus: InputSelectOption[]
+    maritalStatus: InputSelectOption[]
+    staffQualifications: InputSelectOption[]
+    staffExperiences: InputSelectOption[]
+    roles: InputSelectOption[]
 }>();
 
 const form = useForm({
     image: null,
+
+    roles: [],
+
+    title: "",
     first_name: "",
     middle_name: "",
     last_name: "",
+
     email: "",
     phone: "",
-    class_id: "",
-    dob: "",
-    gender: "",
-    address: "",
-    city: "",
-    region: "",
-    parents: [],
-    religion: "",
-    bio: "",
-    allergies: "",
+    staff_id: "",
+    password: "",
 
+    basic_salary: "",
+    designation: "",
+    national_id: "",
+
+    gender: "",
+    bio: "",
+    dob: "",
+    religion: "",
+    region: "",
+    city: "",
+
+    marital_status: "",
+    licence_no: "",
+    qualification: "",
+    experience: "",
+
+    status: "",
 });
 
-const createStudent = () => {
-    form.post(route("students.store"), {
+
+const createStaff = () => {
+    form.post(route("staff.store"), {
         onSuccess: (res) => {
             const message = res.props.message;
             if (res.props.success) toastSuccess(message);
@@ -57,27 +77,36 @@ const createStudent = () => {
 
 <template>
     <AppLayout>
-        <div class="bg-background border-b border-primary shadow-md">
-            <div class="max-w-12xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="bg-background border-b border-border shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="p-2 bg-primary rounded-lg">
-                            <UserCheck2 class="h-5 w-5 text-white"/>
+                    <!-- Left: Icon + Title -->
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-primary rounded-lg shadow-sm">
+                            <UserCheck2 class="h-5 w-5 text-white" />
                         </div>
                         <div>
-                            <h1 class="text-xl font-bold text-foreground">Add New Student</h1>
-                            <p class="text-sm text-muted-foreground">Add existing or admit new student</p>
+                            <h1 class="text-lg sm:text-xl font-semibold text-foreground">
+                                Add New Staff
+                            </h1>
+                            <p class="text-xs sm:text-sm text-muted-foreground">
+                                Add new Staff
+                            </p>
                         </div>
                     </div>
+
+                    <!-- Right: Action Button -->
                     <Link
-                        :href="route('students.index')"
-                        class="px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/70 transition"
+                        :href="route('staff.index')"
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-primary text-white rounded-lg shadow hover:bg-primary/80 transition"
                     >
-                        Students
+                        <Users class="h-4 w-4" />
+                        <span>Staff</span>
                     </Link>
                 </div>
             </div>
         </div>
+
 
         <div class="max-w-full mx-auto px-1 sm:px-6 lg:px-8 py-8">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-8">
@@ -86,8 +115,9 @@ const createStudent = () => {
                     <div class="lg:sticky lg:top-8">
                         <FeaturedFilePond
                             :form="form"
+
                             model-value="image"
-                            title="Student Image"
+                            title="Staff Image"
                             v-model="form.image"
                             modelName="image"
                             :error="form.errors.image"
@@ -97,7 +127,7 @@ const createStudent = () => {
 
                 <!-- Main Form Section - Takes up 3/4 of the width -->
                 <div class="order-2 lg:order-1 lg:col-span-3 space-y-6">
-                    <form @submit.prevent="createStudent" id="add-student" class="p-2 sm:p-8">
+                    <form @submit.prevent="createStaff" id="add-staff" class="p-2 sm:p-8">
                         <div class="mb-8">
                             <div class="flex items-center space-x-3 mb-4">
                                 <div class="p-2 bg-primary rounded-lg gap-2">
@@ -106,34 +136,18 @@ const createStudent = () => {
                                 <h3 class="text-lg font-semibold text-foreground">Personal Information</h3>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                                <InputText :form="form" model="first_name" label="First Name *" required/>
+                                <SelectOption :options="titles" :form="form" model="title" label="Title" required/>
+                                <InputText :form="form" model="first_name" label="First Name" required/>
                                 <InputText :form="form" model="middle_name" label="Middle Name"/>
-                                <InputText :form="form" model="last_name" label="Last Name *" required/>
-                                <InputText :form="form" model="email" label="Email Address *" type="email" required/>
+                                <InputText :form="form" model="last_name" label="Last Name" required/>
+                                <InputText :form="form" model="email" label="Email Address" type="email" required/>
                                 <InputText :form="form" model="phone" label="Phone Number" type="tel"/>
-                                <Datepicker :form="form" model="dob" label="Date of Birth" required/>
-                                <SelectOption :form="form" :options="gender" model="gender" label="Gender"/>
-                                <SelectOption :form="form" :options="religions" model="religion" label="Religion"/>
-                                <SelectOption :form="form" :options="classes" model="class_id" label="Class"/>
-                            </div>
-                        </div>
+                                <Datepicker :form="form" model="dob" label="Date of Birth " />
+                                <SelectOption :form="form" :options="gender" model="gender" label="Gender "/>
+                                <SelectOption :form="form" :options="religions" model="religion" label="Religion "/>
+                                <SelectOption :form="form" :options="maritalStatus" model="marital_status" label="Marital Status "/>
 
-                        <div class="mb-8">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="p-2 bg-primary rounded-lg gap-2">
-                                    <User class="text-white"/>
-                                </div>
-                                <h3 class="text-lg font-semibold text-foreground">Other Information</h3>
-                            </div>
-                            <div class="grid grid-cols-1 gap-4 sm:gap-6">
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                                    <SelectOption :form="form" :options="regions" model="region" label="Region"/>
-                                    <InputText :form="form" model="city" label="Hometown/City" required/>
-                                    <InputText :form="form" model="allergies" label="Alergies"/>
-                                </div>
-                                <div class="grid grid-cols-1 gap-4 sm:gap-6">
-                                    <InputText :form="form" model="bio" textarea label="Additional Information"/>
-                                </div>
+
                             </div>
                         </div>
 
@@ -141,22 +155,39 @@ const createStudent = () => {
                         <div class="mb-8">
                             <div class="flex items-center space-x-3 mb-4">
                                 <div class="p-2 bg-primary rounded-lg gap-2">
-                                    <User class="text-white"/>
+                                    <Briefcase class="text-white"/>
                                 </div>
-                                <h3 class="text-lg font-semibold text-foreground">Guardian Information</h3>
+                                <h3 class="text-lg font-semibold text-foreground">Employment Information</h3>
                             </div>
-
-                            <div class="grid grid-cols-1 gap-6">
-                                <SelectOption :form="form" :options="parents" model="parents" label="Parents" :multiple="true"/>
-                            </div>
-                            <div class="mt-3">
-                                <ParentCreate @created="$inertia.reload({ only: ['parents'] })">
-                                    <button type="button" class="text-sm text-primary hover:underline">
-                                        + Add Parent
-                                    </button>
-                                </ParentCreate>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                                <SelectOption :form="form" :options="roles" model="roles" label="Roles" searchable multiple/>
+                                <InputText :form="form" model="staff_id" label="Staff ID" />
+                                <InputText :form="form" model="basic_salary" label="Basic Salary" type="number"/>
+                                <SelectOption :options="staffQualifications" :form="form" model="qualification" label="Qualification" required/>
+                                <SelectOption :options="staffExperiences" :form="form" model="experience" label="Years of Experience" required/>
+                                <InputText :form="form" model="national_id" label="National ID" required/>
+                                <InputText :form="form" model="licence_no" label="Licence Number"/>
+                                <SelectOption :form="form" :options="staffStatus" model="status" label="Employment Status" required/>
                             </div>
                         </div>
+
+                        <div class="mb-8">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="p-2 bg-primary rounded-lg gap-2">
+                                    <MapPin class="text-white"/>
+                                </div>
+                                <h3 class="text-lg font-semibold text-foreground">Address & Other Information</h3>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                                <SelectOption :form="form" :options="regions" model="region" label="Region" required/>
+                                <InputText :form="form" model="city" label="City/Hometown" required/>
+                                < <InputText :form="form" model="bio"   label="Additional Information"/>
+                            </div>
+
+                        </div>
+
+
+
                         <div class="bg-background rounded-xl shadow-sm border border-gray-200 p-6">
                             <div class="flex items-center justify-between">
                                 <p class="text-sm text-foreground">Review your information and submit when ready</p>
@@ -169,7 +200,7 @@ const createStudent = () => {
                                 >
                                     <LoaderCircle v-if="form.processing" class="mr-2 h-5 w-5 animate-spin" />
                                     <Check v-else class="mr-2 h-5 w-5" />
-                                    {{ form.processing ? 'Please wait' : 'Add Student' }}
+                                    {{ form.processing ? 'Please wait' : 'Add Staff' }}
                                 </Button>
                             </div>
                         </div>

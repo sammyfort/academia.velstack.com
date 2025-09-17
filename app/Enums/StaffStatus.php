@@ -2,12 +2,11 @@
 
 namespace App\Enums;
 
-enum MaritalStatus: string
+enum StaffStatus: string
 {
-    case SINGLE = 'Single';
-    case MARRIED = 'Married';
-    case WIDOW = 'Widow';
-    case DIVORCED = 'Divorced';
+    case ACTIVE = 'active';
+    case STOPPED = 'stopped';
+    case SUSPENDED = 'suspended';
 
     public static function toArray(): array
     {

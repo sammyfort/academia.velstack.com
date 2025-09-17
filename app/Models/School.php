@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StudentStatus;
 use App\Jobs\SMSSenderJob;
 use App\Observers\SchoolObserver;
 use App\Traits\HasAuditFields;
@@ -66,19 +67,21 @@ class School extends Model implements HasMedia
         return $this->hasMany(Term::class);
     }
 
-     public function allStudents(): HasMany
+     public function activeStudents(): HasMany
     {
-        return $this->hasMany(Student::class);
+        return $this->hasMany(Student::class)
+            ->where('status', StudentStatus::ACTIVE->value);
     }
 
     public function students(): HasMany
     {
-        return $this->hasMany(Student::class)->where('is_completed', '=', false);
+        return $this->hasMany(Student::class);
     }
 
     public function alumni(): HasMany
     {
-        return $this->hasMany(Student::class)->where('is_completed', '=', true);
+        return $this->hasMany(Student::class)
+            ->where('status', StudentStatus::COMPLETED->value);
     }
 
     public function parents(): HasMany

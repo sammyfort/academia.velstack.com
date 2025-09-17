@@ -9,4 +9,9 @@ enum StaffExperience: string
     case EXPERIENCED = 'experienced';   // 6 to 10 years
     case EXPERT = 'expert';
 
+    public static function toArray(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
+
 }

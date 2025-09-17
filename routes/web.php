@@ -36,12 +36,17 @@ Route::middleware(['auth:staff', 'subscribed', 'check.account.suspension'])->gro
         'roles' =>  RoleController::class
     ]);
 
-    Route::prefix('student')->as('manage-student.')->group(function () {
+    Route::prefix('student')->as('student.')->group(function () {
         Route::delete('bulk-destroy', [StudentController::class, 'bulkDestroy'])->name('bulk-destroy');
     });
 
-    Route::prefix('roles')->as('manage-role.')->group(function () {
-        Route::post('add-permission', [RoleController::class, 'addPermissions'])->name('permission');
+    Route::prefix('staffs')->as('staffs.')->group(function () {
+        Route::delete('bulk-destroy', [StaffController::class, 'bulkDestroy'])->name('bulk-destroy');
+    });
+
+    Route::prefix('role')->as('role.')->group(function () {
+        Route::post('add-permissions', [RoleController::class, 'addPermissions'])->name('permissions');
+        Route::delete('bulk-destroy', [RoleController::class, 'bulkDestroy'])->name('bulk-destroy');
     });
 
 

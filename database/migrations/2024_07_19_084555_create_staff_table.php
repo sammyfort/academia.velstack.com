@@ -26,12 +26,11 @@ return new class extends Migration {
             $table->string('staff_id')->unique();
             $table->string('password')->nullable();
             $table->decimal('basic_salary', 10, 2);
-            $table->string('designation');
-            $table->string('national_id');
+            $table->string('national_id')->nullable();
 
             $table->string('gender');
             $table->string('bio')->nullable();
-            $table->date('dob');
+            $table->date('dob')->nullable();
             $table->string('religion');
             $table->string('region');
             $table->string('city');
