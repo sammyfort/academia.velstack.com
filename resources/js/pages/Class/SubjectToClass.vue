@@ -111,7 +111,7 @@ const submit = () => {
                     <Input
                         v-model="search"
                         type="text"
-                        placeholder="Search permission..."
+                        placeholder="Search subjects..."
                         class="w-full sm:w-64 px-3 py-2 rounded-md bg-muted text-foreground focus:outline-none"
                     />
 
@@ -127,7 +127,8 @@ const submit = () => {
                         <thead class="bg-muted-background text-foreground">
                         <tr>
                             <th class="px-4 py-2 text-left">Subject</th>
-                            <th class="px-4 py-2 text-left">Code</th>
+                            
+                            <th class="px-4 py-2 text-left">Status</th>
                         </tr>
                         </thead>
                         <tbody>
