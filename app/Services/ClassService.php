@@ -7,14 +7,11 @@ use Illuminate\Support\Str;
 
 class ClassService
 {
-    public static function syncSubjectToStudents(Classroom $class): void
-    {
-
-    }
-
-    public static function attachScoreToSubject(): void
-    {
-
-    }
+   public function markAttendance(Classroom $classroom): string
+   {
+       $prefix = strtoupper(substr($classroom->name, 0, 3));
+       $uniquePart = Str::upper(Str::random(5));
+       return $prefix . '-' . $uniquePart;
+   }
 
 }

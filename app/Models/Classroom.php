@@ -126,27 +126,20 @@ class Classroom extends Model
     /**
      * Get all staff teaching in this class
      */
-    public function teachers(): BelongsToMany
+   public function staff(): BelongsToMany
     {
         return $this->belongsToMany(
             Staff::class,
-            'class_staff',
-            'class_id',
+            'staff_classroom_subject_permissions',
+            'classroom_id',
             'staff_id'
-        );
+        )
+        ->withPivot(['subject_id', 'permission'])
+        ->withTimestamps();
     }
 
 
-    /**
-     * Get all class teachers (masters) managing this class
-     */
-    public function classTeacher()
-    {
-        return $this->belongsToMany(Staff::class, 'class_teacher', 'class_id', 'staff_id')
-            ->using(ClassTeacher::class)
-            ->withPivot('role')
-            ->withTimestamps();
-    }
+   
 
 
 }

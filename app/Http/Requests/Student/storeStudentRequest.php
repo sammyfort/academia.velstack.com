@@ -5,6 +5,7 @@ namespace App\Http\Requests\Student;
 use App\Enums\Gender;
 use App\Enums\Region;
 use App\Enums\Religion;
+use App\Enums\StudentStatus;
 use App\Rules\FileSizeRule;
 use Illuminate\Validation\Rule;
 
@@ -28,6 +29,7 @@ class storeStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'status' => ['required', Rule::in(StudentStatus::toArray())],
             'image' => ['nullable', 'image', new FileSizeRule()],
             'first_name' => ['required', 'max:255'],
             'last_name' => ['required','max:255'],
@@ -39,9 +41,9 @@ class storeStudentRequest extends FormRequest
             'bio' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
 
-            'gender' => ['required', Rule::in(Gender::cases())],
-            'religion' => ['required', Rule::in(Religion::cases())],
-            'region' => ['required', Rule::in(Region::cases())],
+            'gender' => ['required', Rule::in(Gender::toArray())],
+            'religion' => ['required', Rule::in(Religion::toArray())],
+            'region' => ['required', Rule::in(Region::toArray())],
             'parents' => ['required', 'array', 'max:2'],
             'class_id' => ['required', Rule::exists('classrooms', 'id')->where('school_id', school()->id)],
 

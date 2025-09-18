@@ -71,17 +71,17 @@ if (!function_exists('cediSign')){
 }
 
 if (! function_exists('toLabelValue')) {
-    function toOption(iterable $values, string $labelKey = null, string $valueKey = null): array
+    function toOption(iterable $values, string $labelKey = null, string $valueKey = null, $format = true): array
     {
-        return collect($values)->map(function ($item) use ($labelKey, $valueKey) {
+        return collect($values)->map(function ($item) use ($labelKey, $valueKey, $format) {
             if ($labelKey && $valueKey) {
                 return [
-                    'label' => str(data_get($item, $labelKey))->headline(),
+                    'label' => $format ? str(data_get($item, $labelKey))->headline() : data_get($item, $labelKey),
                     'value' => data_get($item, $valueKey),
                 ];
             }
             return [
-                'label' => str($item)->headline(),
+                'label' => $format ? str($item)->headline() : $item,
                 'value' => $item,
             ];
         })->values()->all();

@@ -2,7 +2,7 @@
 import AppLayout from "@/layouts/app/AppLayout.vue";
 import InputText from "@/components/InputText.vue";
 import {Link, useForm} from "@inertiajs/vue3";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import FeaturedFilePond from "@/components/FeaturedFilePond.vue";
 import {Check, LoaderCircle, PlusIcon, User, UserCheck2, BadgeInfo} from "lucide-vue-next";
 import {Button} from "@/components/ui/button";
@@ -21,10 +21,12 @@ const props = defineProps<{
     religions: InputSelectOption[];
     gender: InputSelectOption[];
     parents: InputSelectOption[];
+    studentStatus: InputSelectOption[]
 }>();
 
 const form = useForm({
     image: null,
+    status: props.student.status,
     first_name: props.student.first_name,
     middle_name: props.student.middle_name,
     last_name: props.student.last_name,
@@ -42,6 +44,11 @@ const form = useForm({
     allergies: props.student.allergies || "",
 
 });
+
+onMounted(() => {
+  //  console.log(props.student.dob)
+    // Any additional setup can be done here
+}); 
 
 const updateStudent = () => {
     form.transform((data) => ({
@@ -120,6 +127,7 @@ const updateStudent = () => {
                                 <SelectOption :form="form" :options="gender" model="gender" label="Gender"/>
                                 <SelectOption :form="form" :options="religions" model="religion" label="Religion"/>
                                 <SelectOption :form="form" :options="classes" model="class_id" label="Class" searchable/>
+                                <SelectOption :form="form" :options="studentStatus" model="status" label="Student Status" required/>
                             </div>
                         </div>
 

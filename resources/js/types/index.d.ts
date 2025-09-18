@@ -26,7 +26,7 @@ export interface Auth {
 
 export type AppPageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     name: string;
-    announcement: AnnouncementI|null;
+    announcement: AnnouncementI | null;
     quote: { message: string; author: string };
     auth: Auth;
     ziggy: Config & { location: string };
@@ -38,7 +38,7 @@ export type AppPageProps<T extends Record<string, unknown> = Record<string, unkn
     }
 };
 
-export interface Subject extends ModelI {
+export interface SubjectI extends ModelI {
     name: string
     code: string
     slug: string
@@ -57,9 +57,9 @@ export interface StaffI extends ModelI {
     gender?: string | null;
     dob?: string | null;
 
-    first_name: string ;
+    first_name: string;
     middle_name?: string | null;
-    last_name: string ;
+    last_name: string;
     fullname: string
 
 
@@ -92,9 +92,9 @@ export interface StudentI extends ModelI {
     parents: GuardianI[]
     transportation_id?: number | null;
 
-    first_name: string ;
+    first_name: string;
     middle_name?: string | null;
-    last_name: string ;
+    last_name: string;
     fullname: string
     index_number: string;
 
@@ -116,6 +116,9 @@ export interface StudentI extends ModelI {
     password: string;
     image: string
 
+    subjects: SubjectI[]
+    attendances: AttendanceI[]
+
 }
 
 export interface GuardianI extends ModelI {
@@ -127,7 +130,7 @@ export interface GuardianI extends ModelI {
     occupation: string
 }
 
-export interface Semester extends ModelI {
+export interface SemesterI extends ModelI {
     name: string
     status: string
     start_date: string
@@ -145,7 +148,16 @@ export interface ClassroomI extends ModelI {
     students_count: number
     students: StudentI[]
     subjects: Subject[]
+    staff: StaffI[]
+ 
 
+}
+
+export interface AttendanceI extends ModelI {
+    school_id: number
+    term_id: number 
+    date: string
+    present: boolean
 }
 
 export interface User extends ModelI {
@@ -215,5 +227,5 @@ export interface PaginatedDataI<DT> {
 
 export type InputSelectOption = {
     label: string
-    value: number|string
+    value: number | string
 }

@@ -6,8 +6,10 @@ use App\Enums\ClassGroup;
 use App\Enums\ClassLevel;
 use App\Http\Requests\Class\storeClassRequest;
 use App\Http\Requests\Class\updateClassRequest;
+use Google\Service\Classroom\Topic;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Requests\Class\AttendanceRequest;
 
 class ClassController extends Controller
 {
@@ -64,10 +66,15 @@ class ClassController extends Controller
      */
     public function show(string $slug)
     {
+        $terms = school()->semesters()->orderBy('created_at', 'desc')->get();
         $class = school()->classes()->where('slug', $slug)->firstOrFail();
         return Inertia::render('Class/ClassShow', [
-            'classroom' => $class->loadMissing(['students', 'subjects', 'scoreTypes', 'subjects.scoreTypes', 'subjects.students']),
-
+            'classroom' => $class->loadMissing([
+            'students.subjects', 
+            'students.attendances.term', 
+            'staff', 'subjects', 
+            'scoreTypes', 'subjects.scoreTypes', 'subjects.students']),
+            'semesters' => toOption($terms, 'name', 'id', false),
         ]);
     }
 
@@ -95,5 +102,14 @@ class ClassController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+       public function recordAttendance(AttendanceRequest $request)
+    {
+        $data = $request->validated();
+        $student = school()->students()->findOrFail($data['student_id']);
+        $term = $student->school->semesters()->findOrFail($data['term_id']);
+        recordAttendance($student, $data['date'], $term, $data['present']);
+        return back()->with(successRes("Attendance recorded."));
     }
 }

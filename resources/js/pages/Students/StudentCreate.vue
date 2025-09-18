@@ -20,10 +20,12 @@ const props = defineProps<{
     religions: InputSelectOption[];
     gender: InputSelectOption[];
     parents: InputSelectOption[];
+    studentStatus: InputSelectOption[]
 }>();
 
 const form = useForm({
     image: null,
+    status: "",
     first_name: "",
     middle_name: "",
     last_name: "",
@@ -116,6 +118,7 @@ const createStudent = () => {
                                 <SelectOption :form="form" :options="gender" model="gender" label="Gender"/>
                                 <SelectOption :form="form" :options="religions" model="religion" label="Religion"/>
                                 <SelectOption :form="form" :options="classes" model="class_id" label="Class" searchable/>
+                                <SelectOption :form="form" :options="studentStatus" model="status" label="Student Status" required/>
                             </div>
                         </div>
 

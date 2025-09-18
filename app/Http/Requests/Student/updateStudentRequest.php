@@ -5,6 +5,7 @@ namespace App\Http\Requests\Student;
 use App\Enums\Gender;
 use App\Enums\Region;
 use App\Enums\Religion;
+use App\Enums\StudentStatus;
 use App\Rules\FileSizeRule;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,11 +28,10 @@ class updateStudentRequest extends FormRequest
      */
     public function rules(): array
     {
-        $studentId = $this->route('student'); // may be Model or ID
-        if ($studentId instanceof \App\Models\Student) {
-            $studentId = $studentId->id;
-        }
+        $studentId = $this->route('student');
+
         return [
+            'status' => ['required', Rule::in(StudentStatus::toArray())],
             'image' => ['nullable', 'image', new FileSizeRule()],
             'first_name' => ['required', 'max:255'],
             'last_name' => ['required','max:255'],

@@ -33,7 +33,7 @@ class SemesterController extends Controller
 
         return Inertia::render('Semester/SemesterIndex', [
             'semesters' => $semesters,
-            'available_semesters' => toOption(AcademicTerm::toArray()),
+            'available_semesters' => toOption(AcademicTerm::toArray(), format: false),
             'filters' => [
                 'search' =>$search,
                 'page'   => $request->input('page', 1),
