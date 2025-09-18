@@ -18,10 +18,15 @@ const props = defineProps<{
     classroom: ClassroomI
     semesters: InputSelectOption[]
 }>();
-
-const activeTab = ref('overview');
-
+import { useAppStore } from "@/stores/appStore";
+const tabStore = useAppStore();
  
+
+const activeTab = computed({
+  get: () => tabStore.getActiveTab(props.classroom.id, "overview"),
+  set: (tab) => tabStore.setActiveTab(props.classroom.id, tab),
+});
+
 const form = useForm({
   date: new Date().toISOString().split('T')[0],
   term: props.semesters[0].value,
@@ -49,8 +54,8 @@ const academicYear = computed(() => {
                          
                     </div>
                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-                    <Datepicker :form="form" model="date" class="py-4 px-4" />
-                    <SelectOption :options="semesters" :form="form"  model="term" placeholder="Select Academic calender" />
+                     <Datepicker :form="form" model="date" class="py-4 px-4" />
+                     <SelectOption :options="semesters" :form="form"  model="term" placeholder="Select Academic calender" />
                       <button class="border border-muted text-foreground px-4 py-2 rounded-lg hover:bg-muted
                         transition-colors flex items-center justify-center space-x-2 text-sm">
                             <UserCheck class="w-4 h-4"/>

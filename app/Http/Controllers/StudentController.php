@@ -155,7 +155,7 @@ class StudentController extends Controller
         try {
 
 
-            school()->students()->update(Arr::except($data, ['image', 'parents']));
+            $student->update(Arr::except($data, ['image', 'parents']));
             $student->parents()->sync(
                 collect($data['parents'] ?? [])->mapWithKeys(fn ($parentId) => [
                     $parentId => [

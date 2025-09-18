@@ -7,6 +7,7 @@ import {
   XCircle,
   Eye,
   Edit,
+  NotebookPenIcon
 } from "lucide-vue-next";
 import { ClassroomI } from "@/types";
 import { ref, watchEffect, computed } from "vue";
@@ -19,14 +20,15 @@ const props = defineProps<{
   term_id: number | null;
   date: string;
 }>();
-const searchQuery = ref("");
-const selectedFilter = ref("all");
+ 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSearch } from "@/composables/useSearch";
+
 const getStatusColor = (status: string) => {
   switch (status) {
     case "present":
@@ -106,6 +108,11 @@ const recordAttendance = (studentId: string | number, present: boolean) => {
     preserveScroll: true,
   });
 };
+const { query, results, reset } = useSearch(props.classroom.students, [
+  "first_name", "last_name",
+  "middle_name",
+  "index_number",
+]);
 </script>
 
 <template>
@@ -115,7 +122,7 @@ const recordAttendance = (studentId: string | number, present: boolean) => {
       <Search
         class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
       />
-      <Input v-model="searchQuery" placeholder="Search..." class="pl-10 w-full" />
+      <Input v-model="query" placeholder="Search..." class="pl-10 w-full" />
     </div>
     <SelectOption :options="[]" model="term" placeholder="Select Academic calender" />
   </div>
@@ -123,10 +130,9 @@ const recordAttendance = (studentId: string | number, present: boolean) => {
   <!-- Students Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
     <div
-      v-for="student in classroom.students"
+      v-for="student in results"
       :key="student.id"
-      class="bg-muted/50 rounded-lg p-4 sm:p-5 hover:shadow-md transition-shadow border border-muted"
-    >
+      class="bg-muted/50 rounded-lg p-4 sm:p-5 hover:shadow-md transition-shadow border border-muted" >
       <div class="flex items-center space-x-3 mb-4">
         <!-- Avatar -->
         <div class="bg-primary/10 rounded-full flex items-center justify-center">
@@ -253,6 +259,13 @@ const recordAttendance = (studentId: string | number, present: boolean) => {
         </div>
       </div>
     </div>
+
+     <div v-if="results.length === 0" class="text-center end py-8">
+                <NotebookPenIcon class="h-12 w-12 text-muted-foreground mx-auto mb-4"/>
+                <p class="text-muted-foreground">No student found</p>
+            </div>
+
+
   </div>
 </template>
 

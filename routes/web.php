@@ -40,7 +40,7 @@ Route::middleware(['auth:staff', 'subscribed', 'check.account.suspension'])->gro
         Route::post('record-attendance', [ClassController::class, 'recordAttendance'])->name('record.attendance');
     });
 
-    Route::prefix('student')->as('manage-student.')->group(function () {
+    Route::prefix('manage-student')->as('manage-student.')->group(function () {
         Route::delete('bulk-destroy', [StudentController::class, 'bulkDestroy'])->name('bulk-destroy');
     });
 
@@ -80,3 +80,4 @@ Route::middleware(['auth:staff', 'subscribed', 'check.account.suspension'])->gro
     //    });
 });
 require __DIR__ . '/auth.php';
+require __DIR__ . '/frontend.php';
