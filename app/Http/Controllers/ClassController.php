@@ -64,10 +64,10 @@ class ClassController extends Controller
      */
     public function show(string $slug)
     {
+        $class = school()->classes()->where('slug', $slug)->firstOrFail();
         return Inertia::render('Class/ClassShow', [
-            'class' => school()->classes()->where('slug', $slug)
-                ->with(['students', 'subjects', 'scoreTypes', 'subjects.scoreTypes', 'subjects.students'])
-                ->firstOrFail()
+            'classroom' => $class->loadMissing(['students', 'subjects', 'scoreTypes', 'subjects.scoreTypes', 'subjects.students']),
+
         ]);
     }
 

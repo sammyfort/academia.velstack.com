@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/app/AppLayout.vue";
-import { Classroom, PaginatedDataI } from "@/types";
+import { ClassroomI, PaginatedDataI } from "@/types";
 import {Input} from "@/components/ui/input";
 import {PlusIcon, Search, X, Building2, GraduationCap} from "lucide-vue-next";
 import Datepicker from "@/components/forms/Datepicker.vue";
@@ -14,7 +14,7 @@ import {router} from "@inertiajs/vue3";
 import {useReloadOnChange} from "@/lib/helpers";
 
 const props = defineProps<{
-    classes: PaginatedDataI<Classroom>
+    classes: PaginatedDataI<ClassroomI>
     filters: {
         search: string
         page: number
@@ -105,7 +105,7 @@ const reset = () => {
                 <!-- Classes Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                     <div
-                        v-for="classItem in classes.data as Classroom[]"
+                        v-for="classItem in classes.data as ClassroomI[]"
                         :key="classItem.id"
                         @click="$inertia.visit(route('classes.show', classItem.slug))"
                         class="relative bg-background rounded-xl shadow-sm border border-foreground-200 hover:shadow-md transition-all duration-200 group cursor-pointer"

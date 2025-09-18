@@ -51,7 +51,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Head title="Log in" />
+  <Head title="Login" />
   <GuestLayout>
     <template #content>
       <div

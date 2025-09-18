@@ -4,27 +4,27 @@ namespace App\Enums;
 
 enum Subjects: string
 {
-    case ENGLISH_LANGUAGE = 'English Language';
-    case MATHEMATICS = 'Mathematics';
-    case SCIENCE = 'Science';
-    case COMPUTING = 'Computing';
-    case SOCIAL_STUDIES = 'Social Studies';
+    case ENGLISH_LANGUAGE = 'ENGLISH LANGUAGE';
+    case MATHEMATICS = 'MATHEMATICS';
+    case SCIENCE = 'SCIENCE';
+    case COMPUTING = 'COMPUTING';
+    case SOCIAL_STUDIES = 'SOCIAL STUDIES';
 
     case ICT = 'ICT';
     case RME = 'RME';
 
-    case CREATIVE_ART = 'Creative Art & Design';
-    case ASANTE_TWI  = 'Asante Twi';
-    case FRENCH = 'French Language';
-    case CAREER_TECHNOLOGY = 'Career Technology';
+    case CREATIVE_ART = 'CREATIVE ART & DESIGN';
+    case ASANTE_TWI  = 'ASANTE TWI';
+    case FRENCH = 'FRENCH LANGUAGE';
+    case CAREER_TECHNOLOGY = 'CAREER TECHNOLOGY';
 
-    case HISTORY = 'History';
+    case HISTORY = 'HISTORY';
 
-    case LITERACY = 'Literacy';
+    case LITERACY = 'LITERACY';
 
-    case NUMERACY = 'Numeracy';
+    case NUMERACY = 'NUMERACY';
 
-    case LANGUAGE_LITERACY = 'Language & Literacy';
+    case LANGUAGE_LITERACY = 'LANGUAGE & LITERACY';
 
     case OWOP = 'OWOP';
 

@@ -136,13 +136,15 @@ export interface Semester extends ModelI {
     next_term_begins: string
 }
 
-export interface Classroom extends ModelI {
+export interface ClassroomI extends ModelI {
     school_id: number
     name: string
     level: string
     group: string
     slug: string
     students_count: number
+    students: StudentI[]
+    subjects: Subject[]
 
 }
 
@@ -157,11 +159,6 @@ export interface User extends ModelI {
     password: string;
 
 }
-
-
-
-
-
 
 
 export interface MediaI {

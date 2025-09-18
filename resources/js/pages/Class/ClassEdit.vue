@@ -13,12 +13,12 @@ import {useForm} from '@inertiajs/vue3';
 import {toastError, toastSuccess} from '@/lib/helpers';
 import {ref, watch} from 'vue';
 import {LoaderCircle} from 'lucide-vue-next';
-import {Classroom, InputSelectOption} from '@/types';
+import {ClassroomI, InputSelectOption} from '@/types';
 import SelectOption from "@/components/forms/SelectOption.vue";
 import axios from 'axios'
 
 const props = defineProps<{
-    classroom: Classroom
+    classroom: ClassroomI
 }>();
 
 const isOpen = ref(false)

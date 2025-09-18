@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Enums\StudentStatus;
 use App\Observers\ClassroomObserver;
 use App\Traits\HasAuditFields;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -57,7 +58,7 @@ class Classroom extends Model
     public function students(): HasMany
     {
         return $this->hasMany(Student::class, 'class_id', 'id')
-            ->where('is_completed', '=',false);
+            ->where('status', StudentStatus::ACTIVE->value);
     }
 
     public function fees(): HasMany
