@@ -78,36 +78,68 @@ const sidebarData = [
     },
 ];
 </script>
-
 <template>
-    <Sidebar :collapsible="'icon'">
-        <SidebarHeader>
-            <TeamSwitcher/>
-        </SidebarHeader>
+  <Sidebar :collapsible="'icon'" class="h-screen flex flex-col">
+    <SidebarHeader>
+      <TeamSwitcher />
+    </SidebarHeader>
 
-        <SidebarContent>
-            <template v-for="group in sidebarData" :key="group.label">
-                <SidebarGroup>
-                    <SidebarGroupLabel>{{ group.label }}</SidebarGroupLabel>
-                    <SidebarMenu>
-                        <SidebarItem
-                            v-for="item in group.items"
-                            :key="item.title"
-                            :title="item.title"
-                            :route-name="item.routeName"
-                            :icon="item.icon"
-                            :items="item.items"
-                            :visible="item.visible"
-                        />
-                    </SidebarMenu>
-                </SidebarGroup>
-            </template>
-        </SidebarContent>
+    <!-- This must be the scrollable element -->
+    <SidebarContent class="flex-1 overflow-y-auto min-h-0 custom-scrollbar">
+      <template v-for="group in sidebarData" :key="group.label">
+        <SidebarGroup>
+          <SidebarGroupLabel>{{ group.label }}</SidebarGroupLabel>
+          <SidebarMenu>
+            <SidebarItem
+              v-for="item in group.items"
+              :key="item.title"
+              :title="item.title"
+              :route-name="item.routeName"
+              :icon="item.icon"
+              :items="item.items"
+              :visible="item.visible"
+            />
+          </SidebarMenu>
+        </SidebarGroup>
+      </template>
+    </SidebarContent>
 
-        <SidebarFooter>
-            <NavUser/>
-        </SidebarFooter>
+    <SidebarFooter>
+      <NavUser/>
+    </SidebarFooter>
 
-        <SidebarRail/>
-    </Sidebar>
+    <SidebarRail/>
+  </Sidebar>
 </template>
+
+<style scoped>
+/* global CSS (app.css or <style> without scoped) */
+.custom-scrollbar {
+  /* safety: allow the element to shrink inside flex container */
+  min-height: 0;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(156,163,175,0.5) transparent; /* Firefox: thumb then track */
+}
+
+/* WebKit browsers (Chrome, Edge, Safari) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(156,163,175,0.5);
+  border-radius: 9999px;
+  border: 2px solid transparent; /* padding effect */
+  background-clip: padding-box;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156,163,175,0.8);
+}
+
+</style>

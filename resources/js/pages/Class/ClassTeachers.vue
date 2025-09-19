@@ -63,6 +63,8 @@ const { query, results } = useSearch(
       </StaffAdd>
     </div>
   </div>
+
+  <!-- Teacher Cards -->
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <div
       v-for="teacher in results"
@@ -134,32 +136,46 @@ const { query, results } = useSearch(
       </div>
 
       <!-- Subjects Tile -->
-      <div v-if="teacher.subjects.length" class="mt-3 p-3 bg-muted/20 rounded-lg">
-        <h4 class="text-sm font-semibold text-foreground mb-2">Subjects</h4>
+      <div class="mt-3 p-3   rounded-lg">
+       
 
         <div class="flex flex-col gap-1">
-          <div
-            v-for="(subject, index) in teacher.subjects"
-            :key="subject.id"
-            class="flex items-center justify-between text-xs text-muted-foreground"
-          >
-            <span class="flex items-center space-x-1 rounded-full bg-blue/10 text-blue-400">
-              <NotebookPen class="w-3 h-3" />
-              <span>{{ index + 1 }}.</span>
-            </span>
-            
-            <span class="px-2 py-0.5 text-xs rounded-full bg-primary/10 text-primary">
-             
-             <span class="flex items-center space-x-1">
-              
-              <span>{{subject.name }}</span>
-            </span>
-            </span>
-          </div>
+          <!-- Show list -->
+          <template v-if="teacher.subjects.length">
+           <h4 class="text-sm font-semibold text-foreground mb-2">Subjects</h4>
+            <div
+              v-for="(subject, index) in teacher.subjects"
+              :key="subject.id"
+              class="flex items-center justify-between text-xs text-muted-foreground"
+            >
+              <span
+                class="flex items-center space-x-1 rounded-full bg-blue/10 text-blue-400 px-1 py-0.5"
+              >
+                <NotebookPen class="w-3 h-3" />
+                <span>{{ index + 1 }}.</span>
+              </span>
+
+              <span
+                class="px-2 py-0.5 text-xs rounded-full bg-primary/10 text-primary"
+              >
+                {{ subject.name }}
+              </span>
+            </div>
+          </template>
+
+          <!-- Empty subjects -->
+          <template v-else>
+           <div class="col-span-full flex flex-col items-center justify-center py-16">
+            <p class="text-xs text-muted-foreground italic">
+              No subjects assigned
+            </p>
+            </div>
+          </template>
         </div>
       </div>
     </div>
 
+    <!-- Empty staff state -->
     <div
       v-if="results.length === 0"
       class="col-span-full flex flex-col items-center justify-center py-16"
@@ -171,3 +187,5 @@ const { query, results } = useSearch(
 </template>
 
 <style scoped></style>
+
+ 
