@@ -38,6 +38,8 @@ Route::middleware(['auth:staff', 'subscribed', 'check.account.suspension'])->gro
 
     Route::prefix('class')->as('class.')->group(function () {
         Route::post('record-attendance', [ClassController::class, 'recordAttendance'])->name('record.attendance');
+        Route::post('attach-subject', [ClassController::class, 'addSubjectToClass'])->name('attach.subject');
+        Route::post('assign-staff', [ClassController::class, 'assignStaff'])->name('assign-staff');
     });
 
     Route::prefix('manage-student')->as('manage-student.')->group(function () {

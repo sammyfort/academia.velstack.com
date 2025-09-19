@@ -8,12 +8,20 @@ import {
     DialogTitle,
     DialogTrigger
 } from '@/components/ui/dialog';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import {Button} from '@/components/ui/button';
 import {useForm} from '@inertiajs/vue3';
 import {toastError, toastSuccess} from '@/lib/helpers';
 import {ref, watch, computed, onMounted} from 'vue';
 import {LoaderCircle, Lock} from 'lucide-vue-next';
-import {ClassroomI, InputSelectOption, RoleI, SubjectI} from '@/types';
+import {ClassroomI, SubjectI} from '@/types';
 import axios from "axios";
 import {router} from "@inertiajs/vue3";
 import Input from "@/components/ui/input/Input.vue";
@@ -27,7 +35,7 @@ const loading = ref(false)
 const props = defineProps<{
     classroom: ClassroomI
 }>();
-
+const emit = defineEmits(['updated'])
 
 const form = useForm({
     class_id: props.classroom.id,
@@ -68,13 +76,13 @@ const unselectAll = () => {
 
 const submit = () => {
 
-    form.post(route('role.permissions'), {
+    form.post(route('class.attach.subject'), {
         onSuccess: (res) => {
             const message = res.props.message
             if (res.props.success) toastSuccess(message)
             else toastError(message)
             isOpen.value = false
-            router.reload({only: ['role']})
+            emit('updated')
         },
         preserveScroll: true
     })
@@ -92,7 +100,6 @@ const submit = () => {
                     Add teaching subjects to  <b>{{ classroom.name }}</b>
                 </DialogDescription>
             </DialogHeader>
-            <!-- Loading skeleton -->
             <div v-if="loading" class="space-y-3 px-4">
                 <div
                     v-for="n in 6"
@@ -105,13 +112,10 @@ const submit = () => {
                 </div>
             </div>
 
-            <div v-else
+            <div v-if="filtered.length"
                 class="px-4 pb-4 max-h-[60vh] overflow-y-auto custom-scrollbar -webkit-overflow-scrolling-touch">
                 <div class="p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <Input
-                        v-model="search"
-                        type="text"
-                        placeholder="Search subjects..."
+                    <Input v-model="search" type="text" placeholder="Search subjects..."
                         class="w-full sm:w-64 px-3 py-2 rounded-md bg-muted text-foreground focus:outline-none"
                     />
 
@@ -123,61 +127,49 @@ const submit = () => {
 
 
                 <div class="overflow-x-auto">
-                    <table class="min-w-full border border-border rounded-lg text-sm">
-                        <thead class="bg-muted-background text-foreground">
-                        <tr>
-                            <th class="px-4 py-2 text-left">Subject</th>
-                            
-                            <th class="px-4 py-2 text-left">Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr
-                            v-for="subject in filtered as SubjectI[]"
-                            :key="subject.id"
-                            class="border-t border-border hover:bg-muted/30"
-                        >
-                            <td class="px-4 py-2 flex items-center gap-2">
+                    <Table class="min-w-full border border-border rounded-lg text-sm">
+                        <TableHeader class="bg-muted-background text-foreground">
+                        <TableRow>
+                            <TableHead class="px-4 py-2 text-left">Subject</TableHead>
+                            <TableHead class="px-4 py-2 text-left">Status</TableHead>
+                        </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                        <TableRow v-for="subject in filtered as SubjectI[]" :key="subject.id" class="border-t border-border hover:bg-muted/30">
+                            <TableCell class="px-4 py-2 flex items-center gap-2">
                                 <Lock class="h-4 w-4 text-muted-foreground"/>
                                 {{ subject.name }}
-                            </td>
-                            <td class="px-4 py-2">
+                            </TableCell>
+                            <TableCell class="px-4 py-2">
                                 <Button
-                                    size="sm"
-                                    variant="outline"
+                                    v-if="!form.subjects.includes(subject.id)" size="sm" variant="outline"
                                     class="px-3 py-1 rounded-md text-xs font-medium bg-green-400 text-black hover:bg-green-500 transition"
-                                    v-if="!form.subjects.includes(subject.id)"
-                                    @click="form.subjects.push(subject.id)"
-                                >
+                                    @click="form.subjects.push(subject.id)">
                                     Add
                                 </Button>
 
-                                <Button
-                                    size="sm"
-                                    variant="destructive"
+                                <Button    v-else size="sm" variant="destructive"
                                     class="px-3 py-1 rounded-md text-xs font-medium bg-red-400 text-black hover:bg-red-500 transition"
-                                    v-else
+
                                     @click="form.subjects = form.subjects.filter(s => s !== subject.id)"
-                                >
-                                    Remove
-                                </Button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                >Remove</Button>
+                            </TableCell>
+                        </TableRow>
+                        </TableBody>
+                    </Table>
                 </div>
+            </div>
+            <div v-else class="text-center py-10 text-muted-foreground">
+                No subjects found
             </div>
             <DialogFooter class="p-3">
                 <Button
-                    :disabled="form.processing"
+                    :disabled="form.processing "
                     type="submit"
                     form="add-permissions"
                     @click="submit"
                 >
-                    <LoaderCircle
-                        v-if="form.processing"
-                        class="mr-2 h-4 w-4 animate-spin"
-                    />
+                    <LoaderCircle v-if="form.processing" class="mr-2 h-4 w-4 animate-spin"/>
                     {{ form.processing ? 'Please wait...' : 'Save Changes' }}
                 </Button>
             </DialogFooter>
@@ -185,4 +177,3 @@ const submit = () => {
     </Dialog>
 </template>
 
- 

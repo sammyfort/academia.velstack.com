@@ -75,9 +75,37 @@ class Subject extends Model
         return $this->hasMany(Timetable::class,);
     }
 
-    public function teachers():BelongsToMany
+    /**
+
+     * Get all staff teaching this subject
+     *
+     * @return BelongsToMany<Subject>
+     */
+
+    public function staff(): BelongsToMany
     {
-        return $this->belongsToMany(Staff::class, 'subject_staff');
+        return $this->belongsToMany(
+            Staff::class,
+            'staff_classroom_subject_permissions',
+            'subject_id',
+            'staff_id'
+        )
+            ->withPivot(['classroom_id', 'permission'])
+            ->withTimestamps();
     }
+
+    /**
+     * Filter staff teaching this subject in a particular class
+     *
+     * @param $classroomId
+     * @return BelongsToMany<Subject>
+     */
+    public function staffInClassroom($classroomId): BelongsToMany
+    {
+        return $this->staff()->wherePivot('classroom_id', $classroomId);
+    }
+
+
+
 
 }

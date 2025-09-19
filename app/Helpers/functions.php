@@ -254,8 +254,11 @@ if (! function_exists('assignClassSubjectPermission')) {
     {
         $subjectIds = (array) $subjectIds;
 
-
-       Cache::forget("permissionToClass:$class->id:$staff->id");
+      \App\Models\StaffClassroomSubjectPermission::query()
+            ->where('staff_id', $staff->id)
+            ->where('classroom_id', $class->id)
+            ->where('permission', $permission)
+            ->delete();
 
         if (collect($subjectIds)->isNotEmpty()){
             foreach ($subjectIds as $subjectId) {
@@ -274,7 +277,7 @@ if (! function_exists('assignClassSubjectPermission')) {
 
           \App\Models\StaffClassroomSubjectPermission::create([
               'uuid' => strtoupper(Str::uuid()),
-               'school_id' => school()->id,
+              'school_id' => school()->id,
               'staff_id' => $staff->id,
               'classroom_id' => $class->id,
               'subject_id' => null,

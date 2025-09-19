@@ -11,16 +11,18 @@ import StatCard from "@/components/StatCard.vue";
 import ClassOverview from "@/pages/Class/ClassOverview.vue";
 import Datepicker from "@/components/forms/Datepicker.vue";
 import SelectOption from "@/components/forms/SelectOption.vue";
-import { format } from "date-fns"; 
+import { format } from "date-fns";
 import { useForm } from "@inertiajs/vue3";
 import { dateAndTime } from "@/lib/helpers";
 const props = defineProps<{
     classroom: ClassroomI
     semesters: InputSelectOption[]
+    staffRoles: InputSelectOption[]
 }>();
 import { useAppStore } from "@/stores/appStore";
+import SubjectCreate from "@/pages/Subject/SubjectCreate.vue";
 const tabStore = useAppStore();
- 
+
 
 const activeTab = computed({
   get: () => tabStore.getActiveTab(props.classroom.id, "overview"),
@@ -51,7 +53,7 @@ const academicYear = computed(() => {
                         <p class="text-muted-foreground mt-1 text-sm sm:text-base">{{ academicYear }}
                          <span class="text-blue-500">({{ dateAndTime(form.date) }})</span>
                          </p>
-                         
+
                     </div>
                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                      <Datepicker :form="form" model="date" class="py-4 px-4" />
@@ -66,7 +68,7 @@ const academicYear = computed(() => {
                             <Plus class="w-4 h-4"/>
                             <span>Record Exam</span>
                         </button>
-                       
+
                     </div>
                 </div>
             </div>
@@ -75,27 +77,27 @@ const academicYear = computed(() => {
         <!-- Stats Cards -->
         <div class="px-0 sm:px-6 py-4 sm:py-6">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                <StatCard label="Total Students" :value="classroom.students.length" :icon="Users" 
+                <StatCard label="Total Students" :value="classroom.students.length" :icon="Users"
                  value-color="text-green-600 dark:text-green-300"
-                 icon-color="text-green-600 dark:text-green-300" 
+                 icon-color="text-green-600 dark:text-green-300"
                  icon-bg="bg-green-50 dark:bg-green-900/20"
                  />
 
-                <StatCard label="Subjects" :value="classroom.subjects.length"  :icon="CheckCircle" 
+                <StatCard label="Subjects" :value="classroom.subjects.length"  :icon="CheckCircle"
                  value-color="text-blue-600 dark:text-blue-400"
-                 icon-color="text-blue-600 dark:text-blue-500" 
+                 icon-color="text-blue-600 dark:text-blue-500"
                  icon-bg="bg-blue-50 dark:bg-blue-900/30"
                 />
 
                  <StatCard label="Teachers" :value="classroom.staff.length" :icon="XCircle"
                   value-color="text-yellow-600 dark:text-yellow-400"
-                 icon-color="text-yellow-600 dark:text-yellow-500" 
+                 icon-color="text-yellow-600 dark:text-yellow-500"
                  icon-bg="bg-yellow-50 dark:bg-yellow-900/30"
-                
+
                 />
                 <StatCard label="Average" value="10" :icon="TrendingUp"
                  value-color="text-purple-600 dark:text-purple-400"
-                 icon-color="text-purple-600 dark:text-purple-500" 
+                 icon-color="text-purple-600 dark:text-purple-500"
                  icon-bg="bg-purple-50 dark:bg-purple-900/30"
                 />
             </div>
@@ -126,11 +128,11 @@ const academicYear = computed(() => {
                             Subjects
                         </button>
                         <button
-                            @click="activeTab = 'exams'"
-                            :class="activeTab === 'exams' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
+                            @click="activeTab = 'staff'"
+                            :class="activeTab === 'staff' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
                             class="py-3 sm:py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap"
                         >
-                            Exams
+                            Teachers
                         </button>
                         <button
                             @click="activeTab = 'rankings'"
@@ -146,14 +148,16 @@ const academicYear = computed(() => {
                 <div class="p-4 sm:p-6">
                     <ClassOverview v-if="activeTab === 'overview'"/>
 
-                    <ClassStudents v-if="activeTab === 'students'" 
+                    <ClassStudents v-if="activeTab === 'students'"
                     :term_id="form.term"
                     :date="form.date"
                     :classroom="classroom"/>
 
                     <ClassSubjects v-if="activeTab === 'subjects'" :classroom="classroom"/>
 
-                    <ClassTeachers v-if="activeTab === 'exams'" :classroom="classroom"/>
+                    <ClassTeachers v-if="activeTab === 'staff'"
+                                   :classroom="classroom"
+                                   :staffRoles="staffRoles"/>
 
                     <ClassRankings v-if="activeTab === 'rankings'" :classroom="classroom"/>
                 </div>

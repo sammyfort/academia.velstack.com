@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/app/AppLayout.vue";
-import {InputSelectOption, PaginatedDataI, Subject} from "@/types";
+import {InputSelectOption, PaginatedDataI, SubjectI} from "@/types";
 import {
     Table,
     TableBody,
@@ -26,7 +26,7 @@ import Paginator from "@/components/helpers/Paginator.vue";
 import Datepicker from "@/components/forms/Datepicker.vue";
 
 const props = defineProps<{
-    subjects: PaginatedDataI<Subject>
+    subjects: PaginatedDataI<SubjectI>
     available_subjects: InputSelectOption[]
     filters: {
         search: string
@@ -159,7 +159,7 @@ const handleDelete = (id: number | string) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow v-for="subject in props.subjects.data as Subject[]" :key="subject.id">
+                        <TableRow v-for="subject in props.subjects.data as SubjectI[]" :key="subject.id">
                             <TableCell class="flex flex-col gap-2">
                                 <span class="font-semibold">{{ subject.name }}</span>
                                 <Badge variant="outline" class="text-xs">

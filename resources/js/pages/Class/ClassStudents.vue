@@ -7,20 +7,21 @@ import {
   XCircle,
   Eye,
   Edit,
-  NotebookPenIcon
+    Users
 } from "lucide-vue-next";
-import { ClassroomI } from "@/types";
+import {ClassroomI, StudentI} from "@/types";
 import { ref, watchEffect, computed } from "vue";
 import { Input } from "@/components/ui/input";
 import { useForm, Link } from "@inertiajs/vue3";
 import { dateAndTime, toastError, toastSuccess } from "@/lib/helpers";
 import SelectOption from "@/components/forms/SelectOption.vue";
+import { Button } from "@/components/ui/button";
 const props = defineProps<{
   classroom: ClassroomI;
-  term_id: number | null;
+  term_id: number | string;
   date: string;
 }>();
- 
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -108,11 +109,14 @@ const recordAttendance = (studentId: string | number, present: boolean) => {
     preserveScroll: true,
   });
 };
-const { query, results, reset } = useSearch(props.classroom.students, [
-  "first_name", "last_name",
-  "middle_name",
-  "index_number",
-]);
+
+
+const { query, results } = useSearch(
+    computed(() => props.classroom.students),
+    ["first_name", "last_name",
+    "middle_name",
+    "index_number"],
+);
 </script>
 
 <template>
@@ -130,7 +134,7 @@ const { query, results, reset } = useSearch(props.classroom.students, [
   <!-- Students Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
     <div
-      v-for="student in results"
+      v-for="student in results as StudentI[]"
       :key="student.id"
       class="bg-muted/50 rounded-lg p-4 sm:p-5 hover:shadow-md transition-shadow border border-muted" >
       <div class="flex items-center space-x-3 mb-4">
@@ -145,7 +149,7 @@ const { query, results, reset } = useSearch(props.classroom.students, [
 
         <!-- Name + ID + Dropdown -->
         <div class="flex flex-col">
-          <div class="flex items-center space-x-2">
+          <div class="flex items-center space-x-6">
             <h4 class="font-medium text-foreground text-sm sm:text-base">
               {{ student.fullname }}
             </h4>
@@ -153,9 +157,11 @@ const { query, results, reset } = useSearch(props.classroom.students, [
             <!-- Dropdown aligned with name -->
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
-                <Button class="text-muted-foreground" size="icon">
-                  <MoreHorizontal />
-                </Button>
+                
+                <button class="text-muted-foreground hover:text-foreground">
+                  <MoreHorizontal class="w-4 h-4" />
+              </button>
+                
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" class="w-44 p-1">
@@ -248,8 +254,7 @@ const { query, results, reset } = useSearch(props.classroom.students, [
         <div class="flex justify-between items-center">
           <span class="text-xs sm:text-sm text-muted-foreground">Subjects</span>
           <span class="font-semibold text-foreground text-sm">{{
-            student.subjects.length
-          }}</span>
+            student.subjects.length }}</span>
         </div>
         <div class="flex justify-between items-center">
           <span class="text-xs sm:text-sm text-muted-foreground">Attendance</span>
@@ -260,10 +265,10 @@ const { query, results, reset } = useSearch(props.classroom.students, [
       </div>
     </div>
 
-     <div v-if="results.length === 0" class="text-center end py-8">
-                <NotebookPenIcon class="h-12 w-12 text-muted-foreground mx-auto mb-4"/>
-                <p class="text-muted-foreground">No student found</p>
-            </div>
+      <div v-if="results.length === 0" class="col-span-full flex flex-col items-center justify-center py-16">
+          <Users class="h-12 w-12 text-muted-foreground mb-4" />
+          <p class="text-muted-foreground">No student found</p>
+      </div>
 
 
   </div>

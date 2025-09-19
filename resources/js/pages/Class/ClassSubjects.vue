@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { BookOpen, MoreHorizontal, Search, Plus } from "lucide-vue-next";
-import { ClassroomI } from "@/types";
+import {BookOpen, MoreHorizontal, Search, Plus, UserCheck, Users} from "lucide-vue-next";
+import {ClassroomI, SubjectI} from "@/types";
 import { Input } from "@/components/ui/input";
 import SubjectToClass from "./SubjectToClass.vue";
+import {computed} from 'vue'
 const props = defineProps<{
   classroom: ClassroomI;
 }>();
 import { useSearch } from "@/composables/useSearch";
 
-const { query, results, reset } = useSearch(props.classroom.subjects, ["name", "code"]);
+
+const { query, results } = useSearch(
+    computed(() => props.classroom.subjects),
+    ["name", "code"]
+);
 </script>
 
 <template>
-  <!-- Header: Search + Add Button -->
-  <!-- Header: Search + Action Buttons -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
     <!-- Search -->
     <div class="relative w-full sm:w-1/2">
@@ -25,62 +28,72 @@ const { query, results, reset } = useSearch(props.classroom.subjects, ["name", "
 
     <!-- Action Buttons -->
     <div class="flex space-x-3 justify-end">
-      <button
-        class="border border-muted text-foreground px-4 py-2 rounded-lg hover:bg-muted transition-colors flex items-center justify-center space-x-2 text-sm"
-      >
+      <button class="border border-muted text-foreground px-4 py-2 rounded-lg hover:bg-muted transition-colors flex items-center justify-center space-x-2 text-sm">
         <UserCheck class="w-4 h-4" />
         <span>Take Attendance</span>
       </button>
 
-      <SubjectToClass :classroom="props.classroom">
+      <SubjectToClass :classroom="props.classroom" @updated="$inertia.reload({ only: ['classroom'] })">
         <button
           class="bg-primary text-primary-foreground px-3 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2 text-sm"
         >
           <Plus class="w-4 h-4" />
-          <span>Add Subject</span>
+          <span>Manage Subjects</span>
         </button>
       </SubjectToClass>
     </div>
   </div>
 
-  <!-- Subjects Grid -->
+
   <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-    <div
-      v-for="subject in results"
-      :key="subject.id"
-      class="bg-muted/50 rounded-lg p-4 sm:p-6"
-    >
-      <div class="flex items-center justify-between mb-4">
-        <div class="bg-primary/10 p-3 rounded-full">
-          <BookOpen class="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-        </div>
-        <button class="text-muted-foreground hover:text-foreground">
-          <MoreHorizontal class="w-4 h-4" />
-        </button>
+      <div
+          v-for="subject in results as SubjectI[]" :key="subject.id"
+          class="bg-muted/50 rounded-lg p-4 sm:p-6 space-y-4">
+
+          <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                  <div class="bg-primary/10 p-3 rounded-full">
+                      <BookOpen class="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                  </div>
+                  <h3 class="text-lg font-semibold text-foreground">
+                      {{ subject.name }} 
+                  </h3>
+              </div>
+              <button class="text-muted-foreground hover:text-foreground">
+                  <MoreHorizontal class="w-4 h-4" />
+              </button>
+          </div>
+
+          <div>
+              <p class="text-sm font-medium text-foreground mb-1">Teachers</p>
+              <div v-if="subject.staff?.length" class="flex flex-wrap gap-2">
+                  <span v-for="teacher in subject.staff" :key="teacher.id" class="inline-flex items-center px-2 py-1 text-xs
+                  rounded-full bg-primary/10 text-primary font-medium">{{ teacher.fullname }}</span>
+              </div>
+              <p v-else class="text-sm text-muted-foreground italic">
+                  No teacher assigned
+              </p>
+          </div>
+
+          <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                  <span class="text-sm text-muted-foreground">Students</span>
+                  <span class="font-semibold text-foreground">{{ subject.students.length }}</span>
+              </div>
+              <div class="w-full bg-muted rounded-full h-2">
+                  <div
+                      class="bg-primary h-2 rounded-full transition-all duration-300"
+                       :style="{ width: `${(subject.students.length / classroom.students.length) * 100}%` }"
+                  ></div>
+              </div>
+          </div>
       </div>
 
-      <h3 class="text-lg font-semibold text-foreground mb-2">{{ subject.name }}</h3>
-      <p class="text-sm text-muted-foreground mb-1">Teacher: Sam</p>
-      <p class="text-sm text-muted-foreground mb-4">Today</p>
+  </div>
 
-      <div class="space-y-2">
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-muted-foreground">Progress</span>
-          <span class="font-semibold text-foreground">10%</span>
-        </div>
-        <div class="w-full bg-muted rounded-full h-2">
-          <div
-            class="bg-primary h-2 rounded-full transition-all duration-300"
-            :style="{ width: `${100}%` }"
-          ></div>
-        </div>
-      </div>
+    <div v-if="results.length === 0" class="col-span-full flex flex-col items-center justify-center py-16">
+        <BookOpen class="h-12 w-12 text-muted-foreground mb-4" />
+        <p class="text-muted-foreground">No subject found</p>
     </div>
-  </div>
-
-  <!-- No Results -->
-  <div v-if="!results.length" class="text-center py-10 text-muted-foreground">
-    No subjects found
-  </div>
 </template>
 <style scoped></style>

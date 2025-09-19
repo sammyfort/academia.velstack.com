@@ -44,6 +44,17 @@ export interface SubjectI extends ModelI {
     slug: string
     classes_count: number
     students_count: number
+    staff: StaffI[]
+    scoreTypes: scoreType[]
+    students: StudentI[]
+}
+
+export interface scoreType extends ModelI {
+    school_id: number
+    class_id: number
+    name: string
+    percentage: string
+
 }
 
 export interface StaffI extends ModelI {
@@ -82,6 +93,9 @@ export interface StaffI extends ModelI {
     status?: string | null;
     password: string;
     image: string
+
+    subjects: SubjectI[]
+    pivot: object
 
 }
 export interface StudentI extends ModelI {
@@ -149,13 +163,13 @@ export interface ClassroomI extends ModelI {
     students: StudentI[]
     subjects: Subject[]
     staff: StaffI[]
- 
+
 
 }
 
 export interface AttendanceI extends ModelI {
     school_id: number
-    term_id: number 
+    term_id: number
     date: string
     present: boolean
 }

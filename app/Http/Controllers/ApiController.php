@@ -11,7 +11,14 @@ class ApiController extends Controller
     {
         return response()->json([
             'subjects' => school()->subjects()->get(['id', 'name', 'code'])->toArray()
-        
+
+        ]);
+    }
+
+    public function staff()
+    {
+        return response()->json([
+            'staff' => school()->staff()->get()->toArray()
         ]);
     }
 }

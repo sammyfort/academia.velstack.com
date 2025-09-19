@@ -76,7 +76,7 @@ class Staff extends Authenticatable implements HasMedia
      * @return BelongsToMany
      */
 
-     public function classrooms(): BelongsToMany
+    public function classrooms(): BelongsToMany
     {
         return $this->belongsToMany(
             Classroom::class,
@@ -86,7 +86,21 @@ class Staff extends Authenticatable implements HasMedia
         )->withPivot(['subject_id', 'permission']);
     }
 
-    
+    public function subjects()
+    {
+        return $this->belongsToMany(
+            Subject::class,
+            'staff_classroom_subject_permissions'
+        )
+            ->withPivot(
+                'classroom_id',
+                'permission'
+            )
+            ->withTimestamps();
+    }
+
+
+
     public function fullname(): Attribute
     {
         return new Attribute(
@@ -101,91 +115,91 @@ class Staff extends Authenticatable implements HasMedia
         );
     }
 
-   /**
- * Get all the classrooms the staff member is actively assigned to.
- *
- * - Uses the staff_classroom_subject_permissions pivot table.
- * - Ensures each classroom appears only once, even if the staff teaches multiple subjects there.
- * - Excludes soft-deleted pivot records (deleted_at not null).
- * - Eager loads each classroom's subjects for convenience.
- *
- * Example:
- *   $staff->assignedClassrooms;
- *
- * @return BelongsToMany<Classroom>
- */
-public function assignedClassrooms(): BelongsToMany
-{
-    return $this->belongsToMany(
-        Classroom::class,
-        'staff_classroom_subject_permissions', // pivot table name (must be string, not model::class)
-        'staff_id',
-        'classroom_id'
-    )
-        ->distinct()
-        ->with('subjects')
-        ->wherePivotNull('deleted_at');
-}
+    /**
+     * Get all the classrooms the staff member is actively assigned to.
+     *
+     * - Uses the staff_classroom_subject_permissions pivot table.
+     * - Ensures each classroom appears only once, even if the staff teaches multiple subjects there.
+     * - Excludes soft-deleted pivot records (deleted_at not null).
+     * - Eager loads each classroom's subjects for convenience.
+     *
+     * Example:
+     *   $staff->assignedClassrooms;
+     *
+     * @return BelongsToMany<Classroom>
+     */
+    public function assignedClassrooms(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Classroom::class,
+            'staff_classroom_subject_permissions', // pivot table name (must be string, not model::class)
+            'staff_id',
+            'classroom_id'
+        )
+            ->distinct()
+            ->with('subjects')
+            ->wherePivotNull('deleted_at');
+    }
 
-/**
- * Get all subjects assigned to the staff member across all classrooms.
- *
- * - Uses the staff_classroom_subject_permissions pivot table.
- * - Each subject is linked back to the classroom_id in the pivot.
- * - Ensures subjects are unique and excludes soft-deleted pivot records.
- *
- * Example:
- *   $staff->assignedSubjects->each(function ($subject) {
- *       echo $subject->name;
- *   });
- *
- * @return BelongsToMany<Subject>
- */
-public function assignedSubjects(): BelongsToMany
-{
-    return $this->belongsToMany(
-        Subject::class,
-        'staff_classroom_subject_permissions',
-        'staff_id',
-        'subject_id'
-    )
-        ->withPivot('classroom_id')
-        ->distinct()
-        ->wherePivotNull('deleted_at');
-}
+    /**
+     * Get all subjects assigned to the staff member across all classrooms.
+     *
+     * - Uses the staff_classroom_subject_permissions pivot table.
+     * - Each subject is linked back to the classroom_id in the pivot.
+     * - Ensures subjects are unique and excludes soft-deleted pivot records.
+     *
+     * Example:
+     *   $staff->assignedSubjects->each(function ($subject) {
+     *       echo $subject->name;
+     *   });
+     *
+     * @return BelongsToMany<Subject>
+     */
+    public function assignedSubjects(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Subject::class,
+            'staff_classroom_subject_permissions',
+            'staff_id',
+            'subject_id'
+        )
+            ->withPivot('classroom_id')
+            ->distinct()
+            ->wherePivotNull('deleted_at');
+    }
 
-/**
- * Get all subjects assigned to the staff member with their associated classrooms.
- *
- * - Similar to assignedSubjects(), but eager loads the related classrooms
- *   (using the 'classes' relationship defined on Subject).
- * - Useful if you want to see which classroom(s) each subject belongs to without
- *   manually joining again.
- *
- * Example:
- *   $staff->assignedSubjectsWithClassrooms->each(function ($subject) {
- *       echo $subject->name;
- *       foreach ($subject->classes as $classroom) {
- *           echo $classroom->name;
- *       }
- *   });
- *
- * @return BelongsToMany<Subject>
- */
-public function assignedSubjectsWithClassrooms(): BelongsToMany
-{
-    return $this->belongsToMany(
-        Subject::class,
-        'staff_classroom_subject_permissions',
-        'staff_id',
-        'subject_id'
-    )
-        ->with(['classes' => function ($query) {
-            $query->select('classrooms.id', 'classrooms.name');
-        }])
-        ->distinct()
-        ->wherePivotNull('deleted_at');
-}
+    /**
+     * Get all subjects assigned to the staff member with their associated classrooms.
+     *
+     * - Similar to assignedSubjects(), but eager loads the related classrooms
+     *   (using the 'classes' relationship defined on Subject).
+     * - Useful if you want to see which classroom(s) each subject belongs to without
+     *   manually joining again.
+     *
+     * Example:
+     *   $staff->assignedSubjectsWithClassrooms->each(function ($subject) {
+     *       echo $subject->name;
+     *       foreach ($subject->classes as $classroom) {
+     *           echo $classroom->name;
+     *       }
+     *   });
+     *
+     * @return BelongsToMany<Subject>
+     */
+    public function assignedSubjectsWithClassrooms(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Subject::class,
+            'staff_classroom_subject_permissions',
+            'staff_id',
+            'subject_id'
+        )
+            ->with(['classes' => function ($query) {
+                $query->select('classrooms.id', 'classrooms.name');
+            }])
+            ->distinct()
+            ->wherePivotNull('deleted_at');
+    }
 
 
     public function timetables(): HasMany
@@ -199,10 +213,10 @@ public function assignedSubjectsWithClassrooms(): BelongsToMany
         'remember_token',
     ];
 
-//    public function getAuthIdentifierName(): string
-//    {
-//        return 'email';
-//    }
+    //    public function getAuthIdentifierName(): string
+    //    {
+    //        return 'email';
+    //    }
 
     public function getAuthPassword()
     {
@@ -232,7 +246,11 @@ public function assignedSubjectsWithClassrooms(): BelongsToMany
     public function allowancesAndDeductions()
     {
         return $this->belongsToMany(
-            AllowanceAndDeduction::class, StaffAllowanceDeduction::class, 'staff_id', 'allowance_id')
+            AllowanceAndDeduction::class,
+            StaffAllowanceDeduction::class,
+            'staff_id',
+            'allowance_id'
+        )
             ->withPivot('applied_at')
             ->withTimestamps();
     }

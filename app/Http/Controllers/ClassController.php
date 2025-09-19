@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Enums\ClassGroup;
 use App\Enums\ClassLevel;
+use App\Enums\ClassRole;
 use App\Http\Requests\Class\storeClassRequest;
+use App\Http\Requests\Class\SubjectToClassRequest;
 use App\Http\Requests\Class\updateClassRequest;
-use Google\Service\Classroom\Topic;
+use App\Models\StaffClassroomSubjectPermission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use App\Http\Requests\Class\AttendanceRequest;
+use App\Http\Requests\Class\StaffClassRequest;
 
 class ClassController extends Controller
 {
@@ -68,15 +73,39 @@ class ClassController extends Controller
     {
         $terms = school()->semesters()->orderBy('created_at', 'desc')->get();
         $class = school()->classes()->where('slug', $slug)->firstOrFail();
+
+        $class->loadMissing([
+            'students.subjects',
+            'students.attendances.term',
+            'scoreTypes',
+            'subjects.scoreTypes',
+            'subjects.students',
+            'subjects.staff' => function ($q) use ($class) {
+                $q->wherePivot('classroom_id', $class->id)
+                    ->whereNotNull('subject_id');
+            },
+
+            'staff' => function ($query) use ($class) {
+                $query->with(['subjects' => function ($q) use ($class) {
+                    $q->wherePivot('classroom_id', $class->id);
+                }])
+                    ->wherePivot('classroom_id', $class->id);
+            },
+        ]);
+
+        // 🔑 Deduplicate staff collection
+        $class->setRelation(
+            'staff',
+            $class->staff->unique('id')->values()
+        );
+
         return Inertia::render('Class/ClassShow', [
-            'classroom' => $class->loadMissing([
-            'students.subjects', 
-            'students.attendances.term', 
-            'staff', 'subjects', 
-            'scoreTypes', 'subjects.scoreTypes', 'subjects.students']),
-            'semesters' => toOption($terms, 'name', 'id', false),
+            'classroom'  => $class,
+            'semesters'  => toOption($terms, 'name', 'id', false),
+            'staffRoles' => toOption(ClassRole::toArray()),
         ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -101,15 +130,67 @@ class ClassController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        school()->classes()->findOrFail($id)->delete();
+        return back()->with(successRes("Class deleted successfully."));
     }
 
-       public function recordAttendance(AttendanceRequest $request)
+    public function recordAttendance(AttendanceRequest $request)
     {
         $data = $request->validated();
         $student = school()->students()->findOrFail($data['student_id']);
         $term = $student->school->semesters()->findOrFail($data['term_id']);
         recordAttendance($student, $data['date'], $term, $data['present']);
-        return back()->with(successRes("Attendance recorded."));
+    }
+
+    public function addSubjectToClass(SubjectToClassRequest $request)
+    {
+        $data = $request->validated();
+        $classroom = school()->classes()->where('id', $data['class_id'])->firstOrFail();
+        $subjects = school()->subjects()->whereIn('id', $data['subjects'] ?? [])->get();
+        DB::beginTransaction();
+
+        try {
+            $classroom->subjects()->sync(
+                $subjects->mapWithKeys(fn($subject) => [
+                    $subject->id => [
+                        'uuid' => Str::uuid(),
+                        'school_id' => school()->id,
+                    ]
+                ])->toArray()
+            );
+
+            DB::commit();
+            return back()->with(successRes("Subject attached to class"));
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+            return back()->with(errorRes($exception->getMessage()));
+        }
+    }
+
+
+    public function assignStaff(StaffClassRequest $request)
+    {
+        $data = $request->validated();
+
+        $class = school()->classes()->findOrFail($data['class_id']);
+        $staff = school()->staff()->findOrFail($data['staff_id']);
+
+        DB::beginTransaction();
+        try {
+            assignClassSubjectPermission(
+                $staff,
+                $class,
+                $data['role'],
+                $data['subjects'] ?? []
+            );
+
+            DB::commit();
+            return back()->with(successRes("Staff assigned to class successfully."));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            report($e);
+            throw $e; // or return a response
+        }
     }
 }
