@@ -19,7 +19,7 @@ return new class extends Migration
             $table->morphs('attendable');
             $table->date('date');
             $table->boolean('present');
-            $table->unique(['attendable_id', 'attendable_type', 'date']);
+            $table->unique(['attendable_id', 'attendable_type', 'date', 'term_id']);
             $table->foreignId('created_by')->nullable();
             $table->foreignId('deleted_by')->nullable();
             $table->softDeletes();

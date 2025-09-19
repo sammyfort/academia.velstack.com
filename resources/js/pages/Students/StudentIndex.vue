@@ -5,7 +5,15 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox"
-import {PlusIcon, CreditCard, Edit, Trash2, Search, X, Upload, MoreVertical, MenuIcon,} from "lucide-vue-next";
+import {PlusIcon, CreditCard, Edit, Trash2, Search, X, Upload, MoreVertical, MenuIcon,
+ 
+  TrendingUp,
+ 
+  Users,
+ 
+  CheckCircle,
+  UserCheck2,
+} from "lucide-vue-next";
 import SelectOption from "@/components/forms/SelectOption.vue";
 import {ref, onMounted} from "vue";
 import ConfirmDialogue from "@/components/helpers/ConfirmDialogue.vue";
@@ -18,7 +26,7 @@ const { isDeletingOne, isDeletingMany, deleteOne, deleteMany } = useDelete();
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import {useFilter} from "@/composables/useFilter";
 import { useSelectable } from "@/composables/useSelectable";
-
+import StatCard from "@/components/StatCard.vue";
 const props = defineProps<{
     students: PaginatedDataI<StudentI>;
     classes: InputSelectOption[]
@@ -72,6 +80,42 @@ const { goToPage, reset } = useFilter({
 
 <template>
     <AppLayout>
+     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <StatCard
+          label="Total Students"
+          :value="props.students.total"
+          :icon="Users"
+          value-color="text-green-600 dark:text-green-300"
+          icon-color="text-green-600 dark:text-green-300"
+          icon-bg="bg-green-50 dark:bg-green-900/20"
+        />
+
+        <StatCard
+          label="Subjects"
+          :value="2"
+          :icon="CheckCircle"
+          value-color="text-blue-600 dark:text-blue-400"
+          icon-color="text-blue-600 dark:text-blue-500"
+          icon-bg="bg-blue-50 dark:bg-blue-900/30"
+        />
+
+        <StatCard
+          label="Staff"
+          :value="1"
+          :icon="UserCheck2"
+          value-color="text-yellow-600 dark:text-yellow-400"
+          icon-color="text-yellow-600 dark:text-yellow-500"
+          icon-bg="bg-yellow-50 dark:bg-yellow-900/30"
+        />
+        <StatCard
+          label="Average"
+          value="10"
+          :icon="TrendingUp"
+          value-color="text-purple-600 dark:text-purple-400"
+          icon-color="text-purple-600 dark:text-purple-500"
+          icon-bg="bg-purple-50 dark:bg-purple-900/30"
+        />
+      </div>
         <div class="rounded-2xl border border-border bg-background p-6 shadow-sm mt-4">
             <!-- Header -->
             <div class="mb-6 flex items-center justify-between">

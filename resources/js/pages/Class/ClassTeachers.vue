@@ -147,6 +147,7 @@ const { query, results } = useSearch(
               <NotebookPen class="w-3 h-3" />
               <span>{{ index + 1 }}.</span>
             </span>
+            
             <span class="px-2 py-0.5 text-xs rounded-full bg-primary/10 text-primary">
              
              <span class="flex items-center space-x-1">
