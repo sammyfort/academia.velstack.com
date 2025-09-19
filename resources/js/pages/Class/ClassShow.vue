@@ -2,7 +2,7 @@
 import AppLayout from "@/layouts/app/AppLayout.vue";
 import {ClassroomI, InputSelectOption} from "@/types";
 import {ref, computed, onMounted} from 'vue';
-import {Users, UserCheck, Plus, CheckCircle, XCircle, TrendingUp,} from 'lucide-vue-next';
+import {Users, UserCheck, Plus, CheckCircle, XCircle, TrendingUp, UserCheck2,} from 'lucide-vue-next';
 import ClassStudents from "@/pages/Class/ClassStudents.vue";
 import ClassSubjects from "@/pages/Class/ClassSubjects.vue";
 import ClassTeachers from "@/pages/Class/ClassTeachers.vue";
@@ -89,7 +89,7 @@ const academicYear = computed(() => {
                  icon-bg="bg-blue-50 dark:bg-blue-900/30"
                 />
 
-                 <StatCard label="Teachers" :value="classroom.staff.length" :icon="XCircle"
+                 <StatCard label="Staff" :value="classroom.staff.length" :icon="UserCheck2"
                   value-color="text-yellow-600 dark:text-yellow-400"
                  icon-color="text-yellow-600 dark:text-yellow-500"
                  icon-bg="bg-yellow-50 dark:bg-yellow-900/30"
@@ -132,7 +132,7 @@ const academicYear = computed(() => {
                             :class="activeTab === 'staff' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'"
                             class="py-3 sm:py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap"
                         >
-                            Teachers
+                            Staff
                         </button>
                         <button
                             @click="activeTab = 'rankings'"

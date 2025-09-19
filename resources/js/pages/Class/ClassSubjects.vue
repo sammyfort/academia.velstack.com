@@ -8,6 +8,7 @@ const props = defineProps<{
   classroom: ClassroomI;
 }>();
 import { useSearch } from "@/composables/useSearch";
+import ManageClassSubjects from "./modals/ManageClassSubjects.vue";
 
 
 const { query, results } = useSearch(
@@ -28,19 +29,16 @@ const { query, results } = useSearch(
 
     <!-- Action Buttons -->
     <div class="flex space-x-3 justify-end">
-      <button class="border border-muted text-foreground px-4 py-2 rounded-lg hover:bg-muted transition-colors flex items-center justify-center space-x-2 text-sm">
-        <UserCheck class="w-4 h-4" />
-        <span>Take Attendance</span>
-      </button>
+      
 
-      <SubjectToClass :classroom="props.classroom" @updated="$inertia.reload({ only: ['classroom'] })">
+      <ManageClassSubjects :classroom="props.classroom" @updated="$inertia.reload({ only: ['classroom'] })">
         <button
           class="bg-primary text-primary-foreground px-3 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2 text-sm"
         >
           <Plus class="w-4 h-4" />
           <span>Manage Subjects</span>
         </button>
-      </SubjectToClass>
+      </ManageClassSubjects>
     </div>
   </div>
 
@@ -59,9 +57,9 @@ const { query, results } = useSearch(
                       {{ subject.name }} 
                   </h3>
               </div>
-              <button class="text-muted-foreground hover:text-foreground">
+              <!-- <button class="text-muted-foreground hover:text-foreground">
                   <MoreHorizontal class="w-4 h-4" />
-              </button>
+              </button> -->
           </div>
 
           <div>

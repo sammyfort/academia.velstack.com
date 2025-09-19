@@ -143,14 +143,14 @@ const { query, results } = useSearch(
             :key="subject.id"
             class="flex items-center justify-between text-xs text-muted-foreground"
           >
-            <span class="flex items-center space-x-1">
-              
+            <span class="flex items-center space-x-1 rounded-full bg-blue/10 text-blue-400">
+              <NotebookPen class="w-3 h-3" />
               <span>{{ index + 1 }}.</span>
             </span>
             <span class="px-2 py-0.5 text-xs rounded-full bg-primary/10 text-primary">
              
              <span class="flex items-center space-x-1">
-              <NotebookPen class="w-3 h-3" />
+              
               <span>{{subject.name }}</span>
             </span>
             </span>

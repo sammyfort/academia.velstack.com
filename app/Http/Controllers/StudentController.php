@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Enums\Subjects;
 use App\Http\Requests\Student\storeStudentRequest;
+use App\Http\Requests\Student\StudentAssignSubjectRequest;
 use Exception;
 use Illuminate\Support\Arr;
 use Inertia\Inertia;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
-     public function __construct(protected $props = [])
+    public function __construct(protected $props = [])
     {
         $this->props = [
             'regions' => toOption(Region::toArray()),
@@ -65,7 +66,7 @@ class StudentController extends Controller
             'classes' => $this->props['classes'],
             'studentStatus' => $this->props['studentStatus'],
             'filters' => [
-                'search' =>$search,
+                'search' => $search,
                 'page'   => $request->input('page', 1),
                 'date' => $date,
                 'status' => $status,
@@ -80,9 +81,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Students/StudentCreate', array_merge($this->props, [
-
-        ]));
+        return Inertia::render('Students/StudentCreate', array_merge($this->props, []));
     }
 
     /**
@@ -92,9 +91,9 @@ class StudentController extends Controller
     {
         $data = $request->validated();
 
-         DB::beginTransaction();
+        DB::beginTransaction();
         try {
-            if(empty($data['index_number'])){
+            if (empty($data['index_number'])) {
                 $data['index_number'] = generateString('STU', 8, 'number');
             }
 
@@ -104,20 +103,18 @@ class StudentController extends Controller
             $student = school()->students()->create(Arr::except($data, ['image', 'parents']));
             $student->parents()->attach($data['parents'], [
                 'uuid' => Str::uuid(),
-                'school_id'=> school()->id
+                'school_id' => school()->id
             ]);
             $student->handleUploads($request, [
                 'image' => 'image'
             ]);
 
             DB::commit();
-         return back()->with(successRes("Student added successfully."));
-
+            return back()->with(successRes("Student added successfully."));
         } catch (Exception $exception) {
             DB::rollBack();
 
-           throw $exception;
-
+            throw $exception;
         }
     }
 
@@ -126,9 +123,7 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        return Inertia::render('Students/StudentShow', [
-
-        ]);
+        return Inertia::render('Students/StudentShow', []);
     }
 
     /**
@@ -157,7 +152,7 @@ class StudentController extends Controller
 
             $student->update(Arr::except($data, ['image', 'parents']));
             $student->parents()->sync(
-                collect($data['parents'] ?? [])->mapWithKeys(fn ($parentId) => [
+                collect($data['parents'] ?? [])->mapWithKeys(fn($parentId) => [
                     $parentId => [
                         'uuid' => Str::uuid(),
                         'school_id' => school()->id,
@@ -170,12 +165,10 @@ class StudentController extends Controller
 
             DB::commit();
             return back()->with(successRes("Student updated successfully."));
-
         } catch (Exception $exception) {
             DB::rollBack();
 
             throw $exception;
-
         }
     }
 
@@ -199,5 +192,34 @@ class StudentController extends Controller
             ->delete();
 
         return back()->with(successRes("Selected students deleted successfully."));
+    }
+
+    public function assignSubject(StudentAssignSubjectRequest $request)
+    {
+        $data = $request->validated();
+        $class = school()->classes()->findOrFail($data['class_id']);
+        $student = $class->students()->findOrFail($data['student_id']);
+        $subjectIds = $data['subjects'] ?? [];
+
+        DB::beginTransaction();
+        try {
+
+            $pivotData = collect($subjectIds)->mapWithKeys(fn($id) => [
+                $id => [
+                    'uuid' => (string) Str::uuid(),
+                    'school_id' => school()->id,
+                    'class_id' => $student->class_id,
+                ]
+            ])->toArray();
+
+            $student->subjects()->sync($pivotData);
+             DB::commit();
+            return back()->with(successRes("Subject attached to class"));
+           
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+            return back()->with(errorRes($exception->getMessage()));
+        }
     }
 }

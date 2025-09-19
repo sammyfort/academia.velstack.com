@@ -43,11 +43,7 @@ const form = useForm({
   subjects: [],
 });
 
-const selectedStaff = computed(() => {
-  if (!form.staff_id) return null;
-
-  return props.classroom.staff.find(s => s.id === Number(form.staff_id)) || null;
-});
+ 
 watchEffect(async () => {
   // Load staff data when dialog opens
   if (isOpen.value && !staffData.value.length) {

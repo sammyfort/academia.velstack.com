@@ -63,10 +63,7 @@ class StaffClassRequest extends FormRequest
                     fn($q) =>
                     $q->where('school_id', school()->id)
                 ),
-                Rule::when(
-                    $this->role === ClassRole::SUBJECT_TEACHER->value,
-                    [new UniqueStaffSubject($this->class_id, $this->staff_id)]
-                ),
+                
             ],
         ];
     }

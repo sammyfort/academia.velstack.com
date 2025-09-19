@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -11,43 +19,59 @@ import {
 import { Button } from "@/components/ui/button";
 import { useForm } from "@inertiajs/vue3";
 import { toastError, toastSuccess } from "@/lib/helpers";
-import { ref, computed } from "vue";
+import { ref, watch, computed, watchEffect } from "vue";
 import { LoaderCircle, Lock } from "lucide-vue-next";
 import { ClassroomI, SubjectI } from "@/types";
+import axios from "axios";
+import { router } from "@inertiajs/vue3";
 import Input from "@/components/ui/input/Input.vue";
+ import SelectOption from "@/components/forms/SelectOption.vue";
 
 const isOpen = ref(false);
 const search = ref("");
 
 const props = defineProps<{
   classroom: ClassroomI;
-  subjects: SubjectI[];
+  class_subjects: SubjectI[];
 }>();
 const emit = defineEmits(["updated"]);
 
 const form = useForm({
   class_id: props.classroom.id,
-  subjects: props.classroom.subjects.map((s) => s.id) || [],
+  student_id: '',
+  subjects: [],
+});
+
+watchEffect(async () => {
+  
+  if (form.student_id) {
+    const student = props.classroom.students.find(
+      (s) => s.id === Number(form.student_id)
+    );
+    form.subjects = student?.subjects?.map((s) => s.id) || [];
+  } else {
+    form.subjects = [];
+  }
 });
 
 const filtered = computed(() => {
-  if (!search.value) return props.subjects;
-  return props.subjects?.filter((s) =>
+  if (!search.value) return props.class_subjects;
+  return props.class_subjects?.filter((s) =>
     s.name.toLowerCase().includes(search.value.toLowerCase())
   );
 });
 const selectAll = () => {
-  const allValues = props.subjects?.map((s) => s.id);
+  const allValues = props.class_subjects?.map((s) => s.id);
   form.subjects = Array.from(new Set([...form.subjects, ...allValues]));
 };
 
 const unselectAll = () => {
-  const visibleValues = props.subjects?.map((s) => s.id);
+  const visibleValues = props.class_subjects?.map((s) => s.id);
   form.subjects = form.subjects.filter((p) => !visibleValues.includes(p));
 };
 
 const submit = () => {
-  form.post(route("class.assign-subject"), {
+  form.post(route("student.assign-subject"), {
     onSuccess: (res) => {
       const message = res.props.message;
       if (res.props.success) toastSuccess(message);
@@ -60,6 +84,30 @@ const submit = () => {
 };
 </script>
 <template>
+  <form @submit.prevent="submit" id="student-subject">
+    <div  class="px-4 py-4 grid   gap-4">
+      <div>
+        <SelectOption
+          model="student_id"
+          :form="form"
+          :options="
+            classroom.students.map((s) => ({
+              label: s.fullname,
+              value: s.id,
+            }))
+          "
+          label="Select Student"
+          placeholder="Select Student"
+          searchable
+          required
+        />
+
+      </div>
+        <DialogDescription>
+          Select student and assign of the following subjects to them.
+        </DialogDescription>
+    </div>
+  </form>
   <div
     v-if="filtered.length"
     class="px-4 pb-4 max-h-[60vh] overflow-y-auto custom-scrollbar -webkit-overflow-scrolling-touch"
@@ -74,7 +122,7 @@ const submit = () => {
 
       <div class="flex flex-col sm:flex-row gap-2 sm:justify-end">
         <Button size="sm" variant="outline" @click="selectAll"
-          >Select All ({{ subjects.length }})</Button
+          >Select All ({{ class_subjects.length }})</Button
         >
         <Button size="sm" variant="destructive" @click="unselectAll"
           >Unselect All ({{ form.subjects.length }})</Button
@@ -130,7 +178,7 @@ const submit = () => {
     <Button
       :disabled="form.processing"
       type="submit"
-      form="add-permissions"
+      form="student-subject"
       @click="submit"
     >
       <LoaderCircle v-if="form.processing" class="mr-2 h-4 w-4 animate-spin" />
